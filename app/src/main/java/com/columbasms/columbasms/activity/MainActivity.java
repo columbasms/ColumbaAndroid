@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -103,9 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar_top.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         toolbar_top.setVisibility(View.INVISIBLE);
         toolbar_bottom.setVisibility(View.INVISIBLE);
-
         setSupportActionBar(toolbar_top);
-
 
         activity = this;
 
@@ -113,9 +115,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mToggle = new ActionBarDrawerToggle(this, drawer, toolbar_top, R.string.app_name, R.string.app_name);
 
+
+        mToggle.setDrawerIndicatorEnabled(false);
+        mToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+                }
+
+            }
+        });
+
+
         drawer.setDrawerListener(mToggle);
 
         mToggle.syncState();
+
+
 
 
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -163,32 +181,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intentGCMListen = new Intent(this,GcmReceiver.class);
         startService(intentGCMListen);
 
-
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        header= navView.getHeaderView(0);
+        header = navView.getHeaderView(0);
 
-        TextView navHeader_phoneNumber = (TextView)header.findViewById(R.id.phone_number);
+        TextView navHeader_phoneNumber = (TextView) header.findViewById(R.id.phone_number);
         String phone_number = state.getString("phone_number", null);
-        TextView navHeader_userName = (TextView)header.findViewById(R.id.name);
+        TextView navHeader_userName = (TextView) header.findViewById(R.id.name);
         String userName = state.getString("user_name", null);
 
-        if(phone_number==null) {
+        if (phone_number == null) {
             navHeader_phoneNumber.setText(getIntent().getStringExtra("phone_number"));
-        }navHeader_phoneNumber.setText(phone_number);
+        }
+        navHeader_phoneNumber.setText(phone_number);
 
-        if(userName==null) {
+        if (userName == null) {
             navHeader_userName.setText(getIntent().getStringExtra("user_name"));
-        }navHeader_userName.setText(userName);
+        }
+        navHeader_userName.setText(userName);
 
         USER_ID = state.getString("user_id", null);
-        if(USER_ID==null)getIntent().getStringExtra("user_id");
+        if (USER_ID == null) getIntent().getStringExtra("user_id");
 
         getUser();
+
+        /*if(non c'è la shared subscribe true){
+            subscribeFollowedAssociations();
+            //INSERISCI NELLA SHARED TRUE
+        }
+        */
+
 
     }
 
@@ -229,6 +255,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void subscribeFollowedAssociations(){
+
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item){
 
@@ -239,7 +269,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-                
+
+        }
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
