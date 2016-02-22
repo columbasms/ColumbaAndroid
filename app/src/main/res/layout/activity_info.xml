@@ -29,8 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/versione"
-            android:text="@string/version"
+            android:id="@+id/version"
             android:layout_marginTop="15dp"
             android:textSize="18sp"
             android:textColor="@color/colorText"/>
