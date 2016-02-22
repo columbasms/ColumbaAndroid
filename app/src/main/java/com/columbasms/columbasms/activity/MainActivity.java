@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,19 +37,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.adapter.UserProfileAdapter;
 import com.columbasms.columbasms.fragment.HomeFragment;
 import com.columbasms.columbasms.fragment.MapFragment;
 import com.columbasms.columbasms.fragment.NotificationsFragment;
 import com.columbasms.columbasms.fragment.SplashScreenFragment;
 import com.columbasms.columbasms.fragment.TopicsFragment;
+import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.columbasms.columbasms.utils.network.CacheRequest;
+import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GcmReceiver;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -207,13 +214,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         USER_ID = state.getString("user_id", null);
         if (USER_ID == null) getIntent().getStringExtra("user_id");
 
-        getUser();
 
-        /*if(non c'è la shared subscribe true){
-            subscribeFollowedAssociations();
-            //INSERISCI NELLA SHARED TRUE
+        if(USER_ID != null){
+            getUser();
         }
-        */
+
+
+        if(state.getString("subscribeLogin",null)==null){
+            subscribeFollowedAssociations();
+        }
+
 
 
     }
@@ -257,6 +267,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void subscribeFollowedAssociations(){
 
+        String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.ASSOCIATIONS;
+
+        CacheRequest s =  new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                try {
+                    final String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+
+                    JSONArray jsonArray = new JSONArray(jsonString);
+
+                    System.out.println(jsonString);
+
+
+                    if (jsonArray.length() > 0) {
+
+                        // looping through json and adding to movies list
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+
+                                JSONObject o = jsonArray.getJSONObject(i);
+
+                                subscribeTopic(o.getString("id"));
+
+                            } catch (JSONException e) {
+                                System.out.println("JSON Parsing error: " + e.getMessage());
+                            }
+                        }
+
+                        //INSERISCI NELLA SHARED TRUE
+                        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor_account_information = state.edit();
+                        editor_account_information.putString("subscribeLogin", "true");
+                        editor_account_information.apply();
+                    }
+
+                } catch (UnsupportedEncodingException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.toString());
+            }
+        });
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+        //Adding request to the queue
+        requestQueue.add(s);
     }
 
     @Override
@@ -320,6 +381,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void subscribeTopic(final String id) {
+        new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
+                String token = p.getString("gcm-token","");
+                System.out.println("/topics" + "/organization_" + id);
+                GcmPubSub pubSub = GcmPubSub.getInstance(activity);
+
+                try {
+                    pubSub.subscribe(token, "/topics" + "/organization_" + id, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+        }.execute(null, null, null);;
     }
 
 
