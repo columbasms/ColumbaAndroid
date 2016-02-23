@@ -31,10 +31,11 @@
     <string name="not">Notifiche</string>
     <string name="map">Mappa</string>
     <string name="follow">SEGUI</string>
-    <string name="following">SEGUI GIÀ</string>
+    <string name="following">STAI SEGUENDO</string>
 
-    <string name="see_more">MOSTRA TUTTO</string>
+    <string name="see_more">MOSTRA TUTTE</string>
     <string name="followed_association">Associazioni Seguite</string>
+    <string name="supported_campaigns">Campagne Supportate</string>
 
     <string name="more">SCOPRI</string>
     <string name="hide">NASCONDI</string>
@@ -93,7 +94,6 @@
 
     <string name="trust_btn">SOSTIENI</string>
     <string name="trusted_btn">SOSTENENDO</string>
-    <string name="followers"> seguaci</string>
 
     <string name="enter_grp">Inserisci il nome del gruppo</string>
 
