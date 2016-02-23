@@ -114,7 +114,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TRUST"
+                    android:text="@string/trust_btn"
                     android:visibility="gone"
                     android:layout_marginBottom="16dp"
                     android:textColor="@color/colorPrimary"
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textStyle="bold"
-        android:text="Campaigns"
+        android:text="@string/campaigns"
         android:gravity="center_vertical"/>
     
 </LinearLayout>

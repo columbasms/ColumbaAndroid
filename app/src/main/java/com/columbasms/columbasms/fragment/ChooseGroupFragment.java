@@ -114,8 +114,8 @@ public class ChooseGroupFragment extends DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         final View v = inflater.inflate(R.layout.dialog_select_groups, null);
         if(getArguments().getString("flag")!=null){
-            builder.setView(v).setPositiveButton("confirm",null).setNegativeButton("cancel",null);
-        }else  builder.setView(v).setPositiveButton("send",null).setNegativeButton("cancel",null);
+            builder.setView(v).setPositiveButton(getString(R.string.confirm),null).setNegativeButton(getString(R.string.cancel),null);
+        }else builder.setView(v).setPositiveButton(getString(R.string.send), null).setNegativeButton(getString(R.string.cancel), null);
         dialog = builder.create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 

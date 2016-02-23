@@ -35,6 +35,12 @@ public class AskContactsInputFragment extends DialogFragment {
     private static Activity activity;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        String[] array = new String[2];
+        array[0] = getResources().getString(R.string.from_contacts);
+        array[1] = getResources().getString(R.string.from_groups);
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         res = getActivity().getResources();
@@ -59,7 +65,7 @@ public class AskContactsInputFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         builder.setCustomTitle(inflater.inflate(R.layout.dialog_ask_contacts_input, null));
-        builder.setItems(R.array.ci_type, new DialogInterface.OnClickListener() {
+        builder.setItems(array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Bundle bundle = new Bundle();
                 bundle.putString("message", message);

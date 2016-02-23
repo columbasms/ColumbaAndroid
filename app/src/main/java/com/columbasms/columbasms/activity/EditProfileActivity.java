@@ -440,9 +440,9 @@ public class EditProfileActivity extends AppCompatActivity{
                 j.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
                 j.putExtra(Intent.EXTRA_TEXT, "");
                 try {
-                    startActivity(Intent.createChooser(j, "Send mail..."));
+                    startActivity(Intent.createChooser(j, getString(R.string.snd_mail)));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(EditProfileActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, getString(R.string.no_client), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_guide:

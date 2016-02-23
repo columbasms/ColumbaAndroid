@@ -52,7 +52,7 @@
                             android:textSize="20sp"
                             android:textColor="@color/colorText"
                             android:gravity="start|center_vertical"
-                            android:text="Edit profile"/>
+                            android:text="@string/edit_bar"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                             android:gravity="center_vertical"
                             android:paddingRight="16dp"
                             android:layout_gravity="end|center_vertical"
-                            android:text="SAVE" />
+                            android:text="@string/save" />
 
                     </FrameLayout>
 
@@ -163,7 +163,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Matteo Brienza"
                     android:textColor="@color/colorText"
                     android:textSize="34sp"/>
 
