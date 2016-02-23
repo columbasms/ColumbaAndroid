@@ -216,7 +216,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "?locale=" + Locale.getDefault().getLanguage();
 
-        System.out.println(URL);
+        System.out.println("URL PER OTTENERE LE CAMPAGNE DELL'UTENTE:" + URL);
 
         return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
             @Override
@@ -226,7 +226,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     JSONArray jsonArray = new JSONArray(jsonString);
 
-                    System.out.println(jsonString);
+                    System.out.println("LISTA CAMPAGNE" + jsonArray.toString());
 
                     campaigns_list.clear();
 

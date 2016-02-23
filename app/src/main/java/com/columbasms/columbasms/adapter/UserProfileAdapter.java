@@ -224,7 +224,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
 
                 GroupViewHolder holder3 = (GroupViewHolder) viewHolder;
-                final CharityCampaign c = mItemList.get(position - 1);
+                final CharityCampaign c = mItemList.get(position - 3);
                 final Association a = c.getOrganization();
 
 
@@ -289,7 +289,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
     @Override
     public int getItemCount() {
-        return mItemList == null ? 0 : mItemList.size()+1;
+        return mItemList == null ? 0 : mItemList.size()+3;
     }
 
 
