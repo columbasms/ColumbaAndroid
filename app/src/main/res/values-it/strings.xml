@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Columba</string>
 
+    <string name="version">v.0.3.1a</string>
+
     <string name="appIntro1_title">Columba</string>
     <string name="appIntro1_description">Con Columba puoi aiutare le associazioni di volontariato diffondendo le loro campagne ed eventi con i tuoi SMS inutilizzati!</string>
 
@@ -100,6 +102,7 @@
     <string name="send">invia</string>
     <string name="cancel">annulla</string>
     <string name="confirm">conferma</string>
+    <string name="followers"> Followers</string>
 
     <string name="from_contacts">Da Contatti</string>
     <string name="from_groups">Da Gruppi</string>

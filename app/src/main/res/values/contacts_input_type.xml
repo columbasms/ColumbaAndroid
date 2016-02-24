@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="ci_type">
-        <item>Da Contatti</item>
-        <item>Da Gruppi</item>
-    </string-array>
-</resources>
