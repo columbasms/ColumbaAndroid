@@ -56,7 +56,6 @@
     <string name="dialog_number_verification_title">Verification</string>
     <string name="dialog_number_verification_verify">VERIFY</string>
 
-    <string name="dgts__login_digits_text">Sign in</string>
 
     <string name="gcm_sender_ID">879251508715</string>
     <string name="setImage">set_image</string>
