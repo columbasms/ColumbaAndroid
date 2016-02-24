@@ -103,8 +103,8 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
 
         if(getArguments().getString("flag")!=null){
             //HAI PREMUTO TRUST
-            builder.setView(v).setPositiveButton("confirm",null).setNegativeButton("cancel",null);
-        }else builder.setView(v).setPositiveButton("send",null).setNegativeButton("cancel",null);
+            builder.setView(v).setPositiveButton(getString(R.string.confirm),null).setNegativeButton(getString(R.string.cancel),null);
+        }else builder.setView(v).setPositiveButton(getString(R.string.send), null).setNegativeButton(getString(R.string.cancel), null);
 
         dialog = builder.create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {

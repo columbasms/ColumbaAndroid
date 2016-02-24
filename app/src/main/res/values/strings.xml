@@ -23,8 +23,6 @@
     <string name="follow">FOLLOW</string>
     <string name="following">FOLLOWING</string>
 
-    <string name="associations_followed">associations followed</string>
-
     <string name="see_more">SEE MORE</string>
     <string name="followed_association">Followed Associations</string>
 
@@ -71,6 +69,7 @@
 
     <string name="edit_profile">EDIT PROFILE</string>
     <string name="edit_bar">Edit profile</string>
+    <string name="save">SAVE</string>
 
     <string name="disable_notify">Disable push notifications</string>
     <string name="msg_number">Messages number limit</string>
@@ -96,4 +95,19 @@
     <string name="pic_select">Select Picture</string>
     <string name="enter_name">Enter your name</string>
 
+    <string name="snd_mail">Send mail...</string>
+    <string name="no_client">There are no email clients installed.</string>
+
+    <string name="trust_btn">TRUST</string>
+    <string name="trusted_btn">TRUSTED</string>
+    <string name="followers"> Followers</string>
+
+    <string name="enter_grp">Enter the group name</string>
+
+    <string name="send">send</string>
+    <string name="cancel">cancel</string>
+    <string name="confirm">confirm</string>
+
+    <string name="from_contacts">From Contacts</string>
+    <string name="from_groups">From Groups</string>
 </resources>

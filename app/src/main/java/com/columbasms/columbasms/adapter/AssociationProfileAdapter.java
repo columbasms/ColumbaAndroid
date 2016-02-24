@@ -159,7 +159,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 holder1.assName.setText(association.getOrganization_name());
 
-                String info = association.getFollowers() + " followers" + " - " + mItemList.size() + " campaigns";
+                String info = association.getFollowers() + " " + res.getString(R.string.followers) + " - " + mItemList.size() + " " + res.getString(R.string.campaigns);
 
                 holder1.assOtherInfo.setText(info);
 
@@ -172,14 +172,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 if(association.isTrusting()){
                     System.out.println(association.isTrusting() + "qui1");
                     t.setBackgroundResource(R.drawable.button_trusted);
-                    t.setText("TRUSTED");
+                    t.setText(res.getString(R.string.trusted_btn));
                     t.setTextColor(Color.parseColor("#ffffff"));
                     parameter = "false";
                     t.setTag("1");
                 }else{
                     System.out.println(association.isTrusting() + "qui2");
                     t.setBackgroundResource(android.R.color.white);
-                    t.setText("TRUST");
+                    t.setText(res.getString(R.string.trust_btn));
                     t.setTextColor(res.getColor(R.color.colorPrimaryDark));
                     parameter = "true";
                     t.setTag("0");

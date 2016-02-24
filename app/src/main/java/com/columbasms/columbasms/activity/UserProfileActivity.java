@@ -216,7 +216,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "?locale=" + Locale.getDefault().getLanguage();
 
-        System.out.println(URL);
+        System.out.println("URL PER OTTENERE LE CAMPAGNE DELL'UTENTE:" + URL);
 
         return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
             @Override
@@ -226,7 +226,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     JSONArray jsonArray = new JSONArray(jsonString);
 
-                    System.out.println(jsonString);
+                    System.out.println("LISTA CAMPAGNE" + jsonArray.toString());
 
                     campaigns_list.clear();
 
@@ -333,8 +333,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private static void showSnackbar(){
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
+                .make(coordinatorLayout, activity.getResources().getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                .setAction(activity.getResources().getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getData();
@@ -374,9 +374,9 @@ public class UserProfileActivity extends AppCompatActivity {
                 j.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
                 j.putExtra(Intent.EXTRA_TEXT, "");
                 try {
-                    startActivity(Intent.createChooser(j, "Send mail..."));
+                    startActivity(Intent.createChooser(j, getString(R.string.snd_mail)));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(UserProfileActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserProfileActivity.this, getString(R.string.no_client), Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_guide:

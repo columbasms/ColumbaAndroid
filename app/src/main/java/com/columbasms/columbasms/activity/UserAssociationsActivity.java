@@ -61,7 +61,7 @@ public class UserAssociationsActivity extends AppCompatActivity {
         USER_ID =  sp.getString("user_id","");
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("Followed Associations");
+        toolbar.setTitle(getString(R.string.followed_association));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -161,14 +161,16 @@ public class UserAssociationsActivity extends AppCompatActivity {
 
     private static void showSnackbar(){
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
+                .make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                .setAction(mainActivity.getResources().getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getData();
                     }
                 });
         View view = snackbar.getView();
+        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+        view.setLayoutParams(params);
         snackbar.show();
     }
 

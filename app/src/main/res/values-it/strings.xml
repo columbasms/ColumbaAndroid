@@ -18,7 +18,7 @@
     <string name="feedback">Feedback</string>
     <string name="guide">Guida</string>
 
-    <string name="select_receivers">Seleziona ricevitori</string>
+    <string name="select_receivers">Seleziona riceventi</string>
 
     <string name="notification_follow_message">ha lanciato una nuova campagna!</string>
     <string name="notification_trust_message">Hai appena condiviso una campagna per</string>
@@ -31,7 +31,11 @@
     <string name="not">Notifiche</string>
     <string name="map">Mappa</string>
     <string name="follow">SEGUI</string>
-    <string name="following">SEGUI GIÀ</string>
+    <string name="following">STAI SEGUENDO</string>
+
+    <string name="see_more">MOSTRA TUTTE</string>
+    <string name="followed_association">Associazioni Seguite</string>
+    <string name="supported_campaigns">Campagne Supportate</string>
 
     <string name="more">SCOPRI</string>
     <string name="hide">NASCONDI</string>
@@ -59,6 +63,7 @@
 
     <string name="edit_profile">MODIFICA PROFILO</string>
     <string name="edit_bar">Modifica profilo</string>
+    <string name="save">SALVA</string>
 
     <string name="disable_notify">Disattiva notifiche push</string>
     <string name="msg_number">Numero limite di messaggi</string>
@@ -73,9 +78,9 @@
 
     <string name="share">Condividi con</string>
 
-    <string name="week">s</string>
-    <string name="day">g</string>
-    <string name="hour">o</string>
+    <string name="week">w</string>
+    <string name="day">d</string>
+    <string name="hour">h</string>
     <string name="minute">m</string>
 
     <string name="no_internet">Connessione assente!</string>
@@ -83,5 +88,20 @@
 
     <string name="pic_select">Seleziona Immagine</string>
     <string name="enter_name">Inserisci il tuo nome</string>
+
+    <string name="snd_mail">Invia mail...</string>
+    <string name="no_client">Non sono presenti client email installati.</string>
+
+    <string name="trust_btn">SOSTIENI</string>
+    <string name="trusted_btn">SOSTENENDO</string>
+
+    <string name="enter_grp">Inserisci il nome del gruppo</string>
+
+    <string name="send">invia</string>
+    <string name="cancel">annulla</string>
+    <string name="confirm">conferma</string>
+
+    <string name="from_contacts">Da Contatti</string>
+    <string name="from_groups">Da Gruppi</string>
 
 </resources>

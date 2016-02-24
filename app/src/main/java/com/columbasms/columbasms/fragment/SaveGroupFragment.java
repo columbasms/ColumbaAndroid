@@ -54,7 +54,7 @@ public class SaveGroupFragment extends DialogFragment {
         final View v = inflater.inflate(R.layout.dialog_enter_group_name, null);
         final AppCompatEditText groupName = (AppCompatEditText)v.findViewById(R.id.group_name);
         builder.setView(v);
-        builder.setPositiveButton("save", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.save), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String groupToAdd_name = groupName.getText().toString();
@@ -90,7 +90,7 @@ public class SaveGroupFragment extends DialogFragment {
                 editor_account_information.remove(getArguments().getString("ass_id") + "_contacts_forTrusting");
                 editor_account_information.apply();
             }
-        }).setNegativeButton("dismiss", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
