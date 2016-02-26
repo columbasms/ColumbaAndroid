@@ -70,6 +70,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static String USER_ID;
     private static Activity activity;
 
+    private static TextView prev_text;
+    private static ImageView prev_image;
+
+    @Bind(R.id.home_text)TextView home_text;
+    @Bind(R.id.topics_text)TextView topics_text;
+    @Bind(R.id.map_text)TextView map_text;
+    @Bind(R.id.notifications_text)TextView notifications_text;
+    @Bind(R.id.home_image)ImageView home_image;
+    @Bind(R.id.topics_image)ImageView topics_image;
+    @Bind(R.id.map_image)ImageView map_image;
+    @Bind(R.id.notifications_image)ImageView notifications_image;
     @Bind(R.id.drawer_layout)DrawerLayout drawer;
     @Bind(R.id.list_view_drawer)NavigationView navView;
     @Bind(R.id.toolbar_top)Toolbar toolbar_top;
@@ -80,18 +91,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Bind(R.id.notifications)LinearLayout notifications;
     @OnClick({ R.id.home, R.id.topics,R.id.messages,R.id.notifications})
     public void onClick(View v) {
+
+        prev_text.setTextColor(getResources().getColor(R.color.colorTextUnselected));
+        prev_image.setAlpha(0.7f);
+
         Fragment fr;
         if(v == findViewById(R.id.home)) {
+
+            home_text.setTextColor(getResources().getColor(R.color.colorText));
+            home_image.setAlpha(1f);
+
             toolbar_top.setTitle(R.string.home);
+            prev_text = home_text;
+            prev_image = home_image;
             fr = new HomeFragment();
         }else if(v == findViewById(R.id.topics)){
+
+            topics_text.setTextColor(getResources().getColor(R.color.colorText));
+            topics_image.setAlpha(1f);
+
             toolbar_top.setTitle(R.string.topics);
+            prev_text = topics_text;
+            prev_image = topics_image;
             fr = new TopicsFragment();
         }else if(v == findViewById(R.id.messages)){
+
+            map_text.setTextColor(getResources().getColor(R.color.colorText));
+            map_image.setAlpha(1f);
+
             toolbar_top.setTitle(R.string.map);
+            prev_text = map_text;
+            prev_image = map_image;
             fr = new MapFragment();
         }else{
+
+            notifications_text.setTextColor(getResources().getColor(R.color.colorText));
+            notifications_image.setAlpha(1f);
+
             toolbar_top.setTitle(R.string.not);
+            prev_text = notifications_text;
+            prev_image = notifications_image;
             fr = new NotificationsFragment();
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -108,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         System.out.println("APERTA");
 
+        //BOTTOM TOOLBAR SETUP
+        prev_text = home_text;
+        prev_image = home_image;
+        home_text.setTextColor(getResources().getColor(R.color.colorText));
+        home_image.setAlpha(1f);
 
         //TOP TOOLBAR SETUP
         toolbar_top.setTitle("Home");

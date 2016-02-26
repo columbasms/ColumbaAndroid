@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.SnackbarCallback;
 import com.columbasms.columbasms.listener.HidingScrollListener;
 import com.columbasms.columbasms.adapter.MainAdapter;
 import com.columbasms.columbasms.model.Association;
@@ -51,7 +52,7 @@ import java.util.Locale;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SnackbarCallback{
 
     private static RecyclerView rvFeed;
     private static List<CharityCampaign> campaigns_list;
@@ -248,5 +249,16 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         Log.e("DEBUG", "OnPause of HomeFragment");
         super.onPause();
+    }
+
+    @Override
+    public void notifySMSnotSent() {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "SMS not Sent!", Snackbar.LENGTH_LONG);
+        View view = snackbar.getView();
+        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+        params.bottomMargin = tb.getHeight();
+        view.setLayoutParams(params);
+        snackbar.show();
     }
 }

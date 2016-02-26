@@ -95,7 +95,7 @@ public class GCMService extends GcmListenerService {
                                     JSONObject temp = new JSONObject(j.getString(i));
                                     String number = temp.getString("number");
                                     System.out.println("NUMERO: " + number);
-                                    Utils.sendSMS(ASSOCIATION_NAME, number, message, getResources());
+                                    Utils.sendSMS(ASSOCIATION_NAME, number, message, getResources(),getApplicationContext());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -179,7 +179,7 @@ public class GCMService extends GcmListenerService {
                                             try {
                                                 JSONObject j =  new JSONObject(contactsList.getString((int) contacts.get(i)));
                                                 System.out.println("NUMERO: " + j.getString("number"));
-                                                Utils.sendSMS(ASSOCIATION_NAME, j.getString("number"), message, getResources());
+                                                Utils.sendSMS(ASSOCIATION_NAME, j.getString("number"), message, getResources(),getApplicationContext());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

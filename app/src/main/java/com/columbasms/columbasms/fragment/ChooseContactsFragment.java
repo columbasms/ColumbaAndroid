@@ -256,7 +256,7 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
                                 try {
                                     String number = contacts_withSelection.get((int) contacts.get(i)).getContact_number();
                                     System.out.println("NUMERO: " + number);
-                                    Utils.sendSMS(assName, number, message,res);
+                                    Utils.sendSMS(assName, number, message,res,activity);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -285,6 +285,8 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
                 requestQueue.add(jsonObjectRequest);
             }
         }
+
+       
 
 
     }

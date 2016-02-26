@@ -1,13 +1,19 @@
 package com.columbasms.columbasms.utils;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
 import android.telephony.SmsManager;
 import android.widget.ImageView;
 
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.SnackbarCallback;
 import com.columbasms.columbasms.activity.MainActivity;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Callback;
@@ -65,10 +71,66 @@ public class Utils {
     }
 
     //SEND SMS
-    public static void sendSMS(String associationSender,String phoneNumber, String message,Resources res ){
+    private static String SENT = "1";
+    private static String DELIVERED = "2";
+
+    public static void sendSMS(String associationSender,String phoneNumber, String message, Resources res, Context mContext){
 
 
-        System.out.println("Send message: " + message + " to " + phoneNumber);
+        PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(mContext, 0,new Intent(DELIVERED), 0);
+
+
+        // ---when the SMS has been sent---
+        mContext.registerReceiver(
+                new BroadcastReceiver()
+                {
+                    @Override
+                    public void onReceive(Context arg0,Intent arg1)
+                    {
+                        switch(getResultCode())
+                        {
+                            case Activity.RESULT_OK:
+                                System.out.println("SENT RESULT: OK");
+                                break;
+                            case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                                System.out.println("SENT RESULT: ERROR_GENERIC_FAILURE");
+                                break;
+                            case SmsManager.RESULT_ERROR_NO_SERVICE:
+                                System.out.println("SENT RESULT: ERROR_NO_SERVICE");
+                                break;
+                            case SmsManager.RESULT_ERROR_NULL_PDU:
+                                System.out.println("SENT RESULT: ERROR_NULL_PDU");
+                                break;
+                            case SmsManager.RESULT_ERROR_RADIO_OFF:
+                                System.out.println("SENT RESULT: ERROR_RADIO_OFF");
+                                break;
+                        }
+                    }
+                }, new IntentFilter(SENT));
+
+        mContext.registerReceiver(
+                new BroadcastReceiver() {
+
+                    @Override
+                    public void onReceive(Context arg0, Intent arg1) {
+                        switch (getResultCode()) {
+                            case Activity.RESULT_OK:
+                                System.out.println("DELIVERY RESULT: OK");
+                                break;
+                            case Activity.RESULT_CANCELED:
+                                System.out.println("DELIVERY RESULT: CANCELED");
+                                break;
+                        }
+                    }
+                }, new IntentFilter(DELIVERED));
+
+        ArrayList<PendingIntent> sent = new ArrayList<>();
+        sent.add(sentPI);
+        ArrayList<PendingIntent> delivered = new ArrayList<>();
+        sent.add(deliveredPI);
+
+        System.out.println("TRY TO SEND message: " + message + " to " + phoneNumber);
         SmsManager sms = SmsManager.getDefault();
 
         String format_message =
@@ -79,7 +141,7 @@ public class Utils {
                 phoneNumber.replace(" ", "");
 
         ArrayList<String> parts = sms.divideMessage(format_message);
-        sms.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
+        sms.sendMultipartTextMessage(phoneNumber, null, parts, sent, delivered);
     }
 
 
