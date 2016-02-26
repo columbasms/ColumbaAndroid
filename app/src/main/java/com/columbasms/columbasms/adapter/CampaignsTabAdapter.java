@@ -22,6 +22,7 @@ import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
+import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
 import java.util.List;
 import butterknife.Bind;
@@ -113,12 +114,7 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             @Override
             public void onClick(View v) {
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                String shareBody = c.getMessage();
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                mainActivity.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+                //SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, snackbarCallback, c.getMessage());
             }
         });
 

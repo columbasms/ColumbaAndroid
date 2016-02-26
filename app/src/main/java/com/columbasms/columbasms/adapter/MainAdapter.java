@@ -1,20 +1,31 @@
 package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.SnackbarCallback;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.TopicProfileActivity;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
@@ -22,8 +33,13 @@ import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
+import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
+import com.google.android.gms.plus.PlusShare;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,16 +54,19 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private FragmentManager fragmentManager;
     private Resources res;
     private Activity mainActivity;
+    private SnackbarCallback snackbarCallback;
 
     private int lastPosition;
 
-    public MainAdapter(List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a) {
+    public MainAdapter(List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a, SnackbarCallback s) {
         mItemList = itemList;
         fragmentManager = ft;
         res = r;
         mainActivity = a;
+        snackbarCallback = s;
         lastPosition = -1;
     }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -136,15 +155,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             ImageView share = holder.share;
             share.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    String shareBody = c.getMessage();
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                    mainActivity.startActivity(Intent.createChooser(sharingIntent, share_via));
+                    SocialNetworkUtils.launchSocialNetworkChooser(mainActivity,snackbarCallback,c.getMessage());
                 }
 
             });
@@ -156,6 +169,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     }
+
 
     @Override
     public int getItemCount() {

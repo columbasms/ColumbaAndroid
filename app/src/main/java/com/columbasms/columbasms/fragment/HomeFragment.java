@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment implements SnackbarCallback{
     private static FragmentManager fragmentManager;
     private static Resources res;
     private static Activity mainActivity;
+    private static SnackbarCallback snackbarCallback;
     private static String USER_ID;
 
     @Override
@@ -74,6 +75,8 @@ public class HomeFragment extends Fragment implements SnackbarCallback{
 
         //Init campaigns list
         campaigns_list = new ArrayList<>();
+
+        snackbarCallback = this;
 
         // Set layout manager to position the items
         rvFeed.setLayoutManager(new GridLayoutManager(getActivity(), 1));
@@ -197,7 +200,7 @@ public class HomeFragment extends Fragment implements SnackbarCallback{
                         }
                     }
                     // Create adapter passing in the sample user data
-                    adapter = new MainAdapter(campaigns_list,fragmentManager,res,mainActivity);
+                    adapter = new MainAdapter(campaigns_list,fragmentManager,res,mainActivity,snackbarCallback);
 
                     AlphaInAnimationAdapter adapter_anim = new AlphaInAnimationAdapter(adapter);
 
@@ -252,9 +255,9 @@ public class HomeFragment extends Fragment implements SnackbarCallback{
     }
 
     @Override
-    public void notifySMSnotSent() {
+    public void notifyNoSocialInstalled() {
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "SMS not Sent!", Snackbar.LENGTH_LONG);
+                .make(coordinatorLayout, "No social network installed!", Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
         CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
         params.bottomMargin = tb.getHeight();
