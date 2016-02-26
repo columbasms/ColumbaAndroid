@@ -87,7 +87,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.3.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.makeramen/roundedimageview/2.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.orhanobut/dialogplus/1.11/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.6.2/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-composer/1.0.3/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.6.4/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/2.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/io.fabric.sdk.android/fabric/1.3.10/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/jp.wasabeef/recyclerview-animators/2.2.0/jars" />
@@ -132,8 +133,10 @@
     <orderEntry type="library" exported="" name="design-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-8.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-8.3.0" level="project" />
-    <orderEntry type="library" exported="" name="twitter-core-1.6.2" level="project" />
+    <orderEntry type="library" exported="" name="twitter-text-1.13.0" level="project" />
+    <orderEntry type="library" exported="" name="tweet-composer-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="dialogplus-1.11" level="project" />
+    <orderEntry type="library" exported="" name="twitter-core-1.6.4" level="project" />
     <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
   </component>
 </module>
