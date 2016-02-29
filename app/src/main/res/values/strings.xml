@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Columba</string>
 
+    <string name="facebook_app_id">1571692039814337</string>
+
     <string name="version">v.0.3.1a</string>
 
     <string name="info">Info</string>

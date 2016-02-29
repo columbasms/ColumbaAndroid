@@ -47,6 +47,7 @@ import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.columbasms.columbasms.utils.network.CacheRequest;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GcmReceiver;
 
@@ -144,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         System.out.println("APERTA");
 
