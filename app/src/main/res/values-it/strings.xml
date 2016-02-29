@@ -107,4 +107,6 @@
     <string name="from_contacts">Da Contatti</string>
     <string name="from_groups">Da Gruppi</string>
 
+    <string name="no_social">"Non ci sono social network installati!"</string>
+
 </resources>

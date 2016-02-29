@@ -8,17 +8,11 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.SnackbarCallback;
+import com.columbasms.columbasms.callback.SnackbarCallback;
 import com.columbasms.columbasms.adapter.SocialAdapter;
 import com.columbasms.columbasms.adapter.TopicsAdapter;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookSdk;
-import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.plus.PlusShare;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -26,10 +20,8 @@ import com.orhanobut.dialogplus.OnItemClickListener;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -91,7 +83,6 @@ public class SocialNetworkUtils {
                                         .getIntent();
                                 mainActivity.startActivityForResult(shareIntent, 0);
                             }else if(sn.equals("Facebook")){
-
                                 ShareDialog shareDialog = new ShareDialog(mainActivity);
                                 if (ShareDialog.canShow(ShareLinkContent.class)) {
                                     ShareLinkContent linkContent = new ShareLinkContent.Builder()
@@ -99,7 +90,6 @@ public class SocialNetworkUtils {
                                             .setContentDescription("The 'Hello Facebook' sample  showcases simple Facebook integration")
                                             .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
                                             .build();
-
                                     shareDialog.show(linkContent);
                                 }
 
@@ -113,7 +103,7 @@ public class SocialNetworkUtils {
 
                         }
                     })
-                    .setExpanded(false)  // This will enable the expand feature, (similar to android L share dialog)
+                    .setExpanded(false)
                     .create();
             dialog.show();
 

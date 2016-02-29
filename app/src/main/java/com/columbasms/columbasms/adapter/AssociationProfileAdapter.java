@@ -2,7 +2,6 @@ package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -30,12 +29,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.columbasms.columbasms.AdapterCallback;
+import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.activity.TopicProfileActivity;
+import com.columbasms.columbasms.callback.SnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
 import com.columbasms.columbasms.fragment.ChooseContactsFragment;
-import com.columbasms.columbasms.fragment.ChooseGroupFragment;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -67,6 +65,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     private static Activity activity;
     private FragmentManager fragmentManager;
     private AdapterCallback adapterCallback;
+    private SnackbarCallback snackbarCallback;
 
     private static final int TYPE_PROFILE = 0;
     private static final int TYPE_GROUP = 1;
@@ -116,13 +115,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
 
 
-    public AssociationProfileAdapter(List<CharityCampaign> itemList,Association a,Resources res, Activity activity, FragmentManager fragmentManager,AdapterCallback ac) {
-        mItemList = itemList;
-        this.association = a;
-        this.res = res;
-        this.activity = activity;
-        this.fragmentManager = fragmentManager;
-        this.adapterCallback = ac;
+    public AssociationProfileAdapter(List<CharityCampaign> il,Association a,Resources r, Activity ay, FragmentManager f, AdapterCallback ac, SnackbarCallback s) {
+        mItemList = il;
+        association = a;
+        res = r;
+        activity = ay;
+        fragmentManager = f;
+        adapterCallback = ac;
+        snackbarCallback = s;
     }
 
 
@@ -394,7 +394,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                     @Override
                     public void onClick(View v) {
-                        //SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, snackbarCallback, c.getMessage());
+                        SocialNetworkUtils.launchSocialNetworkChooser(activity, snackbarCallback, c.getMessage());
                     }
 
                 });

@@ -181,12 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-
-
         drawer.setDrawerListener(mToggle);
-
         mToggle.syncState();
-
 
 
 

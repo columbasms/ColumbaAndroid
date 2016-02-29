@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.TopicProfileActivity;
+import com.columbasms.columbasms.callback.SnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
 import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
@@ -37,14 +38,16 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private FragmentManager fragmentManager;
     private Resources res;
     private Activity mainActivity;
+    private SnackbarCallback snackbarCallback;
 
     private int lastPosition;
 
-    public CampaignsTabAdapter (List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a) {
+    public CampaignsTabAdapter (List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a, SnackbarCallback s) {
         mItemList = itemList;
         fragmentManager = ft;
         res = r;
         mainActivity = a;
+        snackbarCallback = s;
         lastPosition = -1;
     }
 
@@ -114,7 +117,7 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             @Override
             public void onClick(View v) {
-                //SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, snackbarCallback, c.getMessage());
+                SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, snackbarCallback, c.getMessage());
             }
         });
 

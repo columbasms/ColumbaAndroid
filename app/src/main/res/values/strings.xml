@@ -111,4 +111,6 @@
 
     <string name="from_contacts">From Contacts</string>
     <string name="from_groups">From Groups</string>
+
+    <string name="no_social">"No social network installed!"</string>
 </resources>

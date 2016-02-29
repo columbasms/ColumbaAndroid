@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -32,7 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.SnackbarCallback;
+import com.columbasms.columbasms.callback.SnackbarCallback;
 import com.columbasms.columbasms.listener.HidingScrollListener;
 import com.columbasms.columbasms.adapter.MainAdapter;
 import com.columbasms.columbasms.model.Association;
@@ -250,14 +249,13 @@ public class HomeFragment extends Fragment implements SnackbarCallback{
 
     @Override
     public void onPause() {
-        Log.e("DEBUG", "OnPause of HomeFragment");
         super.onPause();
     }
 
     @Override
     public void notifyNoSocialInstalled() {
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "No social network installed!", Snackbar.LENGTH_LONG);
+                .make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_social) , Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
         CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
         params.bottomMargin = tb.getHeight();

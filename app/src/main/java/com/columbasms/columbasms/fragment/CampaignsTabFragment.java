@@ -25,6 +25,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.CampaignsTabAdapter;
+import com.columbasms.columbasms.callback.SnackbarCallback;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -44,7 +45,7 @@ import java.util.List;
 /**
  * Created by Matteo Brienza on 2/9/16.
  */
-public class CampaignsTabFragment extends Fragment {
+public class CampaignsTabFragment extends Fragment implements SnackbarCallback{
 
     private static String TOPIC_ID;
 
@@ -57,6 +58,7 @@ public class CampaignsTabFragment extends Fragment {
     private static FragmentManager fragmentManager;
     private static SwipeRefreshLayout mySwipeRefreshLayout;
     private static CoordinatorLayout coordinatorLayout;
+    private static SnackbarCallback snackbarCallback;
     private static Activity mainActivity;
     private static Resources res;
 
@@ -68,6 +70,7 @@ public class CampaignsTabFragment extends Fragment {
         associations_list = new ArrayList<>();
         mContext = getActivity().getApplicationContext();
         fragmentManager = getFragmentManager();
+        snackbarCallback = this;
 
     }
 
@@ -181,7 +184,7 @@ public class CampaignsTabFragment extends Fragment {
                         }
                     }
                     // Create adapter passing in the sample user data
-                    campaignsTabAdapter = new CampaignsTabAdapter(campaigns_list,fragmentManager,res,mainActivity);
+                    campaignsTabAdapter = new CampaignsTabAdapter(campaigns_list,fragmentManager,res,mainActivity,snackbarCallback);
 
                     // Attach the adapter to the recyclerview to populate items
                     rv_main_list.setAdapter(campaignsTabAdapter);
@@ -215,4 +218,13 @@ public class CampaignsTabFragment extends Fragment {
         return cm.getActiveNetworkInfo() != null;
     }
 
+    @Override
+    public void notifyNoSocialInstalled() {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_social) , Snackbar.LENGTH_LONG);
+        View view = snackbar.getView();
+        CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+        view.setLayoutParams(params);
+        snackbar.show();
+    }
 }

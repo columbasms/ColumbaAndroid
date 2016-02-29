@@ -8,13 +8,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.design.widget.CoordinatorLayout;
 import android.telephony.SmsManager;
 import android.widget.ImageView;
 
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.SnackbarCallback;
-import com.columbasms.columbasms.activity.MainActivity;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
