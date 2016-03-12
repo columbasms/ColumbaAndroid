@@ -13,4 +13,5 @@
         app:title="@string/Leaderboard"
         app:titleTextColor="#ffffff"
         />
+
 </LinearLayout>
