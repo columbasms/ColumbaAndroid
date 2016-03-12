@@ -18,12 +18,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,13 +35,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.adapter.UserProfileAdapter;
 import com.columbasms.columbasms.fragment.HomeFragment;
 import com.columbasms.columbasms.fragment.MapFragment;
 import com.columbasms.columbasms.fragment.NotificationsFragment;
 import com.columbasms.columbasms.fragment.SplashScreenFragment;
 import com.columbasms.columbasms.fragment.TopicsFragment;
-import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.columbasms.columbasms.utils.network.CacheRequest;
@@ -70,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static View header;
     private static String USER_ID;
     private static Activity activity;
-
     private static TextView prev_text;
     private static ImageView prev_image;
 
@@ -145,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -373,7 +369,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-
+            case R.id.leaderboard:
+                startActivity(new Intent(this, LeaderboardActivity.class));
+                break;
         }
 
         if (Build.VERSION.SDK_INT >= 19) {
@@ -394,8 +392,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
