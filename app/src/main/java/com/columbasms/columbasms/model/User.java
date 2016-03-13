@@ -16,6 +16,7 @@ public class User {
     private String cover_image;
     private int assFollowed;
     private int campForwarder;
+    private int score;
 
     public User(String id,String digits_id, String digits_token,String phone_number){
         this.id = id;
@@ -36,6 +37,12 @@ public class User {
         this.cover_image = cover_image;
         this.assFollowed = assFollowed;
         this.campForwarder = campForwarder;
+    }
+
+    public User(String fullName/*, String profile_image*/, int score){
+        this.fullName = fullName;
+        //this.profile_image = profile_image;
+        this.score = score;
     }
 
     public String getId() {
@@ -72,5 +79,9 @@ public class User {
 
     public int getCampForwarder() {
         return campForwarder;
+    }
+
+    public int getScore() {
+        return score;
     }
 }
