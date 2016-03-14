@@ -96,6 +96,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         USER_ID =  sp.getString("user_id", "");
         ASSOCIATION_ID = getIntent().getStringExtra("ass_id");
         ASSOCIATION_NAME = getIntent().getStringExtra("ass_name");
+        if(a==null) a =new Association();
 
         System.out.println("CONTATTI PER IL TRUST DI " + ASSOCIATION_NAME + ": " + sp.getString(ASSOCIATION_ID + "_contacts_forTrusting", ""));
         System.out.println("GRUPPI PER IL TRUST DI " + ASSOCIATION_NAME + ": " + sp.getString(ASSOCIATION_ID + "_groups_forTrusting", ""));
@@ -162,10 +163,10 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                 int card_size = associationProfileAdapter.getCardSize();
                 scrollDy += dy;
 
-                if(card_size==0){
+                if (card_size == 0) {
                     cd.setAlpha(0);
                     toolbar.setTitle("");
-                }else  if (scrollDy > card_size) {
+                } else if (scrollDy > card_size) {
                     cd.setAlpha(255);
                     toolbar.setTitle(ASSOCIATION_NAME);
                 } else if (scrollDy <= 0) {
@@ -177,6 +178,12 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                 }
             }
         });
+
+        // Create adapter passing in the sample user data
+        associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback, noSocialsSnackbarCallback);
+
+        // Attach the adapter to the recyclerview to populate items
+        rvAssociationProfile.setAdapter(associationProfileAdapter);
 
         getData();
 
@@ -212,7 +219,18 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
                     JSONObject o = new JSONObject(jsonString);
 
-                    a = new Association(ASSOCIATION_ID,o.getString("organization_name"),o.getString("avatar_normal"),o.getString("cover_normal"),o.getString("description"),o.getInt("followers"),o.getBoolean("following"),o.getBoolean("trusting"));
+
+                    a.setId(ASSOCIATION_ID);
+                    a.setOrganization_name(o.getString("organization_name"));
+                    a.setAvatar_normal(o.getString("avatar_normal"));
+                    a.setCover_normal(o.getString("cover_normal"));
+                    a.setDescription(o.getString("description"));
+                    a.setFollowers(o.getInt("followers"));
+                    a.setFollowing(o.getBoolean("following"));
+                    a.setTrusting(o.getBoolean("trusting"));
+
+
+                    //a = new Association(ASSOCIATION_ID,o.getString("organization_name"),o.getString("avatar_normal"),o.getString("cover_normal"),o.getString("description"),o.getInt("followers"),o.getBoolean("following"),o.getBoolean("trusting"));
 
                     System.out.println(o.toString());
 
@@ -370,23 +388,6 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         snackbar.show();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mySwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-
-                // Create adapter passing in the sample user data
-                associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback, noSocialsSnackbarCallback);
-
-                // Attach the adapter to the recyclerview to populate items
-                rvAssociationProfile.setAdapter(associationProfileAdapter);
-
-                getData();
-            }
-        });
-    }
 }
 
 

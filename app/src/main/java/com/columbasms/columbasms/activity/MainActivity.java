@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(USER_ID != null){
             getUser();
-        }else MainActivity.this.finish();
+        }
 
 
         if(state.getString("subscribeLogin",null)==null){

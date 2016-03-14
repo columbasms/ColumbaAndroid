@@ -227,11 +227,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                                 newFragment.show(fragmentManager, null);
                                             }
 
-                                            association.setTrusting(true);
+                                            //association.setTrusting(true);
 
                                         }else{
 
-                                            association.setTrusting(false);
+                                            //association.setTrusting(false);
 
                                             //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
                                             SharedPreferences.Editor editor_account_information = p.edit();
@@ -241,7 +241,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         }
 
                                         dialog.dismiss();
-                                       notifyDataSetChanged();
+                                        //notifyDataSetChanged();
                                         adapterCallback.onMethodCallback();
                                     }
                                 },
@@ -296,13 +296,13 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                         int foll = association.getFollowers();
 
                         if(f.getTag().equals("0")){
-                            association.setFollowers(foll+1);
-                            association.setFollowing(true);
+                            //association.setFollowers(foll+1);
+                            //association.setFollowing(true);
                             subscribeTopic();
                         }else {
-                            association.setFollowers(foll-1);
-                            association.setFollowing(false);
-                            association.setTrusting(false);
+                            //association.setFollowers(foll-1);
+                            //association.setFollowing(false);
+                            //association.setTrusting(false);
                             unsubscribeTopic();
                         }
 
@@ -328,7 +328,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         editor_account_information.remove(association.getId() + "_contacts_forTrusting");
                                         editor_account_information.apply();
 
-                                        notifyDataSetChanged();
+                                        //notifyDataSetChanged();
                                         dialog.dismiss();
                                         adapterCallback.onMethodCallback();
                                     }

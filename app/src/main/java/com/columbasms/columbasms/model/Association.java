@@ -16,6 +16,11 @@ public class Association {
         private boolean following;
         private boolean trusting;
 
+        public Association(){
+
+        }
+
+
         public Association (String id, String organization_name, String avatar_normal, String cover_normal, String description){
             this.id = id;
             this.organization_name = organization_name;
@@ -50,7 +55,29 @@ public class Association {
             return id;
         }
 
-        public String getOrganization_name() {
+    public void setAvatar_normal(String avatar_normal) {
+        this.avatar_normal = avatar_normal;
+    }
+
+    public void setCover_normal(String cover_normal) {
+        this.cover_normal = cover_normal;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public void setOrganization_name(String organization_name) {
+        this.organization_name = organization_name;
+    }
+
+
+    public String getOrganization_name() {
             return organization_name;
         }
 
