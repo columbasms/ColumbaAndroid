@@ -42,4 +42,6 @@ public class CharityCampaign {
     public String getTimestamp() {
         return timestamp;
     }
+
+
 }

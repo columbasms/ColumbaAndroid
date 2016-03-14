@@ -25,7 +25,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.CampaignsTabAdapter;
-import com.columbasms.columbasms.callback.SnackbarCallback;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * Created by Matteo Brienza on 2/9/16.
  */
-public class CampaignsTabFragment extends Fragment implements SnackbarCallback{
+public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarCallback {
 
     private static String TOPIC_ID;
 
@@ -58,7 +58,7 @@ public class CampaignsTabFragment extends Fragment implements SnackbarCallback{
     private static FragmentManager fragmentManager;
     private static SwipeRefreshLayout mySwipeRefreshLayout;
     private static CoordinatorLayout coordinatorLayout;
-    private static SnackbarCallback snackbarCallback;
+    private static NoSocialsSnackbarCallback noSocialsSnackbarCallback;
     private static Activity mainActivity;
     private static Resources res;
 
@@ -70,7 +70,7 @@ public class CampaignsTabFragment extends Fragment implements SnackbarCallback{
         associations_list = new ArrayList<>();
         mContext = getActivity().getApplicationContext();
         fragmentManager = getFragmentManager();
-        snackbarCallback = this;
+        noSocialsSnackbarCallback = this;
 
     }
 
@@ -184,7 +184,7 @@ public class CampaignsTabFragment extends Fragment implements SnackbarCallback{
                         }
                     }
                     // Create adapter passing in the sample user data
-                    campaignsTabAdapter = new CampaignsTabAdapter(campaigns_list,fragmentManager,res,mainActivity,snackbarCallback);
+                    campaignsTabAdapter = new CampaignsTabAdapter(campaigns_list,fragmentManager,res,mainActivity, noSocialsSnackbarCallback);
 
                     // Attach the adapter to the recyclerview to populate items
                     rv_main_list.setAdapter(campaignsTabAdapter);

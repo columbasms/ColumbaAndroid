@@ -8,7 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.telephony.SmsManager;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.columbasms.columbasms.R;
@@ -142,6 +146,14 @@ public class Utils {
     }
 
 
+
+
+
+
+
+
+
+
     //DOWNLOAD IMAGE AND APPLY A TRASFORMATION
     private static Transformation t;
     public static void downloadImage(final String URL, final ImageView im, final boolean applyTrasformation, boolean applyBorder){
@@ -208,6 +220,13 @@ public class Utils {
 
                     }
                 });
-
     }
+
+
+
+
+
+
+
+
 }

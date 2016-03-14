@@ -128,7 +128,7 @@ public class ChooseGroupFragment extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         JSONArray groupsForTrusting = new JSONArray();
-                        List<ContactsGroup> allGroups = adapter.getContactsGroupList();
+                        List<ContactsGroup> allGroups = adapter.getAllContactsGroups();
                         for(int i = 0; i<allGroups.size(); i++){
                             ContactsGroup temp = allGroups.get(i);
                             if(temp.isSelected()){
@@ -183,7 +183,7 @@ public class ChooseGroupFragment extends DialogFragment {
         }
 
         // Create adapter passing in the sample user data
-        adapter = new ContactsGroupAdapter(contactsGroupList,colors);
+        adapter = new ContactsGroupAdapter(contactsGroupList,null,colors);
 
         // Attach the adapter to the recyclerview to populate items
         rvGroups.setAdapter(adapter);

@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/search"
+          android:title="search"
+          android:icon="@drawable/ic_search_white_24dp"
+          app:showAsAction="collapseActionView|ifRoom"
+          app:actionViewClass="android.support.v7.widget.SearchView"/>/>
+
+    <item
+        android:id="@+id/action_selectAll"
+        android:icon="@drawable/ic_check_box_outline_blank_white_24dp"
+        app:showAsAction="always"
+        android:title="0"/>
+
+
+</menu>

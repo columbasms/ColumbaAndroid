@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,9 @@ import org.json.JSONObject;
 import java.security.acl.Group;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Matteo Brienza on 2/16/16.
  */
@@ -29,10 +33,12 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
     private int[] colors;
     private boolean colorAlreadySelected;
     private static List<ContactsGroup> contactsGroupList;
+    private static List<ContactsGroup> allContactsGroups;
 
     // Pass in the contact array into the constructor
-    public ContactsGroupAdapter(List<ContactsGroup> contactsGroupList, int[] colors) {
+    public ContactsGroupAdapter(List<ContactsGroup> contactsGroupList, List<ContactsGroup> allContactsGroups, int[] colors) {
         this.contactsGroupList = contactsGroupList;
+        this.allContactsGroups = allContactsGroups;
         this.colors = colors;
     }
 
@@ -42,8 +48,8 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
         return contactsGroupList == null ? 0 : contactsGroupList.size();
     }
 
-    public List<ContactsGroup> getContactsGroupList() {
-        return contactsGroupList;
+    public List<ContactsGroup> getAllContactsGroups() {
+        return allContactsGroups;
     }
 
 
@@ -56,7 +62,7 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
         colorAlreadySelected = false;
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.item_contact, parent, false);
+        View contactView = inflater.inflate(R.layout.item_groups, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -80,28 +86,49 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
         TextDrawable drawable = TextDrawable.builder().buildRound(group_name.substring(0, 1), colors[position]);
         contacts_image.setImageDrawable(drawable);
 
+        CheckBox button = viewHolder.favourite;
+        if (isSelected==false){
+            button.setChecked(false);
+        }else button.setChecked(true);
+
 
     }
 
-    // Provide a direct reference to each of the views within a data item
+    public void setFilter(String queryText) {
+        contactsGroupList.clear();
+        for (ContactsGroup item: allContactsGroups) {
+            if (item.getName().toLowerCase().contains(queryText))
+                contactsGroupList.add(item);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void flushFilter(){
+        contactsGroupList.clear();
+        contactsGroupList.addAll(allContactsGroups);
+        notifyDataSetChanged();
+    }
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView nameTextView;
-        public ImageView contacts_image;
-        public ImageView favourite;
-        public LinearLayout cl;
+
+        @Bind(R.id.contacts_name) TextView nameTextView;
+        @Bind(R.id.contacts_image) ImageView contacts_image;
+        @Bind(R.id.favourite) CheckBox favourite;
+        @Bind(R.id.contact_layout) LinearLayout cl;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            cl = (LinearLayout) itemView.findViewById(R.id.contact_layout);
-            cl.setOnClickListener(this);
-            nameTextView = (TextView) itemView.findViewById(R.id.contacts_name);
-            contacts_image = (ImageView) itemView.findViewById(R.id.contacts_image);
+
+            ButterKnife.bind(this,itemView);
+
             ColorGenerator generator = ColorGenerator.MATERIAL;
             int color1 = generator.getRandomColor();
             TextDrawable drawable = TextDrawable.builder().buildRound("", color1);
             contacts_image.setImageDrawable(drawable);
-            favourite = (ImageView) itemView.findViewById(R.id.favourite);
+
             favourite.setOnClickListener(this);
+            cl.setOnClickListener(this);
 
         }
 
@@ -110,13 +137,22 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
             int pos = getAdapterPosition();
             ContactsGroup g = contactsGroupList.get(pos);
             if (g.isSelected()) {
-                favourite.setBackgroundResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+                favourite.setChecked(false);
                 g.setSelected(false);
             } else {
-                favourite.setBackgroundResource(R.drawable.ic_check_box_black_24dp);
+                favourite.setChecked(true);
                 g.setSelected(true);
             }
+            setFlagAtIndex(allContactsGroups, g);
             contactsGroupList.set(pos, g);
+        }
+
+        private void setFlagAtIndex(List<ContactsGroup> l, ContactsGroup cg){
+            for (int i = 0; i<l.size();i++){
+                if (l.get(i).getName().equals(cg.getName())) {
+                    l.get(i).setSelected(cg.isSelected());
+                }
+            }
         }
     }
 }

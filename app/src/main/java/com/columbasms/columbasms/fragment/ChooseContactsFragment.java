@@ -18,12 +18,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.AuthFailureError;
@@ -34,10 +36,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.activity.MainActivity;
 import com.columbasms.columbasms.adapter.ContactsAdapter;
 import com.columbasms.columbasms.model.Contact;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
+import com.quinny898.library.persistentsearch.SearchBox;
+import com.quinny898.library.persistentsearch.SearchResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +81,8 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+
+
         res = getActivity().getResources();
         activity = getActivity();
 
@@ -95,6 +102,9 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
         // Pass null as the parent view because its going in the dialog layout
 
         final View v = inflater.inflate(R.layout.dialog_select_contacts, null);
+
+        Toolbar toolbar = (Toolbar)v.findViewById(R.id.toolbar);
+
         rvContacts = (RecyclerView)v.findViewById(R.id.rv_contactList);
         save_as_a_group = (ImageView)v.findViewById(R.id.save_as_a_group);
         save_as_a_grouptext = (TextView)v.findViewById(R.id.save_as_a_group_text);
@@ -193,7 +203,7 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
         //SEND MESSAGES TO SELECTED CONTACTS (AND SAVE SELECTION FOR ASSOCIATION)
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         jsonArray = new JSONArray();
-        final List<Contact> contacts_list = adapter.getContacts();
+        final List<Contact> contacts_list = adapter.getAllContacts();
         contacts_withSelection = new ArrayList<>();
         Contact temp;
         final JSONArray j = new JSONArray();
@@ -322,7 +332,7 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
             sab.setTag(1);
         }
 
-        sab.setOnClickListener(this);
+        //sab.setOnClickListener(this);
 
         // Set layout manager to position the items
         rvContacts.setLayoutManager(new GridLayoutManager(getActivity(),1));
@@ -334,7 +344,7 @@ public class ChooseContactsFragment extends DialogFragment implements View.OnCli
         }
 
         // Create adapter passing in the sample user data
-        adapter = new ContactsAdapter(contactList,colors);
+        adapter = new ContactsAdapter(contactList,null,null);
 
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(adapter);

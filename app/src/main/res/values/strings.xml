@@ -15,8 +15,12 @@
     <string name="notification_trust_message">You just shared a campaign for</string>
 
     <string name="save_as_a_group">Save as a group</string>
+    <string name="save_as">Save as </string>
 
     <string name="group_setting">Groups Settings</string>
+
+    <string name="select_atLeast_a_contact">Select at least a contact</string>
+    <string name="select_atLeast_a_group">Select at least a group</string>
 
     <string name="home">Home</string>
     <string name="topics">Topics</string>
@@ -54,7 +58,7 @@
 
 
     <string name="dialog_contacts_title">Select contacts</string>
-    <string name="dialog_contactsGroups_title">Select a group</string>
+    <string name="dialog_contactsGroups_title">Select groups</string>
     <string name="dialog_number_verification_title">Verification</string>
     <string name="dialog_number_verification_verify">VERIFY</string>
 
@@ -105,9 +109,10 @@
 
     <string name="enter_grp">Enter the group name</string>
 
-    <string name="send">send</string>
-    <string name="cancel">cancel</string>
-    <string name="confirm">confirm</string>
+    <string name="send">SEND</string>
+    <string name="cancel">CANCEL</string>
+    <string name="confirm">CONFIRM</string>
+
 
     <string name="from_contacts">From Contacts</string>
     <string name="from_groups">From Groups</string>

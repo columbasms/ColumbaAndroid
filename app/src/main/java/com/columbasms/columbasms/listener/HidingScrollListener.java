@@ -42,4 +42,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     public abstract void onHide();
     public abstract void onShow();
 
+    public int getScrolledDistance(){
+        return scrolledDistance;
+    }
+
 }

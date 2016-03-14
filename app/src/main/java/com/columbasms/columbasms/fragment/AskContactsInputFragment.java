@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.activity.ContactsSelectionActivity;
+import com.columbasms.columbasms.activity.GroupsSelectionActivity;
 import com.columbasms.columbasms.adapter.ContactsAdapter;
 import com.columbasms.columbasms.model.Contact;
 
@@ -23,16 +26,13 @@ import java.util.List;
  */
 public class AskContactsInputFragment extends DialogFragment {
 
-    private ContactsAdapter adapter;
-    private List<Contact> contactList;
-    private ImageView sab;
-    private String assName;
-    private String key;
-    private String message;
     private String CAMPAIGN_ID;
     private String USER_ID;
-    private static Resources res;
-    private static Activity activity;
+    private String ASSOCIATION_NAME;
+    private String ASSOCIATION_KEY;
+    private String ASSOCIATION_ID;
+    private String CAMPAIGN_MESSAGE;
+
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -40,48 +40,43 @@ public class AskContactsInputFragment extends DialogFragment {
         array[0] = getResources().getString(R.string.from_contacts);
         array[1] = getResources().getString(R.string.from_groups);
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        res = getActivity().getResources();
-        activity = getActivity();
-
-        //GET ASSOCIATION NAME FOR THIS CAMPAIGN AND CREATE KEY
-        assName = getTag();
-        key =  assName + "_contacts";
-        message = getArguments().getString("message");
+        //GET ALL INFORMATION
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        ASSOCIATION_NAME = getTag();
+        ASSOCIATION_KEY =  ASSOCIATION_NAME + "_contacts";
+        ASSOCIATION_ID = getArguments().getString("association_id");
+        CAMPAIGN_MESSAGE = getArguments().getString("message");
+        CAMPAIGN_ID = getArguments().getString("campaign_id");
+        USER_ID = p.getString("user_id", "NOID");
 
         final String flag = getArguments().getString("flag");
 
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-
-        CAMPAIGN_ID = getArguments().getString("campaign_id");
-        USER_ID = p.getString("user_id","NOID");
-
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
         builder.setCustomTitle(inflater.inflate(R.layout.dialog_ask_contacts_input, null));
         builder.setItems(array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Bundle bundle = new Bundle();
-                bundle.putString("message", message);
-                bundle.putString("campaign_id", CAMPAIGN_ID);
-                bundle.putString("ass_id", getArguments().getString("ass_id"));
-                bundle.putString("flag",flag);
+
                 switch (which){
                     case 0:
-                        ChooseContactsFragment newFragment0 = new ChooseContactsFragment();
-                        newFragment0.setArguments(bundle);
-                        newFragment0.show(getFragmentManager(), assName);
+                        Intent i = new Intent(getActivity(), ContactsSelectionActivity.class);
+                        i.putExtra("association_name",ASSOCIATION_NAME);
+                        i.putExtra("association_id",ASSOCIATION_ID);
+                        i.putExtra("message",CAMPAIGN_MESSAGE);
+                        i.putExtra("campaign_id", CAMPAIGN_ID);
+                        i.putExtra("flag", flag);
+                        getActivity().startActivity(i);
                         break;
                     case 1:
-                        ChooseGroupFragment newFragment1 = new ChooseGroupFragment ();
-                        newFragment1.setArguments(bundle);
-                        newFragment1.show(getFragmentManager(), assName);
+                        Intent g = new Intent(getActivity(), GroupsSelectionActivity.class);
+                        g.putExtra("association_name", ASSOCIATION_NAME);
+                        g.putExtra("association_id", ASSOCIATION_ID);
+                        g.putExtra("message", CAMPAIGN_MESSAGE);
+                        g.putExtra("campaign_id", CAMPAIGN_ID);
+                        g.putExtra("flag", flag);
+                        getActivity().startActivity(g);
                         break;
                 };
             }

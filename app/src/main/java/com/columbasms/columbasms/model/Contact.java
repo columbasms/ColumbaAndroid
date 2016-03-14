@@ -1,5 +1,7 @@
 package com.columbasms.columbasms.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by Matteo Brienza on 1/14/16.
  */
@@ -29,5 +31,10 @@ public class Contact {
 
     public void setSelected(boolean b){
         isSelected = b;
+    }
+
+    @Override
+    public String toString(){
+        return ToStringBuilder.reflectionToString(this);
     }
 }

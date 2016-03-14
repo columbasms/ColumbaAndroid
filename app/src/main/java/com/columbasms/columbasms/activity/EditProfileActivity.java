@@ -333,10 +333,17 @@ public class EditProfileActivity extends AppCompatActivity{
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+
                 HashMap<String, String> headers = new HashMap<String, String>();
+
+                //VA TOLTO
                 String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
                 String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
                 headers.put("Authorization", "Basic "+ credBase64);
+                /*VA INSERITO
+                headers.put("X-Auth-Token",auth_token);
+                */
+
                 return headers;
             }
 

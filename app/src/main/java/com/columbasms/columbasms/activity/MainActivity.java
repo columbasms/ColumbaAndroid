@@ -65,14 +65,16 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static long SPLASH_SCREEN_DELAY = 1500;
+    private static long SPLASH_SCREEN_DELAY = 1500; 
     private ActionBarDrawerToggle mToggle;
     private static View header;
-    private static String USER_ID;
     private static Activity activity;
 
     private static TextView prev_text;
     private static ImageView prev_image;
+
+    private static String USER_ID;
+    private static String AUTH_TOKEN;
 
     @Bind(R.id.home_text)TextView home_text;
     @Bind(R.id.topics_text)TextView topics_text;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Bind(R.id.topics)LinearLayout topics;
     @Bind(R.id.messages)LinearLayout map;
     @Bind(R.id.notifications)LinearLayout notifications;
+
     @OnClick({ R.id.home, R.id.topics,R.id.messages,R.id.notifications})
     public void onClick(View v) {
 
@@ -101,43 +104,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             home_text.setTextColor(getResources().getColor(R.color.colorText));
             home_image.setAlpha(1f);
-
             toolbar_top.setTitle(R.string.home);
             prev_text = home_text;
             prev_image = home_image;
             fr = new HomeFragment();
+
         }else if(v == findViewById(R.id.topics)){
 
             topics_text.setTextColor(getResources().getColor(R.color.colorText));
             topics_image.setAlpha(1f);
-
             toolbar_top.setTitle(R.string.topics);
             prev_text = topics_text;
             prev_image = topics_image;
             fr = new TopicsFragment();
+
         }else if(v == findViewById(R.id.messages)){
 
             map_text.setTextColor(getResources().getColor(R.color.colorText));
             map_image.setAlpha(1f);
-
             toolbar_top.setTitle(R.string.map);
             prev_text = map_text;
             prev_image = map_image;
             fr = new MapFragment();
+
         }else{
 
             notifications_text.setTextColor(getResources().getColor(R.color.colorText));
             notifications_image.setAlpha(1f);
-
             toolbar_top.setTitle(R.string.not);
             prev_text = notifications_text;
             prev_image = notifications_image;
             fr = new NotificationsFragment();
         }
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_place, fr);
         fragmentTransaction.commit();
+
     }
 
     @Override
@@ -148,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        System.out.println("APERTA");
 
         //BOTTOM TOOLBAR SETUP
         prev_text = home_text;
@@ -253,6 +256,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navHeader_userName.setText(getIntent().getStringExtra("user_name"));
         }
         navHeader_userName.setText(userName);
+
+        AUTH_TOKEN = state.getString("auth_token", null);
+        if (AUTH_TOKEN == null) getIntent().getStringExtra("auth_token");
 
         USER_ID = state.getString("user_id", null);
         if (USER_ID == null) getIntent().getStringExtra("user_id");
@@ -443,7 +449,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return null;
             }
 
-        }.execute(null, null, null);;
+        }.execute(null, null, null);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        /*
+        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor_account_information = state.edit();
+        editor_account_information.putBoolean("homeFragment_alreadyLoaded", false);
+        editor_account_information.apply();
+        */
     }
 
 

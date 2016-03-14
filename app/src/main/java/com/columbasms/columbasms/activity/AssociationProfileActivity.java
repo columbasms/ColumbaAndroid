@@ -31,7 +31,7 @@ import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.AssociationProfileAdapter;
-import com.columbasms.columbasms.callback.SnackbarCallback;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -54,7 +54,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Matteo Brienza on 2/1/16.
  */
-public class AssociationProfileActivity extends AppCompatActivity implements AdapterCallback,SnackbarCallback{
+public class AssociationProfileActivity extends AppCompatActivity implements AdapterCallback,NoSocialsSnackbarCallback {
 
     @Bind(R.id.toolbar_profile)Toolbar toolbar;
 
@@ -72,7 +72,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
     private static List<CharityCampaign> campaigns_list;
     private static Association a;
     private static AdapterCallback adapterCallback;
-    private static SnackbarCallback snackbarCallback;
+    private static NoSocialsSnackbarCallback noSocialsSnackbarCallback;
     private static String ASSOCIATION_ID;
     private static String ASSOCIATION_NAME;
     private static String USER_ID;
@@ -89,6 +89,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         System.out.println(sp.getString(ASSOCIATION_NAME + "_contacts_forTrusting", ""));
+
         USER_ID =  sp.getString("user_id", "");
         ASSOCIATION_ID = getIntent().getStringExtra("ass_id");
         ASSOCIATION_NAME = getIntent().getStringExtra("ass_name");
@@ -140,7 +141,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         fragmentManager = getSupportFragmentManager();
         mainActivity = this;
         adapterCallback = this;
-        snackbarCallback = this;
+        noSocialsSnackbarCallback = this;
 
         // Set layout manager to position the items
         rvAssociationProfile.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
@@ -274,7 +275,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                         }
                     }
                     // Create adapter passing in the sample user data
-                    associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback,snackbarCallback);
+                    associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback, noSocialsSnackbarCallback);
 
                     // Attach the adapter to the recyclerview to populate items
                     rvAssociationProfile.setAdapter(associationProfileAdapter);
@@ -355,7 +356,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
     }
     @Override
     public void onMethodCallback() {
-        getData();
+        //getData();
     }
 
     @Override

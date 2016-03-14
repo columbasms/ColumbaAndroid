@@ -391,7 +391,6 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        System.out.println("RIENTRATO IN USER PROFILE");
         getData();
     }
 }

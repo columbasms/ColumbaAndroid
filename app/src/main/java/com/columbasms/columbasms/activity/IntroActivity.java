@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -136,11 +137,17 @@ public class IntroActivity extends AppIntro {
                         DigitsOAuthSigning oauthSigning = new DigitsOAuthSigning(authConfig, authToken);
                         Map<String, String> authHeaders = oauthSigning.getOAuthEchoHeadersForVerifyCredentials();
 
-                        //ADD GCM TOKEN (STORED)
+                        //ADD GCM TOKEN (STORED) TO MAP
                         String token_name = "gcm-token";
                         String token = null;
                         token = sp.getString(token_name, null);
                         authHeaders.put(token_name, token);
+
+                        /*ADD HTTP-AUTH HEADER
+                        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
+                        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
+                        authHeaders.put("Authorization", "Basic " + credBase64);
+                        */
 
                         CustomRequest authRequest = new CustomRequest(Request.Method.POST, API_URL.USERS_URL, authHeaders, new Response.Listener<NetworkResponse>() {
                             @Override
@@ -164,6 +171,7 @@ public class IntroActivity extends AppIntro {
 
                                     editor_account_information.putString("user_id", digitsClient.getString("id"));
                                     editor_account_information.putString("user_name", digitsClient.getString("user_name"));
+                                    //editor_account_information.putString("auth_token", digitsClient.getString("X-Auth-Token"));
                                     editor_account_information.putString("phone_number", phoneNumber);
                                     editor_account_information.putString("firstLaunch", "false");
                                     editor_account_information.apply();
@@ -173,6 +181,7 @@ public class IntroActivity extends AppIntro {
                                     i.putExtra("phone_number", phoneNumber);
                                     i.putExtra("user_name", digitsClient.getString("user_name"));
                                     i.putExtra("user_id", digitsClient.getString("id"));
+                                    //i.putExtra("auth_token", digitsClient.getString("X-Auth-Token"));
                                     startActivity(i);
                                     finish();
 
@@ -202,7 +211,7 @@ public class IntroActivity extends AppIntro {
                         Log.d("Digits", "Sign in with Digits failure", exception);
                     }
                 });
-                    //MANCA IL SERVICE DI GCM
+
             }
 
 

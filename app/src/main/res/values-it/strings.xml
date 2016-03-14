@@ -21,12 +21,15 @@
     <string name="guide">Guida</string>
 
     <string name="select_receivers">Seleziona riceventi</string>
+    <string name="select_atLeast_a_contact">Seleziona almeno un contatto</string>
+    <string name="select_atLeast_a_group">Seleziona almeno un gruppo</string>
 
     <string name="notification_follow_message">ha lanciato una nuova campagna!</string>
     <string name="notification_trust_message">Hai appena condiviso una campagna per</string>
 
     <string name="save_as_a_group">Salva come gruppo</string>
     <string name="group_setting">Impostazioni Gruppi</string>
+    <string name="save_as">Salva come </string>
 
     <string name="home">Home</string>
     <string name="topics">Tematiche</string>
@@ -50,7 +53,7 @@
 
 
     <string name="dialog_contacts_title">Seleziona contatti</string>
-    <string name="dialog_contactsGroups_title">Seleziona un gruppo</string>
+    <string name="dialog_contactsGroups_title">Seleziona gruppi</string>
     <string name="dialog_number_verification_title">Verifica in corso</string>
     <string name="dialog_number_verification_verify">VERIFICA</string>
 
@@ -99,9 +102,9 @@
 
     <string name="enter_grp">Inserisci il nome del gruppo</string>
 
-    <string name="send">invia</string>
-    <string name="cancel">annulla</string>
-    <string name="confirm">conferma</string>
+    <string name="send">INVIA</string>
+    <string name="cancel">ANNULLA</string>
+    <string name="confirm">CONFERMA</string>
     <string name="followers"> Followers</string>
 
     <string name="from_contacts">Da Contatti</string>

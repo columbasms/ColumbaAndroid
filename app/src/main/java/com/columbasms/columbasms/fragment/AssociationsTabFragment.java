@@ -54,6 +54,7 @@ public class AssociationsTabFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tab_associations, container, false);
 
         TOPIC_ID = getArguments().getString("topic_id");
+
         toolbar = (Toolbar)getActivity().findViewById(R.id.toolbar_topic);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

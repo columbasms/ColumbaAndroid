@@ -2,6 +2,7 @@ package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -29,9 +30,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.columbasms.columbasms.activity.ContactsSelectionActivity;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.callback.SnackbarCallback;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
 import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
@@ -65,7 +67,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     private static Activity activity;
     private FragmentManager fragmentManager;
     private AdapterCallback adapterCallback;
-    private SnackbarCallback snackbarCallback;
+    private NoSocialsSnackbarCallback noSocialsSnackbarCallback;
 
     private static final int TYPE_PROFILE = 0;
     private static final int TYPE_GROUP = 1;
@@ -115,14 +117,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
 
 
-    public AssociationProfileAdapter(List<CharityCampaign> il,Association a,Resources r, Activity ay, FragmentManager f, AdapterCallback ac, SnackbarCallback s) {
+    public AssociationProfileAdapter(List<CharityCampaign> il,Association a,Resources r, Activity ay, FragmentManager f, AdapterCallback ac, NoSocialsSnackbarCallback s) {
         mItemList = il;
         association = a;
         res = r;
         activity = ay;
         fragmentManager = f;
         adapterCallback = ac;
-        snackbarCallback = s;
+        noSocialsSnackbarCallback = s;
     }
 
 
@@ -208,19 +210,28 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                     public void onResponse(String response) {
                                         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
                                         if (parameter.equals("true")){
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("flag", "true");
-                                            bundle.putString("ass_id", association.getId());
+
+
                                             if (p.getString("thereIsaGroup", "").equals("")){
-                                                ChooseContactsFragment newFragment = new ChooseContactsFragment();
-                                                newFragment.setArguments(bundle);
-                                                newFragment.show(fragmentManager, association.getId());
+                                                Intent i = new Intent(activity, ContactsSelectionActivity.class);
+                                                i.putExtra("flag","true");
+                                                i.putExtra("association_id",association.getId());
+                                                activity.startActivity(i);
                                             }else{
                                                 AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("flag", "true");
+                                                bundle.putString("association_id", association.getId());
                                                 newFragment.setArguments(bundle);
-                                                newFragment.show(fragmentManager, association.getId());
+                                                newFragment.show(fragmentManager, null);
                                             }
+
+                                            association.setTrusting(true);
+
                                         }else{
+
+                                            association.setTrusting(false);
+
                                             //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
                                             SharedPreferences.Editor editor_account_information = p.edit();
                                             editor_account_information.remove(association.getId() + "_groups_forTrusting");
@@ -229,7 +240,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         }
 
                                         dialog.dismiss();
-                                        adapterCallback.onMethodCallback();
+                                        notifyDataSetChanged();
+                                        //adapterCallback.onMethodCallback();
                                     }
                                 },
                                 new Response.ErrorListener()
@@ -282,8 +294,12 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     public void onClick(View v) {
 
                         if(f.getTag().equals("0")){
+                            association.setFollowing(true);
                             subscribeTopic();
-                        }else unsubscribeTopic();
+                        }else {
+                            association.setFollowing(false);
+                            unsubscribeTopic();
+                        }
 
                         final ProgressDialog dialog = new ProgressDialog(activity);
                         dialog.show();
@@ -299,15 +315,16 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
-                                        //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
+                                        //HAI FATTO UNFOLLOW RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
                                         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
                                         SharedPreferences.Editor editor_account_information = p.edit();
                                         editor_account_information.remove(association.getId() + "_groups_forTrusting");
                                         editor_account_information.remove(association.getId() + "_contacts_forTrusting");
                                         editor_account_information.apply();
 
+                                        notifyDataSetChanged();
                                         dialog.dismiss();
-                                        adapterCallback.onMethodCallback();
+                                        //adapterCallback.onMethodCallback();
                                     }
                                 },
                                 new Response.ErrorListener() {
@@ -371,18 +388,22 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 s.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("message", c.getMessage());
-                        bundle.putString("campaign_id", c.getId());
-                        bundle.putString("ass_id", a.getId());
                         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
 
                         if (p.getString("thereIsaGroup", "").equals("")){
-                            ChooseContactsFragment newFragment = new ChooseContactsFragment();
-                            newFragment.setArguments(bundle);
-                            newFragment.show(fragmentManager, a.getOrganization_name());
+                            Intent i = new Intent(activity, ContactsSelectionActivity.class);
+                            i.putExtra("association_name",a.getOrganization_name());
+                            i.putExtra("association_id",a.getId());
+                            i.putExtra("message",c.getMessage());
+                            i.putExtra("campaign_id", c.getId());
+                            activity.startActivity(i);
                         }else{
                             AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("association_name",a.getOrganization_name());
+                            bundle.putString("association_id", a.getId());
+                            bundle.putString("message", c.getMessage());
+                            bundle.putString("campaign_id", c.getId());
                             newFragment.setArguments(bundle);
                             newFragment.show(fragmentManager, a.getOrganization_name());
                         }
@@ -394,7 +415,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                     @Override
                     public void onClick(View v) {
-                        SocialNetworkUtils.launchSocialNetworkChooser(activity, snackbarCallback, c.getMessage());
+                        SocialNetworkUtils.launchSocialNetworkChooser(activity, noSocialsSnackbarCallback, c.getMessage());
                     }
 
                 });

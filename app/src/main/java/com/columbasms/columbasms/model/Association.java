@@ -77,4 +77,12 @@ public class Association {
         public boolean isTrusting() {
             return trusting;
         }
+
+        public void setFollowing(boolean following) {
+            this.following = following;
+        }
+
+        public void setTrusting(boolean trusting) {
+            this.trusting = trusting;
+        }
 }

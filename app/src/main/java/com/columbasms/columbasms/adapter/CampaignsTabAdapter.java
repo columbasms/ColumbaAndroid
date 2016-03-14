@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -16,13 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
-import com.columbasms.columbasms.activity.TopicProfileActivity;
-import com.columbasms.columbasms.callback.SnackbarCallback;
+import com.columbasms.columbasms.activity.ContactsSelectionActivity;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
 import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
-import com.columbasms.columbasms.model.Topic;
 import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
 import java.util.List;
@@ -38,16 +36,16 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private FragmentManager fragmentManager;
     private Resources res;
     private Activity mainActivity;
-    private SnackbarCallback snackbarCallback;
+    private NoSocialsSnackbarCallback noSocialsSnackbarCallback;
 
     private int lastPosition;
 
-    public CampaignsTabAdapter (List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a, SnackbarCallback s) {
+    public CampaignsTabAdapter (List<CharityCampaign> itemList,FragmentManager ft,Resources r,Activity a, NoSocialsSnackbarCallback s) {
         mItemList = itemList;
         fragmentManager = ft;
         res = r;
         mainActivity = a;
-        snackbarCallback = s;
+        noSocialsSnackbarCallback = s;
         lastPosition = -1;
     }
 
@@ -94,18 +92,22 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         s.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("message", c.getMessage());
-                bundle.putString("campaign_id", c.getId());
-                bundle.putString("ass_id", a.getId());
                 SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(mainActivity);
 
                 if (p.getString("thereIsaGroup", "").equals("")){
-                    ChooseContactsFragment newFragment = new ChooseContactsFragment();
-                    newFragment.setArguments(bundle);
-                    newFragment.show(fragmentManager, a.getOrganization_name());
+                    Intent i = new Intent(mainActivity, ContactsSelectionActivity.class);
+                    i.putExtra("association_name",a.getOrganization_name());
+                    i.putExtra("association_id",a.getId());
+                    i.putExtra("message",c.getMessage());
+                    i.putExtra("campaign_id", c.getId());
+                    mainActivity.startActivity(i);
                 }else{
                     AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("association_name",a.getOrganization_name());
+                    bundle.putString("association_id", a.getId());
+                    bundle.putString("message", c.getMessage());
+                    bundle.putString("campaign_id", c.getId());
                     newFragment.setArguments(bundle);
                     newFragment.show(fragmentManager, a.getOrganization_name());
                 }
@@ -117,7 +119,7 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             @Override
             public void onClick(View v) {
-                SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, snackbarCallback, c.getMessage());
+                SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, noSocialsSnackbarCallback, c.getMessage());
             }
         });
 

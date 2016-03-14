@@ -9,7 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.callback.SnackbarCallback;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.adapter.SocialAdapter;
 import com.columbasms.columbasms.adapter.TopicsAdapter;
 import com.facebook.share.model.ShareLinkContent;
@@ -59,7 +59,7 @@ public class SocialNetworkUtils {
 
 
 
-    public static void launchSocialNetworkChooser(final Activity mainActivity,SnackbarCallback snackbarCallback, final String message){
+    public static void launchSocialNetworkChooser(final Activity mainActivity,NoSocialsSnackbarCallback noSocialsSnackbarCallback, final String message){
         List<String> socials = SocialNetworkUtils.getSocialInstalled(mainActivity);
         if(socials.size()!=0){
 
@@ -108,7 +108,7 @@ public class SocialNetworkUtils {
             dialog.show();
 
         }else{
-            snackbarCallback.notifyNoSocialInstalled();
+            noSocialsSnackbarCallback.notifyNoSocialInstalled();
         }
     }
 
