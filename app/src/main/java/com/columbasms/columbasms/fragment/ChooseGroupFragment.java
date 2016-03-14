@@ -232,7 +232,7 @@ public class ChooseGroupFragment extends DialogFragment {
                             try {
                                 JSONObject j =  new JSONObject(contactsList.getString((int) contacts.get(i)));
                                 System.out.println("NUMERO: " + j.getString("number"));
-                                Utils.sendSMS(assName, j.getString("number"), message,res,activity);
+                                //Utils.sendSMS(assName, j.getString("number"), message,res,activity);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

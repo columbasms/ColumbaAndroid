@@ -191,6 +191,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     @Override
                     public void onClick(View v) {
 
+                        //BUG NOT FIXED: IF USER DOESN'T SELECT A CONTACT HE CAN TRUST
                         final ProgressDialog dialog = new ProgressDialog(activity);
                         dialog.show();
                         dialog.setCancelable(false);
@@ -263,6 +264,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                         };
                         requestQueue.add(putRequest);
+
                     }
                 });
 

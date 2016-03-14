@@ -54,7 +54,7 @@
     <string name="campaigns">Campaigns</string>
 
     <string name="sms_footer">Powered By Columba</string>
-    <string name="sms_stop">To stop receiving this SMS:\nwww.columbasms.com/stop/</string>
+    <string name="sms_stop">To stop receiving this SMS:\n</string>
 
 
     <string name="dialog_contacts_title">Select contacts</string>

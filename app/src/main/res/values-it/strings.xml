@@ -49,7 +49,7 @@
     <string name="campaigns">Campagne</string>
 
     <string name="sms_footer">Inviato con Columba</string>
-    <string name="sms_stop">Per interrompere la ricezione di questi messaggi:\nwww.columbasms.com/stop/</string>
+    <string name="sms_stop">Per interrompere la ricezione di questi messaggi:\n</string>
 
 
     <string name="dialog_contacts_title">Seleziona contatti</string>

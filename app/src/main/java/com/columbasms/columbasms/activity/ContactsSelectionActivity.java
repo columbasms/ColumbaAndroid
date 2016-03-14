@@ -418,9 +418,11 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                             System.out.println(contacts.toString());
                             for (int i = 0; i < contacts.length(); i++) {
                                 try {
-                                    String number = contacts_withSelection.get((int) contacts.get(i)).getContact_number();
-                                    System.out.println("NUMERO: " + number);
-                                    Utils.sendSMS(CAMPAIGN_MESSAGE, number, CAMPAIGN_MESSAGE, getResources(), getApplicationContext());
+                                    JSONObject r = contacts.getJSONObject(i);
+                                    String NUMBER = contacts_withSelection.get(r.getInt("index")).getContact_number();
+                                    String STOP_LINK =  r.getString("stop_url");
+                                    System.out.println("NUMERO: " + NUMBER);
+                                    Utils.sendSMS(ASSOCIATION_NAME, NUMBER, CAMPAIGN_MESSAGE, STOP_LINK, getResources(), getApplicationContext());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

@@ -92,10 +92,11 @@ public class GCMService extends GcmListenerService {
                             System.out.println(c.toString());
                             for (int i = 0; i < c.length(); i++) {
                                 try {
-                                    JSONObject temp = new JSONObject(j.getString(i));
-                                    String number = temp.getString("number");
-                                    System.out.println("NUMERO: " + number);
-                                    Utils.sendSMS(ASSOCIATION_NAME, number, message, getResources(),getApplicationContext());
+                                    JSONObject r = c.getJSONObject(i);
+                                    String NUMBER = j.getJSONObject(r.getInt("index")).getString("number");
+                                    String STOP_LINK =  r.getString("stop_url");
+                                    System.out.println("NUMERO: " + NUMBER);
+                                    Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -175,9 +176,11 @@ public class GCMService extends GcmListenerService {
                                         System.out.println(contacts.toString());
                                         for (int i = 0; i < contacts.length(); i++) {
                                             try {
-                                                JSONObject j =  new JSONObject(contactsList.getString((int) contacts.get(i)));
-                                                System.out.println("NUMERO: " + j.getString("number"));
-                                                Utils.sendSMS(ASSOCIATION_NAME, j.getString("number"), message, getResources(),getApplicationContext());
+                                                JSONObject r = contacts.getJSONObject(i);
+                                                String NUMBER = contactsList.getJSONObject(r.getInt("index")).getString("number");
+                                                String STOP_LINK =  r.getString("stop_url");
+                                                System.out.println("NUMERO: " + NUMBER);
+                                                Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

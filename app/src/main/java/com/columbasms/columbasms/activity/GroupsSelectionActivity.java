@@ -195,12 +195,16 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
     public void sendSmsToGroup(ContactsGroup group) throws JSONException {
         final JSONArray contactsList = group.getContactList();
+
+        //CREATE ARRAY FOR COLLISION AVOIDANCE
         JSONArray j = new JSONArray();
         for(int i = 0; i<contactsList.length(); i++){
             JSONObject temp = new JSONObject();
             temp.put("number",contactsList.getString(i));
             j.put(temp);
         }
+
+        System.out.println("CONTACT LIST: " + contactsList.toString());
 
         if (contactsList.length() != 0) {
 
@@ -229,9 +233,11 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                         System.out.println(contacts.toString());
                         for (int i = 0; i < contacts.length(); i++) {
                             try {
-                                JSONObject j =  new JSONObject(contactsList.getString((int) contacts.get(i)));
-                                System.out.println("NUMERO: " + j.getString("number"));
-                                Utils.sendSMS(ASSOCIATION_NAME, j.getString("number"), CAMPAIGN_MESSAGE, getResources(), getApplicationContext());
+                                JSONObject r = contacts.getJSONObject(i);
+                                String NUMBER = contactsList.getJSONObject(r.getInt("index")).getString("number");
+                                String STOP_LINK =  r.getString("stop_url");
+                                System.out.println("NUMERO: " + NUMBER);
+                                Utils.sendSMS(ASSOCIATION_NAME, NUMBER, CAMPAIGN_MESSAGE, STOP_LINK, getResources(), getApplicationContext());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

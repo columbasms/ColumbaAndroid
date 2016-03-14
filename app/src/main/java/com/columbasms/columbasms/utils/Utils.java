@@ -75,7 +75,7 @@ public class Utils {
     private static String SENT = "1";
     private static String DELIVERED = "2";
 
-    public static void sendSMS(String associationSender,String phoneNumber, String message, Resources res, Context mContext){
+    public static void sendSMS(String associationSender,String phoneNumber, String message,String stop_link, Resources res, Context mContext){
 
 
         PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(SENT), 0);
@@ -138,8 +138,7 @@ public class Utils {
                 associationSender + ":\n"+
                 message + "\n" +
                 res.getString(R.string.sms_footer) + "\n" +
-                res.getString(R.string.sms_stop) +
-                phoneNumber.replace(" ", "");
+                res.getString(R.string.sms_stop) + stop_link;
 
         ArrayList<String> parts = sms.divideMessage(format_message);
         sms.sendMultipartTextMessage(phoneNumber, null, parts, sent, delivered);
