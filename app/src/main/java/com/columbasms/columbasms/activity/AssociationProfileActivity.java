@@ -96,7 +96,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         USER_ID =  sp.getString("user_id", "");
         ASSOCIATION_ID = getIntent().getStringExtra("ass_id");
         ASSOCIATION_NAME = getIntent().getStringExtra("ass_name");
-        if(a==null) a =new Association();
+
+        a =new Association();
 
         System.out.println("CONTATTI PER IL TRUST DI " + ASSOCIATION_NAME + ": " + sp.getString(ASSOCIATION_ID + "_contacts_forTrusting", ""));
         System.out.println("GRUPPI PER IL TRUST DI " + ASSOCIATION_NAME + ": " + sp.getString(ASSOCIATION_ID + "_groups_forTrusting", ""));
@@ -297,6 +298,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                     }
 
                     associationProfileAdapter.notifyDataSetChanged();
+                    coordinatorLayout.setVisibility(View.VISIBLE);
 
                 } catch (UnsupportedEncodingException | JSONException e) {
                     e.printStackTrace();
