@@ -240,8 +240,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         }
 
                                         dialog.dismiss();
-                                        notifyDataSetChanged();
-                                        //adapterCallback.onMethodCallback();
+                                       notifyDataSetChanged();
+                                        adapterCallback.onMethodCallback();
                                     }
                                 },
                                 new Response.ErrorListener()
@@ -291,11 +291,16 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     @Override
                     public void onClick(View v) {
 
+                        int foll = association.getFollowers();
+
                         if(f.getTag().equals("0")){
+                            association.setFollowers(foll+1);
                             association.setFollowing(true);
                             subscribeTopic();
                         }else {
+                            association.setFollowers(foll-1);
                             association.setFollowing(false);
+                            association.setTrusting(false);
                             unsubscribeTopic();
                         }
 
@@ -313,6 +318,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                 new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
+
                                         //HAI FATTO UNFOLLOW RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
                                         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
                                         SharedPreferences.Editor editor_account_information = p.edit();
@@ -322,7 +328,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                                         notifyDataSetChanged();
                                         dialog.dismiss();
-                                        //adapterCallback.onMethodCallback();
+                                        adapterCallback.onMethodCallback();
                                     }
 
 

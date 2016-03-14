@@ -27,6 +27,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.columbasms.columbasms.adapter.TopicsAdapter;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
@@ -276,11 +277,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                             }
                         }
                     }
-                    // Create adapter passing in the sample user data
-                    associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback, noSocialsSnackbarCallback);
 
-                    // Attach the adapter to the recyclerview to populate items
-                    rvAssociationProfile.setAdapter(associationProfileAdapter);
+                    associationProfileAdapter.notifyDataSetChanged();
 
                 } catch (UnsupportedEncodingException | JSONException e) {
                     e.printStackTrace();
@@ -358,7 +356,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
     }
     @Override
     public void onMethodCallback() {
-        //getData();
+        System.out.println("callback");
+        getData();
     }
 
     @Override
@@ -369,6 +368,24 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
         view.setLayoutParams(params);
         snackbar.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mySwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                // Create adapter passing in the sample user data
+                associationProfileAdapter = new AssociationProfileAdapter(campaigns_list,a,res,mainActivity,fragmentManager,adapterCallback, noSocialsSnackbarCallback);
+
+                // Attach the adapter to the recyclerview to populate items
+                rvAssociationProfile.setAdapter(associationProfileAdapter);
+
+                getData();
+            }
+        });
     }
 }
 

@@ -235,6 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
+
+
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         header = navView.getHeaderView(0);
 
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AUTH_TOKEN = state.getString("auth_token", null);
         if (AUTH_TOKEN == null) getIntent().getStringExtra("auth_token");
-        System.out.println( "AUTH_TOKEN: " + AUTH_TOKEN);
+        System.out.println("AUTH_TOKEN: " + AUTH_TOKEN);
 
         USER_ID = state.getString("user_id", null);
         if (USER_ID == null) getIntent().getStringExtra("user_id");
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(USER_ID != null){
             getUser();
-        }
+        }else MainActivity.this.finish();
 
 
         if(state.getString("subscribeLogin",null)==null){

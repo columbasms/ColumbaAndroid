@@ -250,7 +250,6 @@ public class GCMService extends GcmListenerService {
         PendingIntent pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.app_intro1)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -264,28 +263,6 @@ public class GCMService extends GcmListenerService {
         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());
-
-        /*
-        Intent intent = new Intent(this, NotificationReceiverActivity.class);
-    PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
-
-    // Build notification
-    // Actions are just fake
-    Notification noti = new Notification.Builder(this)
-        .setContentTitle("New mail from " + "test@gmail.com")
-        .setContentText("Subject").setSmallIcon(R.drawable.icon)
-        .setContentIntent(pIntent)
-        .addAction(R.drawable.icon, "Call", pIntent)
-        .addAction(R.drawable.icon, "More", pIntent)
-        .addAction(R.drawable.icon, "And more", pIntent).build();
-    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    // hide the notification after its selected
-    noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
-    notificationManager.notify(0, noti);
-         */
-
-
 
     }
 

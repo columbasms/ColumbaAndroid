@@ -74,6 +74,10 @@ public class Association {
             return followers;
         }
 
+        public void setFollowers(int followers) {
+            this.followers = followers;
+        }
+
         public boolean isTrusting() {
             return trusting;
         }
