@@ -44,7 +44,7 @@ public class GCMService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
-        SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         ASSOCIATION_ID = from.split("_")[1];
         String USER_ID = state.getString("user_id", "");
@@ -114,9 +114,7 @@ public class GCMService extends GcmListenerService {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> headers = new HashMap<String, String>();
-                        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                        headers.put("Authorization", "Basic " + credBase64);
+                        headers.put("X-Auth-Token", state.getString("auth_token", null));
                         return headers;
                     }
 
@@ -198,9 +196,7 @@ public class GCMService extends GcmListenerService {
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
                                     HashMap<String, String> headers = new HashMap<String, String>();
-                                    String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                                    String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                                    headers.put("Authorization", "Basic " + credBase64);
+                                    headers.put("X-Auth-Token", state.getString("auth_token", null));
                                     return headers;
                                 }
 
@@ -265,6 +261,7 @@ public class GCMService extends GcmListenerService {
                 .setContentText(notificationContent);
         notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
         notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
+        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notificationBuilder.build());
 
