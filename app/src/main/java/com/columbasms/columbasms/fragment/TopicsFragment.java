@@ -59,12 +59,14 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
     private static String USER_ID;
     private static AdapterCallback adapterCallback;
 
+    private static SharedPreferences sp;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         Resources res = getResources();
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         USER_ID =  sp.getString("user_id","");
         topics_list = new ArrayList<>();
         mainActivity = getActivity();
@@ -139,7 +141,7 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
 
         System.out.println(URL);
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest( sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
 
             @Override
             public void onResponse(NetworkResponse response) {

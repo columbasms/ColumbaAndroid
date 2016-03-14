@@ -81,6 +81,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
     public class GroupViewHolder extends ViewHolder {
 
+        @Bind(R.id.button_layout)LinearLayout button_layout;
         @Bind(R.id.topic)TextView topic;
         @Bind(R.id.message)TextView message;
         @Bind(R.id.ass_name)TextView assName;
@@ -274,14 +275,11 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                 });
                 Utils.downloadImage(a.getAvatar_normal(), pi, true, false);
 
-                ImageView send_hided = holder3.send;
-                send_hided.setVisibility(View.GONE);
+                holder3.button_layout.setVisibility(View.GONE);
 
                 TextView time = holder3.timestamp;
                 time.setText(c.getTimestamp());
 
-                ImageView share_hided = holder3.share;
-                share_hided.setVisibility(View.GONE);
 
                 break;
         }

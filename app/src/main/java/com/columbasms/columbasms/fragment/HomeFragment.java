@@ -67,16 +67,19 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
     private static int top = -1;
     private static GridLayoutManager mLayoutManager;
 
+    private static SharedPreferences sp;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         USER_ID =  sp.getString("user_id", "");
         AUTH_TOKEN =  sp.getString("auth_token", "");
 
         mainActivity = getActivity();
+
 
         tb = (Toolbar)mainActivity.findViewById(R.id.toolbar_bottom);
 
@@ -159,7 +162,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
         System.out.println(URL);
 
-        CacheRequest cacheRequest = new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        CacheRequest cacheRequest = new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

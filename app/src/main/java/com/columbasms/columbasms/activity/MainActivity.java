@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AUTH_TOKEN = state.getString("auth_token", null);
         if (AUTH_TOKEN == null) getIntent().getStringExtra("auth_token");
+        System.out.println( "AUTH_TOKEN: " + AUTH_TOKEN);
 
         USER_ID = state.getString("user_id", null);
         if (USER_ID == null) getIntent().getStringExtra("user_id");
@@ -279,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         System.out.println(URL);
 
-        CacheRequest request = new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        CacheRequest request = new CacheRequest(AUTH_TOKEN,0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.ASSOCIATIONS;
 
-        CacheRequest s =  new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        CacheRequest s =  new CacheRequest(AUTH_TOKEN, 0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

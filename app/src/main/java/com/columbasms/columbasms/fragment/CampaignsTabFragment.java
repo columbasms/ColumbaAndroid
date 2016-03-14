@@ -2,9 +2,11 @@ package com.columbasms.columbasms.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -58,9 +61,12 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
     private static FragmentManager fragmentManager;
     private static SwipeRefreshLayout mySwipeRefreshLayout;
     private static CoordinatorLayout coordinatorLayout;
+    private static LinearLayout layout_noCampaigns;
     private static NoSocialsSnackbarCallback noSocialsSnackbarCallback;
     private static Activity mainActivity;
     private static Resources res;
+
+    private static SharedPreferences sp;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -80,6 +86,9 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tab_campaigns, container, false);
 
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        layout_noCampaigns = (LinearLayout)v.findViewById(R.id.layout_noCampaigns);
         coordinatorLayout = (CoordinatorLayout)v.findViewById(R.id.topic_coordinatorLayout);
         toolbar = (Toolbar)getActivity().findViewById(R.id.toolbar_topic);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -137,13 +146,12 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
 
     private static CacheRequest getCampaignsList(){
 
-        //https://www.columbasms.com/api/v1/topics/{id}/campaigns
 
         String URL = API_URL.TOPICS_URL + "/" + TOPIC_ID + API_URL.CAMPAIGNS;
 
         System.out.println(URL);
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -156,6 +164,8 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
                     campaigns_list.clear();
 
                     if (jsonArray.length() > 0) {
+
+                        layout_noCampaigns.setVisibility(View.GONE);
 
                         // looping through json and adding to movies list
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -182,7 +192,7 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
                                 System.out.println("JSON Parsing error: " + e.getMessage());
                             }
                         }
-                    }
+                    }else layout_noCampaigns.setVisibility(View.VISIBLE);
                     // Create adapter passing in the sample user data
                     campaignsTabAdapter = new CampaignsTabAdapter(campaigns_list,fragmentManager,res,mainActivity, noSocialsSnackbarCallback);
 

@@ -143,11 +143,11 @@ public class IntroActivity extends AppIntro {
                         token = sp.getString(token_name, null);
                         authHeaders.put(token_name, token);
 
-                        /*ADD HTTP-AUTH HEADER
+
                         String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
                         String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
                         authHeaders.put("Authorization", "Basic " + credBase64);
-                        */
+
 
                         CustomRequest authRequest = new CustomRequest(Request.Method.POST, API_URL.USERS_URL, authHeaders, new Response.Listener<NetworkResponse>() {
                             @Override
@@ -171,7 +171,7 @@ public class IntroActivity extends AppIntro {
 
                                     editor_account_information.putString("user_id", digitsClient.getString("id"));
                                     editor_account_information.putString("user_name", digitsClient.getString("user_name"));
-                                    //editor_account_information.putString("auth_token", digitsClient.getString("X-Auth-Token"));
+                                    editor_account_information.putString("auth_token", digitsClient.getString("auth_token"));
                                     editor_account_information.putString("phone_number", phoneNumber);
                                     editor_account_information.putString("firstLaunch", "false");
                                     editor_account_information.apply();
@@ -181,7 +181,7 @@ public class IntroActivity extends AppIntro {
                                     i.putExtra("phone_number", phoneNumber);
                                     i.putExtra("user_name", digitsClient.getString("user_name"));
                                     i.putExtra("user_id", digitsClient.getString("id"));
-                                    //i.putExtra("auth_token", digitsClient.getString("X-Auth-Token"));
+                                    i.putExtra("auth_token", digitsClient.getString("auth_token"));
                                     startActivity(i);
                                     finish();
 

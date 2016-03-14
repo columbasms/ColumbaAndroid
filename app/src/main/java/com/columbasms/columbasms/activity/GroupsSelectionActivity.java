@@ -63,6 +63,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
     private String ASSOCIATION_ID;
     private String CAMPAIGN_MESSAGE;
 
+    private static SharedPreferences sp;
 
     @Bind(R.id.toolbar)Toolbar t;
     @Bind(R.id.rv_groups)RecyclerView rvGroups;
@@ -115,6 +116,8 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
     }
 
+    private static SharedPreferences p;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +126,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         //GET CAMPAIGN_ID, USER_ID, ASSOCIATION NAME FOR THIS CAMPAIGN AND CREATE KEY,
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+        p = PreferenceManager.getDefaultSharedPreferences(this);
         ASSOCIATION_NAME = getIntent().getStringExtra("association_name");
         ASSOCIATION_KEY =  ASSOCIATION_NAME + "_contacts";
         ASSOCIATION_ID = getIntent().getStringExtra("association_id");
@@ -246,9 +249,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
-                    String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                    String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                    headers.put("Authorization", "Basic " + credBase64);
+                    headers.put("X-Auth-Token", p.getString("auth_token", null));
                     return headers;
                 }
 

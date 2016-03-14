@@ -151,7 +151,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
             case TYPE_PROFILE:
                 final ProfileViewHolder holder1 = (ProfileViewHolder) viewHolder;
 
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+                final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
 
 
@@ -257,9 +257,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                             @Override
                             public Map<String, String> getHeaders() throws AuthFailureError {
                                 HashMap<String, String> headers = new HashMap<String, String>();
-                                String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                                String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                                headers.put("Authorization", "Basic " + credBase64);
+                                headers.put("X-Auth-Token", sp.getString("auth_token", null));
                                 return headers;
                             }
 
@@ -326,6 +324,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         dialog.dismiss();
                                         //adapterCallback.onMethodCallback();
                                     }
+
+
                                 },
                                 new Response.ErrorListener() {
                                     @Override
@@ -334,14 +334,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         dialog.dismiss();
                                     }
                                 }
+
+
                         ) {
 
                             @Override
                             public Map<String, String> getHeaders() throws AuthFailureError {
                                 HashMap<String, String> headers = new HashMap<String, String>();
-                                String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                                String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                                headers.put("Authorization", "Basic " + credBase64);
+                                headers.put("X-Auth-Token", sp.getString("auth_token", null));
                                 return headers;
                             }
 

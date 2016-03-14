@@ -52,12 +52,14 @@ public class UserAssociationsActivity extends AppCompatActivity {
     private static List<Association> associations_list;
     private static Activity mainActivity;
 
+    private static SharedPreferences sp;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_associations);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
         USER_ID =  sp.getString("user_id","");
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -112,7 +114,7 @@ public class UserAssociationsActivity extends AppCompatActivity {
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.ASSOCIATIONS;
 
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

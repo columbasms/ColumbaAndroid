@@ -87,6 +87,8 @@ public class EditProfileActivity extends AppCompatActivity{
     private static ImageView cover;
     private static ImageView profile;
 
+    private static SharedPreferences sp;
+
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -123,7 +125,7 @@ public class EditProfileActivity extends AppCompatActivity{
             }
         });
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         USER_ID = sp.getString("user_id", "");
         cover = (ImageView)findViewById(R.id.cover_image_usr);
@@ -134,7 +136,7 @@ public class EditProfileActivity extends AppCompatActivity{
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                verifyStoragePermissions(activity);
+                //verifyStoragePermissions(activity);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -166,7 +168,7 @@ public class EditProfileActivity extends AppCompatActivity{
         edit_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                verifyStoragePermissions(activity);
+                //verifyStoragePermissions(activity);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -187,7 +189,7 @@ public class EditProfileActivity extends AppCompatActivity{
                 dialog.setContentView(R.layout.dialog_progress);
 
                 //SAVE CHANGES LOCALLY
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor_account_information = sp.edit();
                 editor_account_information.putString("user_name", String.valueOf(name.getText()));
                 editor_account_information.apply();
@@ -228,9 +230,7 @@ public class EditProfileActivity extends AppCompatActivity{
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> headers = new HashMap<String, String>();
-                        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                        headers.put("Authorization", "Basic " + credBase64);
+                        headers.put("X-Auth-Token", sp.getString("auth_token", null));
                         return headers;
                     }
 
@@ -257,7 +257,7 @@ public class EditProfileActivity extends AppCompatActivity{
         String URL = API_URL.USERS_URL + "/" + USER_ID;
         System.out.println(URL);
 
-        CacheRequest request = new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        CacheRequest request = new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -333,17 +333,8 @@ public class EditProfileActivity extends AppCompatActivity{
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-
                 HashMap<String, String> headers = new HashMap<String, String>();
-
-                //VA TOLTO
-                String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                headers.put("Authorization", "Basic "+ credBase64);
-                /*VA INSERITO
-                headers.put("X-Auth-Token",auth_token);
-                */
-
+                headers.put("X-Auth-Token", sp.getString("auth_token", null));
                 return headers;
             }
 

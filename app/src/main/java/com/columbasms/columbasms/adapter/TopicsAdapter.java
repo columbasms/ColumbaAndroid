@@ -160,7 +160,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
             final int pos = getAdapterPosition();
             final Topic n = topics.get(pos);
             //SETUP URL
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+            final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
             URL = API_URL.USERS_URL + "/" + sp.getString("user_id","") +  API_URL.TOPICS + "/" + n.getId();
             System.out.println(URL);
 
@@ -202,9 +202,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<String, String>();
-                    String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                    String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                    headers.put("Authorization", "Basic " + credBase64);
+                    headers.put("X-Auth-Token", sp.getString("auth_token", null));
                     return headers;
                 }
 

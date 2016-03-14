@@ -86,9 +86,9 @@ public class SocialNetworkUtils {
                                 ShareDialog shareDialog = new ShareDialog(mainActivity);
                                 if (ShareDialog.canShow(ShareLinkContent.class)) {
                                     ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                                            .setContentTitle("Hello Facebook")
-                                            .setContentDescription("The 'Hello Facebook' sample  showcases simple Facebook integration")
-                                            .setContentUrl(Uri.parse("http://developers.facebook.com/android"))
+                                            .setContentTitle("ColumbaSMS")
+                                            .setContentDescription("Donate your wasted SMS for charity!")
+                                            .setContentUrl(Uri.parse("https://www.columbasms.com"))
                                             .build();
                                     shareDialog.show(linkContent);
                                 }

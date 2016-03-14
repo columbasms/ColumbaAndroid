@@ -2,8 +2,10 @@ package com.columbasms.columbasms.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -49,6 +51,9 @@ public class AssociationsTabFragment extends Fragment {
     private static List<Association> associations_list;
     private static Activity mainActivity;
 
+    private static SharedPreferences sp;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tab_associations, container, false);
@@ -63,6 +68,7 @@ public class AssociationsTabFragment extends Fragment {
             }
         });
 
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         associations_list = new ArrayList<>();
         mainActivity = getActivity();
@@ -112,7 +118,7 @@ public class AssociationsTabFragment extends Fragment {
         String URL = API_URL.TOPICS_URL + "/" + TOPIC_ID + API_URL.ASSOCIATIONS;
 
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

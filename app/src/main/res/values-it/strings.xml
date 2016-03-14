@@ -114,4 +114,6 @@
 
     <string name="leaderboard_id">CgkIwOCKtIgUEAIQAA</string>
 
+    <string name="no_campaigns_inTopic">Non ci sono campagne in questo topic.</string>
+
 </resources>

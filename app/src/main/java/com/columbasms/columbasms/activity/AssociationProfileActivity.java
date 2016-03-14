@@ -77,6 +77,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
     private static String ASSOCIATION_NAME;
     private static String USER_ID;
 
+    private static SharedPreferences sp;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
         res = getResources();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         System.out.println(sp.getString(ASSOCIATION_NAME + "_contacts_forTrusting", ""));
 
@@ -201,7 +203,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.ASSOCIATIONS + "/" + ASSOCIATION_ID;
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest( sp.getString("auth_token", null), 0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -235,7 +237,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
         String URL = API_URL.ASSOCIATIONS_URL + "/" + ASSOCIATION_ID + API_URL.CAMPAIGNS + "?locale=" + Locale.getDefault().getLanguage();
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

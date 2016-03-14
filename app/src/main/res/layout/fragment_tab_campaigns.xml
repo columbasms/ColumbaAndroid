@@ -8,6 +8,29 @@
     android:gravity="top"
     tools:context=".TopicProfileActivity">
 
+    <LinearLayout
+        android:id="@+id/layout_noCampaigns"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/circle_fade"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_margin="16dp"
+            android:text="@string/no_campaigns_inTopic"/>
+
+    </LinearLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/topic_swiperefresh"
         android:layout_width="match_parent"

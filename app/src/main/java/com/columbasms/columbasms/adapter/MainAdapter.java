@@ -96,23 +96,24 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             final List<Topic> topicList = c.getTopics();
             String topics = "";
-            for (int i = 0; i<topicList.size(); i++){
-                topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
-            }
-            TextView topic = holder.topic;
-            topic.setText(topics);
-            topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
-            topic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TEMPORARY SUPPORT FOR ONLY ONE TOPIC FOR CAMPAIGN
-                    Intent i = new Intent(v.getContext(), TopicProfileActivity.class);
-                    i.putExtra("topic_name", topicList.get(0).getName());
-                    i.putExtra("topic_id", topicList.get(0).getId());
-                    v.getContext().startActivity(i);
+            if(topicList.size()>0) {
+                for (int i = 0; i < topicList.size(); i++) {
+                    topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
                 }
-            });
-
+                TextView topic = holder.topic;
+                topic.setText(topics);
+                topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
+                topic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TEMPORARY SUPPORT FOR ONLY ONE TOPIC FOR CAMPAIGN
+                        Intent i = new Intent(v.getContext(), TopicProfileActivity.class);
+                        i.putExtra("topic_name", topicList.get(0).getName());
+                        i.putExtra("topic_id", topicList.get(0).getId());
+                        v.getContext().startActivity(i);
+                    }
+                });
+            }
 
             final TextView message = holder.message;
             message.setText(c.getMessage());

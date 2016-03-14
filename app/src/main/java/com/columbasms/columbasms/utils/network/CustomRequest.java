@@ -27,10 +27,6 @@ public class CustomRequest extends Request<NetworkResponse> {
         this.mListener = listener;
         this.mErrorListener = errorListener;
         this.mHeaders = mHeaders;
-        //QUESTO VA TOLTO
-        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-        mHeaders.put("Authorization", "Basic "+ credBase64);
     }
 
 

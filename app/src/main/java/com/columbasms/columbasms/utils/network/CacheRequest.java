@@ -21,23 +21,17 @@ public class CacheRequest extends Request<NetworkResponse> {
 
     private final Response.Listener<NetworkResponse> mListener;
     private final Response.ErrorListener mErrorListener;
-    //private String auth_token;
+    private String auth_token;
 
 
-    public CacheRequest(int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener) {
-        super(method, url, errorListener);
-        this.mListener = listener;
-        this.mErrorListener = errorListener;
-    }
 
-    /*NUOVO COSTRUTTORE (VA ELIMINATO IL VECCHIO
     public CacheRequest(String auth_token, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         this.auth_token = auth_token;
         this.mListener = listener;
         this.mErrorListener = errorListener;
     }
-    */
+
 
 
     @Override
@@ -84,15 +78,9 @@ public class CacheRequest extends Request<NetworkResponse> {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        //VA TOLTO
         HashMap<String, String> headers = new HashMap<String, String>();
-        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-        headers.put("Authorization", "Basic " + credBase64);
-
-        /*VA INSERITO
         headers.put("X-Auth-Token",auth_token);
-        */
+
         return headers;
     }
 

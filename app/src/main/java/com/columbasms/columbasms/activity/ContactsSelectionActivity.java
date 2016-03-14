@@ -137,7 +137,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     }
 
 
-
+    private static SharedPreferences p;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,6 +145,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         setContentView(R.layout.activity_select_contacts);
 
         ButterKnife.bind(this);
+
 
         //Toolbar setup
         t.setTitle(getResources().getString(R.string.dialog_contacts_title));
@@ -162,7 +163,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         }
 
         //GET CAMPAIGN_ID, USER_ID, ASSOCIATION NAME FOR THIS CAMPAIGN AND CREATE KEY,
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+        p = PreferenceManager.getDefaultSharedPreferences(this);
         ASSOCIATION_NAME = getIntent().getStringExtra("association_name");
         ASSOCIATION_KEY =  ASSOCIATION_NAME + "_contacts";
         ASSOCIATION_ID = getIntent().getStringExtra("association_id");
@@ -438,9 +439,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> headers = new HashMap<String, String>();
-                        String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
-                        String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
-                        headers.put("Authorization", "Basic " + credBase64);
+                        headers.put("X-Auth-Token", p.getString("auth_token", null));
                         return headers;
                     }
 

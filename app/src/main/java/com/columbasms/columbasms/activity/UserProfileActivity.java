@@ -178,7 +178,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         System.out.println(URL);
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -218,7 +218,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         System.out.println("URL PER OTTENERE LE CAMPAGNE DELL'UTENTE:" + URL);
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -281,7 +281,7 @@ public class UserProfileActivity extends AppCompatActivity {
         String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.ASSOCIATIONS;
 
 
-        return new CacheRequest(0, URL, new Response.Listener<NetworkResponse>() {
+        return new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
