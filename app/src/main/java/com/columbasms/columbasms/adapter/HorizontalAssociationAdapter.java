@@ -2,27 +2,16 @@ package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
-import com.columbasms.columbasms.activity.TopicProfileActivity;
-import com.columbasms.columbasms.activity.UserAssociationsActivity;
-import com.columbasms.columbasms.fragment.AskContactsInputFragment;
-import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
-import com.columbasms.columbasms.model.CharityCampaign;
-import com.columbasms.columbasms.model.Topic;
-import com.columbasms.columbasms.utils.Utils;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;

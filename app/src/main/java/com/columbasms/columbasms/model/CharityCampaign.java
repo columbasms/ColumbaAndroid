@@ -14,6 +14,12 @@ public class CharityCampaign {
     private List<Topic> topics;
     private String timestamp;
 
+    //NEW DETAILS
+    private String longDescription;
+    private String photo;
+    private List<Address>addresses;
+
+    public CharityCampaign(){}
 
     public CharityCampaign(String id, String message, Association organization, List<Topic> topics,String timestamp){
         this.id = id;
@@ -21,6 +27,17 @@ public class CharityCampaign {
         this.organization = organization;
         this.topics = topics;
         this.timestamp = timestamp;
+    }
+
+    public CharityCampaign(String id, String message, Association organization, List<Topic> topics,String timestamp, String longDescription, String photo, List<Address>addresses){
+        this.id = id;
+        this.message = message;
+        this.organization = organization;
+        this.topics = topics;
+        this.timestamp = timestamp;
+        this.longDescription = longDescription;
+        this.photo = photo;
+        this.addresses = addresses;
     }
 
     public String getId() {
@@ -43,5 +60,15 @@ public class CharityCampaign {
         return timestamp;
     }
 
+    public String getLongDescription() {
+        return longDescription;
+    }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
 }

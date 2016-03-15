@@ -3,4 +3,5 @@
     android:id="@+id/mapView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/appbar_height"/>
+    android:layout_marginTop="@dimen/appbar_height"
+    android:layout_marginBottom="@dimen/appbar_height"/>

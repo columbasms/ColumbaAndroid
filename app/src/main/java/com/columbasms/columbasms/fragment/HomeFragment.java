@@ -3,15 +3,20 @@ package com.columbasms.columbasms.fragment;
 /**
  * Created by Matteo Brienza on 1/29/16.
  */
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +35,7 @@ import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.listener.HidingScrollListener;
 import com.columbasms.columbasms.adapter.MainAdapter;
+import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -122,6 +128,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
         getData(null, coordinatorLayout);
 
+
         /*NB: WITHOUT THIS SNIPPET, RECYCLER VIEW SCROLL POSITION SAVING DOESN'T WORK IF NEW CAMPAIGN IS STARTED; YOU HAVE TO ALSO PUT FALSE IN SP INSIDE MAIN ACTIVITY ONDESTROY()
         if (!sp.getBoolean("homeFragment_alreadyLoaded",false)) {
             getData(null, coordinatorLayout);
@@ -189,11 +196,19 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
                                     topicList.add(new Topic(t.getString("id"),t.getString("name"),false,t.getString("main_color"), t.getString("status_color"),null));
                                 }
 
+                                List<Address> addressList = new ArrayList<>();
+
+                                JSONArray addresses = new JSONArray(o.getString("campaign_addresses"));
+                                for(int j = 0; j< addresses.length(); j++){
+                                    JSONObject t = addresses.getJSONObject(j);
+                                    addressList.add(new Address(t.getString("address"), t.getDouble("lat"), t.getDouble("lng")));
+                                }
+
 
                                 JSONObject a = new JSONObject(o.getString("organization"));
                                 Association ass = new Association(a.getString("id"),a.getString("organization_name"),a.getString("avatar_normal"),null,null);
 
-                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity));
+                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), addressList );
 
                                 campaigns_list.add(0, m);
 

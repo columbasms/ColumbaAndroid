@@ -1,9 +1,11 @@
 package com.columbasms.columbasms.activity;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -13,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -230,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intentGCMListen = new Intent(this,GcmReceiver.class);
         startService(intentGCMListen);
 
+
     }
 
     @Override
@@ -379,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.leaderboard:
-                startActivity(new Intent(this, LeaderboardActivity.class));
+                //startActivity(new Intent(this, LeaderboardActivity.class));
                 break;
         }
 

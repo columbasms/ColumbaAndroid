@@ -75,7 +75,7 @@ public class Utils {
     private static String SENT = "1";
     private static String DELIVERED = "2";
 
-    public static void sendSMS(String associationSender,String phoneNumber, String message,String stop_link, Resources res, Context mContext){
+    public static void sendSMS(String associationSender, final String phoneNumber, final String message,String stop_link, Resources res, Context mContext){
 
 
         PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(SENT), 0);
@@ -92,19 +92,19 @@ public class Utils {
                         switch(getResultCode())
                         {
                             case Activity.RESULT_OK:
-                                System.out.println("SENT RESULT: OK");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " RESULT_OK");
                                 break;
                             case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                                System.out.println("SENT RESULT: ERROR_GENERIC_FAILURE");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " GENERIC_FAILURE");
                                 break;
                             case SmsManager.RESULT_ERROR_NO_SERVICE:
-                                System.out.println("SENT RESULT: ERROR_NO_SERVICE");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_NO_SERVICE");
                                 break;
                             case SmsManager.RESULT_ERROR_NULL_PDU:
-                                System.out.println("SENT RESULT: ERROR_NULL_PDU");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_NULL_PDU");
                                 break;
                             case SmsManager.RESULT_ERROR_RADIO_OFF:
-                                System.out.println("SENT RESULT: ERROR_RADIO_OFF");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_RADIO_OFF");
                                 break;
                         }
                     }

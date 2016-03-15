@@ -6,13 +6,11 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.EditProfileActivity;
 import com.columbasms.columbasms.activity.TopicProfileActivity;
 import com.columbasms.columbasms.activity.UserAssociationsActivity;
-import com.columbasms.columbasms.fragment.ChooseContactsFragment;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -81,6 +78,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
     public class GroupViewHolder extends ViewHolder {
 
+        @Bind(R.id.percentRelativeLayout)PercentRelativeLayout prl;
         @Bind(R.id.button_layout)LinearLayout button_layout;
         @Bind(R.id.topic)TextView topic;
         @Bind(R.id.message)TextView message;
@@ -279,6 +277,9 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
                 TextView time = holder3.timestamp;
                 time.setText(c.getTimestamp());
+
+                PercentRelativeLayout prl = holder3.prl;
+                prl.setVisibility(View.GONE);
 
 
                 break;

@@ -6,23 +6,30 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
+import com.columbasms.columbasms.activity.CampaignsDetailsActivity;
 import com.columbasms.columbasms.activity.ContactsSelectionActivity;
+import com.columbasms.columbasms.activity.MapsActivity;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
-import com.columbasms.columbasms.fragment.ChooseContactsFragment;
+import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
+
+import java.util.ArrayList;
 import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,6 +68,17 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         final RecyclerItemViewHolder holder = (RecyclerItemViewHolder) viewHolder;
         final CharityCampaign c = mItemList.get(position);
         final Association a = c.getOrganization();
+
+        CardView ctc = holder.cardToClick;
+        ctc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //MANCA UN TAG PER DIRE CHE ACTIVITY SEI..SE FOSSI IL PROFILO NEI DETTAGLI NON DEVONO APPARIRE I BOTTONI SEND/RECEIVE
+                Intent i = new Intent(mainActivity, CampaignsDetailsActivity.class);
+                i.putExtra("campaign_id",c.getId());
+                mainActivity.startActivity(i);
+            }
+        });
 
         ImageView profile_image = holder.profile_image;
         profile_image.setOnClickListener(new View.OnClickListener() {
@@ -123,11 +141,39 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         });
 
+        ImageView locate = holder.locate;
+        RelativeLayout locateBack = holder.locate_layout;
+        if(c.getAddresses().size()!=0) {
+            locate.setVisibility(View.VISIBLE);
+            locateBack.setVisibility(View.VISIBLE);
+            locate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(mainActivity, MapsActivity.class);
+                    i.putExtra("color_marker", c.getTopics().get(0).getMainColor());
+                    i.putParcelableArrayListExtra("address_list", (ArrayList<Address>) c.getAddresses());
+                    mainActivity.startActivity(i);
+                }
+
+            });
+        }else{
+            locate.setVisibility(View.GONE);
+            locateBack.setVisibility(View.GONE);
+        }
+
+
         final ImageView p = holder.profile_image;
         Utils.downloadImage(a.getAvatar_normal(), p, true, false);
 
         TextView time = holder.timestamp;
         time.setText(c.getTimestamp());
+
+        final ImageView cover = holder.cover_image;
+        PercentRelativeLayout prl = holder.prl;
+        if(!c.getPhoto().equals("https://www.columbasms.com/images/invalid")) {
+            prl.setVisibility(View.VISIBLE);
+            Utils.downloadImage(c.getPhoto(), cover, false, false);
+        }else prl.setVisibility(View.GONE);
 
 
     }
@@ -140,11 +186,16 @@ public class CampaignsTabAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.card_view_to_click)CardView cardToClick;
+        @Bind(R.id.percentRelativeLayout)PercentRelativeLayout prl;
+        @Bind(R.id.cover_image)ImageView cover_image;
         @Bind(R.id.message)TextView message;
         @Bind(R.id.ass_name)TextView associationName;
         @Bind(R.id.send)ImageView send;
         @Bind(R.id.timestamp)TextView timestamp;
         @Bind(R.id.profile_image)ImageView profile_image;
+        @Bind(R.id.locate)ImageView locate;
+        @Bind(R.id.locate_layout)RelativeLayout locate_layout;
         @Bind(R.id.share)ImageView share;
 
         public RecyclerItemViewHolder(final View parent) {

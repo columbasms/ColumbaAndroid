@@ -116,4 +116,6 @@
 
     <string name="no_campaigns_inTopic">Non ci sono campagne in questo topic.</string>
 
+    <string name="more_campaign_info">Più informazioni: </string>
+
 </resources>

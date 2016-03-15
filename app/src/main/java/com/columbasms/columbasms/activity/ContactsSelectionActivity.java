@@ -1,11 +1,17 @@
 package com.columbasms.columbasms.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +24,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -412,7 +419,6 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        System.out.println("Invio a: ");
                         try {
                             contacts = new JSONArray(response.getString("users"));
                             System.out.println(contacts.toString());
@@ -421,7 +427,6 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                                     JSONObject r = contacts.getJSONObject(i);
                                     String NUMBER = contacts_withSelection.get(r.getInt("index")).getContact_number();
                                     String STOP_LINK =  r.getString("stop_url");
-                                    System.out.println("NUMERO: " + NUMBER);
                                     Utils.sendSMS(ASSOCIATION_NAME, NUMBER, CAMPAIGN_MESSAGE, STOP_LINK, getResources(), getApplicationContext());
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -450,24 +455,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                 requestQueue.add(jsonObjectRequest);
             }
         }
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -29,6 +29,7 @@ import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.CampaignsTabAdapter;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
+import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -180,11 +181,20 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
                                     topicList.add(new Topic(t.getString("id"),t.getString("name"),false,t.getString("main_color"), t.getString("status_color"),null));
                                 }
 
+                                List<Address> addressList = new ArrayList<>();
+
+                                JSONArray addresses = new JSONArray(o.getString("campaign_addresses"));
+                                for(int j = 0; j< addresses.length(); j++){
+                                    JSONObject t = addresses.getJSONObject(j);
+                                    addressList.add(new Address(t.getString("address"), t.getDouble("lat"), t.getDouble("lng")));
+                                }
+
 
                                 JSONObject a = new JSONObject(o.getString("organization"));
                                 Association ass = new Association(a.getString("id"),a.getString("organization_name"),a.getString("avatar_normal"),null,null);
 
-                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList, Utils.getTimestamp(o.getString("created_at").substring(0, 19), mainActivity));
+                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), addressList );
+
 
                                 campaigns_list.add(0, m);
 

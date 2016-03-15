@@ -11,16 +11,17 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -30,12 +31,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.columbasms.columbasms.activity.CampaignsDetailsActivity;
 import com.columbasms.columbasms.activity.ContactsSelectionActivity;
+import com.columbasms.columbasms.activity.MapsActivity;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
-import com.columbasms.columbasms.fragment.ChooseContactsFragment;
+import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
@@ -45,6 +48,7 @@ import com.columbasms.columbasms.utils.network.API_URL;
 import com.google.android.gms.gcm.GcmPubSub;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +83,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     }
     public class GroupViewHolder extends ViewHolder {
 
+        @Bind(R.id.percentRelativeLayout)PercentRelativeLayout prl;
+        @Bind(R.id.card_view_to_click)CardView cardToClick;
+        @Bind(R.id.cover_image)ImageView cover_image;
+        @Bind(R.id.locate)ImageView locate;
+        @Bind(R.id.locate_layout)RelativeLayout locate_layout;
         @Bind(R.id.topic)TextView topic;
         @Bind(R.id.message)TextView message;
         @Bind(R.id.ass_name)TextView associationName;
@@ -94,6 +103,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     }
 
     public class ProfileViewHolder extends ViewHolder {
+
 
         @Bind(R.id.card_layout)LinearLayout lc;
         @Bind(R.id.lc_background)LinearLayout lc_background;
@@ -376,6 +386,16 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 final CharityCampaign c = mItemList.get(position-1);
                 final Association a = c.getOrganization();
 
+                CardView ctc = holder2.cardToClick;
+                ctc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //MANCA UN TAG PER DIRE CHE ACTIVITY SEI..SE FOSSI IL PROFILO NEI DETTAGLI NON DEVONO APPARIRE I BOTTONI SEND/RECEIVE
+                        Intent i = new Intent(activity, CampaignsDetailsActivity.class);
+                        i.putExtra("campaign_id",c.getId());
+                        activity.startActivity(i);
+                    }
+                });
 
                 final TextView an = holder2.associationName;
                 an.setText(c.getOrganization().getOrganization_name());
@@ -433,6 +453,33 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 TextView time = holder2.timestamp;
                 time.setText(c.getTimestamp());
+
+                ImageView locate = holder2.locate;
+                RelativeLayout locateBack = holder2.locate_layout;
+                if(c.getAddresses().size()!=0) {
+                    locate.setVisibility(View.VISIBLE);
+                    locateBack.setVisibility(View.VISIBLE);
+                    locate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(activity, MapsActivity.class);
+                            i.putExtra("color_marker", topicList.get(0).getMainColor());
+                            i.putParcelableArrayListExtra("address_list", (ArrayList<Address>) c.getAddresses());
+                            activity.startActivity(i);
+                        }
+
+                    });
+                }else{
+                    locate.setVisibility(View.GONE);
+                    locateBack.setVisibility(View.GONE);
+                }
+
+                final ImageView cover_item = holder2.cover_image;
+                PercentRelativeLayout prl = holder2.prl;
+                if(!c.getPhoto().equals("https://www.columbasms.com/images/invalid")) {
+                    prl.setVisibility(View.VISIBLE);
+                    Utils.downloadImage(c.getPhoto(), cover_item, false, false);
+                }else prl.setVisibility(View.GONE);
 
                 break;
         }

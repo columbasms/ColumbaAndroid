@@ -122,4 +122,6 @@
     <string name="leaderboard_id">CgkIwOCKtIgUEAIQAA</string>
 
     <string name="no_campaigns_inTopic">No campaigns in this topic.</string>
+
+    <string name="more_campaign_info">More informations: </string>
 </resources>

@@ -3,7 +3,8 @@
     package="com.columbasms.columbasms">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -44,20 +45,25 @@
         <activity
             android:name=".activity.InfoActivity"
             android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.UserAssociationsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.MapsActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.IntroActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.EditProfileActivity"
             android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.AssociationProfileActivity"
             android:screenOrientation="portrait"
@@ -69,26 +75,29 @@
         </activity>
         <activity
             android:name=".activity.UserProfileActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.CampaignsDetailsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.TopicProfileActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.LeaderboardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.ContactsSelectionActivity"
             android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.GroupsSelectionActivity"
             android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <meta-data android:name="android.app.searchable"
                    android:resource="@xml/searchable" />
@@ -137,7 +146,7 @@
         <service
             android:name=".service.RegistrationService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
