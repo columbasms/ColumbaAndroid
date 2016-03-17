@@ -1,17 +1,10 @@
 package com.columbasms.columbasms.activity;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,8 +17,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -53,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import butterknife.Bind;
@@ -76,6 +69,9 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     private String ASSOCIATION_KEY;
     private String ASSOCIATION_ID;
     private String CAMPAIGN_MESSAGE;
+
+    private static int MAX_SMS;
+    private static int SENT_SMS;
 
     private static JSONArray contacts;
     private static JSONArray groupToAdd_contacts; //JSON ARRAY USED TO STORE THE USER CONTACTS SELECTION IF HE WANTS TO SAVE IT AS A GROUP
@@ -153,7 +149,6 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
         ButterKnife.bind(this);
 
-
         //Toolbar setup
         t.setTitle(getResources().getString(R.string.dialog_contacts_title));
         t.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -177,6 +172,12 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         CAMPAIGN_MESSAGE = getIntent().getStringExtra("message");
         CAMPAIGN_ID = getIntent().getStringExtra("campaign_id");
         USER_ID = p.getString("user_id", "NOID");
+
+        //GET MSG_LIMIT_NUMBER FROM PREFERENCES
+        MAX_SMS = Integer.parseInt(p.getString("msg_number", "50"));
+        SENT_SMS = Integer.parseInt(p.getString("sent_msg_number", "0"));
+        System.out.println("LIMITE MESSAGGI DA INVIARE: " + MAX_SMS);
+        System.out.println("LIMITE MESSAGGI DA INVIARE: " + SENT_SMS);
 
 
         //RECYCLER VIEW SETUP
@@ -335,61 +336,6 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
 
 
-        //CASE 1: IF USERS HAVE CHOSE TO SAVE AS GROUP HIS SELECTION (save_as_a_group.TAG==1)
-        if (save_as_a_group.getTag().equals("1")){
-
-            final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(this);
-            final SharedPreferences.Editor editor_account_information = state.edit();
-
-            String s = group_name.getText().toString();
-            int size = s.length();
-            String groupToAdd_name = s.substring(2,size-1); //GROUP NAME
-            JSONArray allGroups = null; //ALL GROUPS STORED IN THE PHONE
-            JSONObject newGroup = new JSONObject(); //NEW GROUP TO SAVE
-            try {
-                //GET ALL GROUPS ARRAY (IF THERE ISN'T A GROUP CREATE THE RESOURCE)
-                String allGroupsString = state.getString("groups","");
-                if(allGroupsString.equals("")) allGroups = new JSONArray();
-                else allGroups = new JSONArray(allGroupsString);
-
-                //CREATE A JSON OBJECT WITH NEW GROUP DATA AND ADD IT TO ALL GROUPS LIST
-                newGroup.put("name", groupToAdd_name);
-                newGroup.put("contacts", groupToAdd_contacts.toString());
-                allGroups.put(newGroup);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(allGroups.toString());
-
-            if (state.getString("thereIsaGroup", "").equals(""))editor_account_information.putString("thereIsaGroup","true");
-
-            if(getIntent().getStringExtra("flag")!=null){
-                //IF flag != NULL THE GROUPS JUST CREATED IS THE "TRUSTED" GROUPS
-                JSONArray groupsForTrusting = new JSONArray();
-                groupsForTrusting.put(newGroup);
-                editor_account_information.putString(ASSOCIATION_ID + "_groups_forTrusting", groupsForTrusting.toString());
-                ContactsSelectionActivity.this.finish();
-            }
-
-            //STORE ALL GROUPS CREATED BY USER IN A SHARED PREFERENCES
-            editor_account_information.putString("groups", allGroups.toString());
-            editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
-            editor_account_information.apply();
-
-        }else{
-            //CASE 2: CONTACTS SELECTION FOR TRUSTING (NO SMS SENDING, JUST CONTACTS SELECTION SAVING, see next)
-            if(getIntent().getStringExtra("flag")!=null) {
-                System.out.println("SALVO I CONTATTI PER IL TRUST con questa key:  " + ASSOCIATION_ID + "_contacts_forTrusting");
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(ASSOCIATION_ID + "_contacts_forTrusting", j.toString());
-                editor.apply();
-                ContactsSelectionActivity.this.finish();
-            }
-        }
-
-
 
         //SEND SMS IF ABOVE SELECTIONS AREN'T FOR TRUSTING
         if(getIntent().getStringExtra("flag")==null){
@@ -435,11 +381,59 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        //SAVE GROUP IF SAVE AS A GROUPS IS ACTIVED
+                        if (save_as_a_group.getTag().equals("1")){
+
+                            final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            final SharedPreferences.Editor editor_account_information = state.edit();
+
+                            String s = group_name.getText().toString();
+                            int size = s.length();
+                            String groupToAdd_name = s.substring(2,size-1); //GROUP NAME
+                            JSONArray allGroups = null; //ALL GROUPS STORED IN THE PHONE
+                            JSONObject newGroup = new JSONObject(); //NEW GROUP TO SAVE
+                            try {
+                                //GET ALL GROUPS ARRAY (IF THERE ISN'T A GROUP CREATE THE RESOURCE)
+                                String allGroupsString = state.getString("groups","");
+                                if(allGroupsString.equals("")) allGroups = new JSONArray();
+                                else allGroups = new JSONArray(allGroupsString);
+
+                                //CREATE A JSON OBJECT WITH NEW GROUP DATA AND ADD IT TO ALL GROUPS LIST
+                                newGroup.put("name", groupToAdd_name);
+                                newGroup.put("contacts", groupToAdd_contacts.toString());
+                                allGroups.put(newGroup);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            System.out.println(allGroups.toString());
+
+                            if (state.getString("thereIsaGroup", "").equals(""))editor_account_information.putString("thereIsaGroup","true");
+
+                            //UPDATE ALL GROUPS CREATED BY USER IN A SHARED PREFERENCES
+                            editor_account_information.putString("groups", allGroups.toString());
+                            editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
+                            editor_account_information.apply();
+                        }
+
+                        int contact_alreadyReached = contacts_withSelection.size()-contacts.length();
+                        if(contacts.length()==0){
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.all_contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                        }else if(contacts.length()==contacts_withSelection.size()){
+                            Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent), Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent) + "\n( " + contact_alreadyReached + " " + getResources().getString(R.string.contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                        }
                         ContactsSelectionActivity.this.finish();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        NetworkResponse networkResponse = error.networkResponse;
+                            if(networkResponse!=null)
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
                         System.out.println(error.toString());
                     }
                 }) {
@@ -454,6 +448,60 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
                 requestQueue.add(jsonObjectRequest);
             }
+        }else{
+
+
+            //TRUSTING ACTION: SAVE CONTACTS OR GROUPS WITHOUT SEND MESSAGE
+            //CASE 1: IF USERS HAVE CHOSE TO SAVE AS GROUP HIS SELECTION (save_as_a_group.TAG==1)
+            if (save_as_a_group.getTag().equals("1")){
+
+                final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(this);
+                final SharedPreferences.Editor editor_account_information = state.edit();
+
+                String s = group_name.getText().toString();
+                int size = s.length();
+                String groupToAdd_name = s.substring(2,size-1); //GROUP NAME
+                JSONArray allGroups = null; //ALL GROUPS STORED IN THE PHONE
+                JSONObject newGroup = new JSONObject(); //NEW GROUP TO SAVE
+                try {
+                    //GET ALL GROUPS ARRAY (IF THERE ISN'T A GROUP CREATE THE RESOURCE)
+                    String allGroupsString = state.getString("groups","");
+                    if(allGroupsString.equals("")) allGroups = new JSONArray();
+                    else allGroups = new JSONArray(allGroupsString);
+
+                    //CREATE A JSON OBJECT WITH NEW GROUP DATA AND ADD IT TO ALL GROUPS LIST
+                    newGroup.put("name", groupToAdd_name);
+                    newGroup.put("contacts", groupToAdd_contacts.toString());
+                    allGroups.put(newGroup);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(allGroups.toString());
+
+                if (state.getString("thereIsaGroup", "").equals(""))editor_account_information.putString("thereIsaGroup","true");
+
+                //SAVE THE GROUPS AS A TRUSTED GROUPS
+                JSONArray groupsForTrusting = new JSONArray();
+                groupsForTrusting.put(newGroup);
+                editor_account_information.putString(ASSOCIATION_ID + "_groups_forTrusting", groupsForTrusting.toString());
+                ContactsSelectionActivity.this.finish();
+
+
+                //UPDATE ALL GROUPS CREATED BY USER IN A SHARED PREFERENCES
+                editor_account_information.putString("groups", allGroups.toString());
+                editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
+                editor_account_information.apply();
+
+            }else{
+                //SAVE CONTACTS (NO GROUP) FOR TRUST
+                System.out.println("SALVO I CONTATTI PER IL TRUST con questa key:  " + ASSOCIATION_ID + "_contacts_forTrusting");
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(ASSOCIATION_ID + "_contacts_forTrusting", j.toString());
+                editor.apply();
+            }
+            ContactsSelectionActivity.this.finish();
         }
     }
 
@@ -462,16 +510,8 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
 
     public void addContacts(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String fc = prefs.getString(ASSOCIATION_KEY, null);
-        JSONArray contacts_selected = null;
-        try {
-            if(fc!=null) {
-                contacts_selected = new JSONArray(fc);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        HashSet<String> mobileNoSet = new HashSet<>();
 
         try {
             Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
@@ -480,11 +520,13 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     Contact c = new Contact(name,phoneNumber,false);
-                    if(contacts_selected!=null){
-                        if(findContactByPhone(contacts_selected,phoneNumber))c.setSelected(true);
+
+                    if (!mobileNoSet.contains(name)) {
+                        contactList.add(c);
+                        allContacts.add(c);
+                        mobileNoSet.add(name);
                     }
-                    contactList.add(c);
-                    allContacts.add(c);
+
                 }
             }
             phones.close();
@@ -567,6 +609,12 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
             save_as_a_grouptext.setText(getResources().getString(R.string.save_as));
             group_name.setText(" \"" + name + "\"" );
         }
-        else save_as_a_group.setBackgroundResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+        else{
+            save_as_a_group.setTag("0");
+            save_as_a_group.setBackgroundResource(R.drawable.ic_check_box_outline_blank_black_24dp);
+        }
     }
+
+
+
 }

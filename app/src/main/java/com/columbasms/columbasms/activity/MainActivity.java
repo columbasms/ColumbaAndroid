@@ -1,11 +1,9 @@
 package com.columbasms.columbasms.activity;
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -15,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -62,6 +59,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Created by Matteo Brienza on 2/1/16.
+ */
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private static long SPLASH_SCREEN_DELAY = 1500; 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static String USER_ID;
     private static String AUTH_TOKEN;
+    private static int MAX_SMS;
 
     @Bind(R.id.home_text)TextView home_text;
     @Bind(R.id.topics_text)TextView topics_text;
@@ -187,9 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToggle.syncState();
 
 
-
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
 
         if (state.getString("firstLaunch",null)==null && state.getString("splashed",null)==null) {
             // Show the splash screen at the beginning
@@ -269,11 +269,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(USER_ID != null){
             getUser();
-        }
-
-
-        if(state.getString("subscribeLogin",null)==null){
-            subscribeFollowedAssociations();
+            if(state.getString("subscribeLogin",null)==null){
+                subscribeFollowedAssociations();
+            }
         }
 
 
@@ -294,6 +292,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             HttpHeaderParser.parseCharset(response.headers));
 
                     JSONObject o = new JSONObject(jsonString);
+
+                    MAX_SMS = o.getInt("max_sms");
+                    System.out.println(o.toString());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+                    if(prefs.getString("msg_number",null)==null) {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("msg_number", Integer.toString(MAX_SMS));
+                        editor.apply();
+                    }
+
+
                     ImageView profile = (ImageView)header.findViewById(R.id.profile_image);
                     ImageView cover = (ImageView)header.findViewById(R.id.cover_image);
                     Utils.downloadImage(o.getString("avatar_normal"), profile, true, true);
@@ -380,10 +389,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, UserProfileActivity.class));
                 break;
             case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent i = new Intent(this, SettingsActivity.class);
+                i.putExtra("msg_number", MAX_SMS);
+                startActivity(i);
                 break;
             case R.id.leaderboard:
-                //startActivity(new Intent(this, LeaderboardActivity.class));
+                startActivity(new Intent(this, LeaderboardActivity.class));
                 break;
         }
 

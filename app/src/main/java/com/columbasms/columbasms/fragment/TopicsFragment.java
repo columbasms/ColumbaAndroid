@@ -188,8 +188,8 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
 
     private static void showSnackbar(){
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
+                .make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_internet), Snackbar.LENGTH_LONG)
+                .setAction(mainActivity.getResources().getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getData();

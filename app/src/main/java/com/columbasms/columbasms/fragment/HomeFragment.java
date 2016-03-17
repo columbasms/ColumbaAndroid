@@ -257,7 +257,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
     private static void notifyNoInternetConnection(final CoordinatorLayout c){
         Snackbar snackbar = Snackbar
                 .make(c, mainActivity.getResources().getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
+                .setAction(mainActivity.getResources().getString(R.string.retry), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         getData(null,c);

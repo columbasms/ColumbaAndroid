@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.security.acl.Group;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -92,6 +93,14 @@ public class ContactsGroupAdapter extends RecyclerView.Adapter<ContactsGroupAdap
         }else button.setChecked(true);
 
 
+    }
+
+    public static List<ContactsGroup> getAllContactsGroupsWithSelection() {
+        List<ContactsGroup> l = new ArrayList<>();
+        for (int i = 0; i<allContactsGroups.size(); i++){
+            if(allContactsGroups.get(i).isSelected())l.add(allContactsGroups.get(i));
+        }
+        return l;
     }
 
     public void setFilter(String queryText) {

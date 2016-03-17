@@ -17,6 +17,7 @@ public class User {
     private int assFollowed;
     private int campForwarder;
     private int score;
+    private int rank;
 
     public User(String id,String digits_id, String digits_token,String phone_number){
         this.id = id;
@@ -39,10 +40,15 @@ public class User {
         this.campForwarder = campForwarder;
     }
 
-    public User(String fullName/*, String profile_image*/, int score){
+    public User(String fullName, String profile_image, int score,int rank){
         this.fullName = fullName;
-        //this.profile_image = profile_image;
+        this.profile_image = profile_image;
         this.score = score;
+        this.rank = rank;
+    }
+
+    public int getRank() {
+        return rank;
     }
 
     public String getId() {

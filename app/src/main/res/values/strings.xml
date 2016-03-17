@@ -123,5 +123,17 @@
 
     <string name="no_campaigns_inTopic">No campaigns in this topic.</string>
 
+    <string name="of">of</string>
+
+    <string name="mess_succ_sent">messages succesfully sent</string>
+
+    <string name="no_mess_succ_sent">No message succesfully sent</string>
+
+    <string name="all_contacts_already_reached">All contacts selected has been already reached</string>
+
+    <string name="contacts_already_reached">contacts selected has been already reached</string>
+
+    <string name="network_error">Network error.\nPlease check your connection and try again</string>
+
     <string name="more_campaign_info">More informations: </string>
 </resources>

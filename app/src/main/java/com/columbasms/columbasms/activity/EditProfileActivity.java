@@ -220,9 +220,13 @@ public class EditProfileActivity extends AppCompatActivity{
                         {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                System.out.println(error.toString());
                                 dialog.dismiss();
-                                EditProfileActivity.this.finish();
+                                NetworkResponse networkResponse = error.networkResponse;
+                                if(networkResponse!=null)
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                                else Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+                                System.out.println(error.toString());
+
                             }
                         }
                 ) {
@@ -339,9 +343,7 @@ public class EditProfileActivity extends AppCompatActivity{
             }
 
         };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(15000,
-                5,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(15000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //Creating a Request Queue
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
 

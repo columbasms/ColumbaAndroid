@@ -235,37 +235,45 @@ public class GCMService extends GcmListenerService {
 
     public void sendNotification(String associationName,String message,boolean isForTrust){
 
-        String notificationContent = "";
+        SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if(isForTrust == false){
-            notificationContent = associationName + " " + getResources().getString(R.string.notification_follow_message);
-        }else notificationContent = getResources().getString(R.string.notification_trust_message) + " " + associationName;
+        System.out.println("NOTIFICATION PREF: " + state.getBoolean("disable_notify", false));
 
-        Intent resultIntent = new Intent(this, AssociationProfileActivity.class);
-        resultIntent.putExtra("ass_id", ASSOCIATION_ID);
-        resultIntent.putExtra("ass_name", ASSOCIATION_NAME);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack
-        stackBuilder.addParentStack(AssociationProfileActivity.class);
-        // Adds the Intent to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        // Gets a PendingIntent containing the entire back stack
-        PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(!state.getBoolean("disable_notify", false)) {
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.app_intro1)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setVibrate(new long[] {1, 1, 1})
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setContentTitle("ColumbaSMS")
-                .setContentIntent(pendingIntent)
-                .setContentText(notificationContent);
-        notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
-        notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
-        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notificationBuilder.build());
+                    String notificationContent = "";
+
+                    if (isForTrust == false) {
+                        notificationContent = associationName + " " + getResources().getString(R.string.notification_follow_message);
+                    } else
+                        notificationContent = getResources().getString(R.string.notification_trust_message) + " " + associationName;
+
+                    Intent resultIntent = new Intent(this, AssociationProfileActivity.class);
+                    resultIntent.putExtra("ass_id", ASSOCIATION_ID);
+                    resultIntent.putExtra("ass_name", ASSOCIATION_NAME);
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                    // Adds the back stack
+                    stackBuilder.addParentStack(AssociationProfileActivity.class);
+                    // Adds the Intent to the top of the stack
+                    stackBuilder.addNextIntent(resultIntent);
+                    // Gets a PendingIntent containing the entire back stack
+                    PendingIntent pendingIntent =
+                            stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.app_intro1)
+                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setVibrate(new long[]{1, 1, 1})
+                            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                            .setContentTitle("ColumbaSMS")
+                            .setContentIntent(pendingIntent)
+                            .setContentText(notificationContent);
+                    notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+                    notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
+                    notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(1, notificationBuilder.build());
+        }
 
     }
 

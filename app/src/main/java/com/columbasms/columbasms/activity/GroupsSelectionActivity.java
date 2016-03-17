@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -65,6 +66,9 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
     private static SharedPreferences sp;
 
+    private int groups_count;
+    private int groups_contacts;
+
     @Bind(R.id.toolbar)Toolbar t;
     @Bind(R.id.rv_groups)RecyclerView rvGroups;
 
@@ -80,11 +84,13 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
         if(thereIsAGroupWithSelection()) {
 
+            groups_contacts = 0;
+            groups_count = 0;
+
             JSONArray groupsForTrusting = new JSONArray();
-            List<ContactsGroup> allGroups = adapter.getAllContactsGroups();
-            for(int i = 0; i<allGroups.size(); i++){
-                ContactsGroup temp = allGroups.get(i);
-                if(temp.isSelected()){
+            List<ContactsGroup> allGroups_withSelection = adapter.getAllContactsGroupsWithSelection();
+            for(int i = 0; i<allGroups_withSelection.size(); i++){
+                ContactsGroup temp = allGroups_withSelection.get(i);
                     if(getIntent().getStringExtra("flag")!=null){
                         //YOU CAME FROM TRUST CLICK
                         JSONObject group = new JSONObject();
@@ -97,19 +103,24 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                         }
                     }else {
                         try {
-                            sendSmsToGroup(temp);
+                            groups_count+=temp.getContactList().length();
+                            if(i==allGroups_withSelection.size()-1)sendSmsToGroup(temp,true); //IF IT IS THE LAST GROUP NOTIFY CLOSING
+                            else sendSmsToGroup(temp,false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }
             }
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor_account_information = sp.edit();
-            editor_account_information.putString(ASSOCIATION_ID +"_groups_forTrusting", groupsForTrusting.toString());
+            editor_account_information.putString(ASSOCIATION_ID + "_groups_forTrusting", groupsForTrusting.toString());
             editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
             editor_account_information.apply();
-            GroupsSelectionActivity.this.finish();
+
+            if(getIntent().getStringExtra("flag")!=null)GroupsSelectionActivity.this.finish();
+
+
+
 
         }else Toast.makeText(getApplicationContext(), getResources().getString(R.string.select_atLeast_a_group), Toast.LENGTH_SHORT).show();
 
@@ -193,14 +204,15 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
 
 
-    public void sendSmsToGroup(ContactsGroup group) throws JSONException {
+    public void sendSmsToGroup(ContactsGroup group, final boolean toClose) throws JSONException {
         final JSONArray contactsList = group.getContactList();
 
         //CREATE ARRAY FOR COLLISION AVOIDANCE
         JSONArray j = new JSONArray();
         for(int i = 0; i<contactsList.length(); i++){
             JSONObject temp = new JSONObject();
-            temp.put("number",contactsList.getString(i));
+            JSONObject o = new JSONObject(contactsList.getString(i));
+            temp.put("number",o.getString("number"));
             j.put(temp);
         }
 
@@ -228,6 +240,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                 public void onResponse(JSONObject response) {
 
                     System.out.println("Invio a: ");
+
                     try {
                         JSONArray contacts = new JSONArray(response.getString("users"));
                         System.out.println(contacts.toString());
@@ -242,13 +255,32 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                                 e.printStackTrace();
                             }
                         }
+                        groups_contacts+=contacts.length();
+                        //SE E' L'ULTIMO GRUPPO STAMPA SNACKBAR E CHIUDI L'ACTIVITY
+                        if(toClose){
+                            //SE HAI PROVATO A INVIARE E NON CI SONO ERRORI
+                            int contact_alreadyReached = groups_count-groups_contacts;
+                            if(contacts.length()==0){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.all_contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                            }else if(groups_contacts==groups_count){
+                                Toast.makeText(getApplicationContext(), groups_contacts + " " + getResources().getString(R.string.of) +  " " + groups_count + " " + getResources().getString(R.string.mess_succ_sent), Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getApplicationContext(), groups_contacts + " " + getResources().getString(R.string.of) +  " " + groups_count + " " + getResources().getString(R.string.mess_succ_sent) + "\n( " + contact_alreadyReached + " " + getResources().getString(R.string.contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                            }
+                            GroupsSelectionActivity.this.finish();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    NetworkResponse networkResponse = error.networkResponse;
+                    if(networkResponse!=null)
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
                     System.out.println(error.toString());
                 }
             }) {

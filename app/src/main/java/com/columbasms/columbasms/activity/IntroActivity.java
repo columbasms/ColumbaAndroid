@@ -49,7 +49,7 @@ import java.util.Map;
 import io.fabric.sdk.android.Fabric;
 
 /**
- * Created by Federico on 04/02/16.
+ * Created by Federico on 04/02/16, edited by Matteo Brienza.
  */
 public class IntroActivity extends AppIntro {
 
@@ -153,7 +153,7 @@ public class IntroActivity extends AppIntro {
                             @Override
                             public void onResponse(NetworkResponse response) {
 
-                                System.out.println("RISPOSTAAUTHRICEVUTA");
+                                System.out.println("RISPOSTA AUTH RICEVUTA");
 
                                 try {
 

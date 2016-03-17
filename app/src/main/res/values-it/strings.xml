@@ -116,6 +116,18 @@
 
     <string name="no_campaigns_inTopic">Non ci sono campagne in questo topic.</string>
 
+    <string name="of">di</string>
+
+    <string name="no_mess_succ_sent">Nessun messaggio inviato con successo</string>
+
+    <string name="all_contacts_already_reached">Tutti i contatti selezionati sono già stati raggiunti</string>
+
+    <string name="contacts_already_reached"> contatti selezionati sono già stati raggiunti</string>
+
+    <string name="mess_succ_sent">messaggi inviati con successo</string>
+
+    <string name="network_error">Errore di rete.\nControlla la tua connesione e riprova</string>
+
     <string name="more_campaign_info">Più informazioni: </string>
 
 </resources>

@@ -12,6 +12,7 @@ public class API_URL {
     public static final String CAMPAIGNS_URL = BASE_URL + "/campaigns";
     public static final String ASSOCIATIONS_URL = BASE_URL + "/organizations";
     public static final String TOPICS_URL = BASE_URL + "/topics";
+    public static final String LEADERBOARD_URL = BASE_URL + "/leaderboard";
 
     public static final String USERS = "/users";
     public static final String CAMPAIGNS = "/campaigns";

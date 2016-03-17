@@ -5,7 +5,9 @@ package com.columbasms.columbasms.fragment;
  */
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -31,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.activity.CampaignsDetailsActivity;
 import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
@@ -55,8 +58,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A fragment that launches other parts of the demo application.
@@ -68,11 +73,19 @@ public class MapFragment extends Fragment {
     private static Toolbar tb;
     private static String AUTH_TOKEN;
 
+    private static String last;
+
+    private static Map<String, String> markerAddressCampaignIdMap;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         AUTH_TOKEN =  sp.getString("auth_token", "");
+
+
+
+        markerAddressCampaignIdMap = new HashMap<>();
 
         // inflat and return the layout
         View v = inflater.inflate(R.layout.fragment_map, container,
@@ -89,6 +102,9 @@ public class MapFragment extends Fragment {
         }
 
         googleMap = mMapView.getMap();
+
+        googleMap.getUiSettings().setMapToolbarEnabled(true);
+
 
         if(Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -109,12 +125,36 @@ public class MapFragment extends Fragment {
                 .build();                   // Creates a CameraPosition from the builder
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        getData();
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                String snippet = marker.getSnippet();
+
+                if(snippet!=null) {
+                    if (snippet.equals(last)) {
+                        Intent i = new Intent(getActivity(), CampaignsDetailsActivity.class);
+                        i.putExtra("campaign_id", markerAddressCampaignIdMap.get(snippet));
+                        getActivity().startActivity(i);
+                    }
+                    last = marker.getSnippet();
+                    googleMap.getUiSettings().setMapToolbarEnabled(true);
+                }else last = "";
+                marker.showInfoWindow();
+
+                return true;
+            }
+        });
+
+        getDataCampaigns();
+
+        getDataAssociations();
 
         return v;
     }
 
-    private static void getData(){
+    private static void getDataCampaigns(){
 
         String URL = API_URL.CAMPAIGNS_URL + "?locale=" + Locale.getDefault().getLanguage();
 
@@ -143,14 +183,73 @@ public class MapFragment extends Fragment {
                                     topicList.add(new Topic(t.getString("id"),t.getString("name"),false,t.getString("main_color"), t.getString("status_color"),null));
                                 }
 
+                                JSONObject ass = new JSONObject(o.getString("organization"));
+                                String ass_name = ass.getString("organization_name");
                                 JSONArray addresses = new JSONArray(o.getString("campaign_addresses"));
                                 for(int j = 0; j< addresses.length(); j++){
                                     JSONObject t = addresses.getJSONObject(j);
                                     Address a = new Address(t.getString("address"), t.getDouble("lat"), t.getDouble("lng"));
                                     LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
                                     String newAddr = makeShort(a.getAddress());
-                                    googleMap.addMarker(new MarkerOptions().position(latLng).title(newAddr).icon(getMarkerIcon(topicList.get(0).getMainColor())));
+
+
+                                    markerAddressCampaignIdMap.put(newAddr,o.getString("id"));
+
+                                    googleMap.addMarker(new MarkerOptions().position(latLng).title(ass_name).icon(getMarkerIcon(topicList.get(0).getMainColor())).snippet(newAddr));
+
                                 }
+
+
+                            } catch (JSONException e) {
+                                System.out.println("JSON Parsing error: " + e.getMessage());
+                            }
+                        }
+                    }
+
+
+                } catch (UnsupportedEncodingException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.toString());
+            }
+        });
+
+        MyApplication.getInstance().addToRequestQueue(cacheRequest);
+
+    }
+
+
+
+    private static void getDataAssociations(){
+
+        String URL = API_URL.ASSOCIATIONS_URL;
+
+        System.out.println(URL);
+
+        CacheRequest cacheRequest = new CacheRequest(AUTH_TOKEN,0, URL, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                try {
+                    final String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+
+                    JSONArray jsonArray = new JSONArray(jsonString);
+
+                    if (jsonArray.length() > 0) {
+
+                        // looping through json and adding to movies list
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                JSONObject o = jsonArray.getJSONObject(i);
+
+                                LatLng latLng = new LatLng(o.getDouble("lat"),o.getDouble("lng"));
+
+                                String newAddr = makeShort(o.getString("address"));
+
+                                googleMap.addMarker(new MarkerOptions().position(latLng).title(o.getString("organization_name")).icon(getMarkerIcon("#009688")));
 
 
                             } catch (JSONException e) {

@@ -23,8 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -261,6 +263,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                     public void onErrorResponse(VolleyError error) {
                                         System.out.println(error.toString());
                                         dialog.dismiss();
+                                        NetworkResponse networkResponse = error.networkResponse;
+                                        if(networkResponse!=null)
+                                            Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                                        else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                         ) {
@@ -350,6 +357,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                     public void onErrorResponse(VolleyError error) {
                                         System.out.println(error.toString());
                                         dialog.dismiss();
+                                        NetworkResponse networkResponse = error.networkResponse;
+                                        if(networkResponse!=null)
+                                            Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                                        else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
 

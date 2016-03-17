@@ -32,8 +32,8 @@ android {
         applicationId "com.columbasms.columbasms"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 8
-        versionName "0.4.1a"
+        versionCode 11
+        versionName "0.4.4a"
     }
     buildTypes {
         release {

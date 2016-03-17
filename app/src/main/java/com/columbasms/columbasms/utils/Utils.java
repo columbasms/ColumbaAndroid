@@ -51,10 +51,14 @@ public class Utils {
         try {
             Date dateDeparture = format.parse(dtDeparture);
             Date dateArrival = format.parse(dtArrival);
+
             dateDeparture.compareTo(dateArrival);
-            long diff = dateDeparture.getTime() - dateArrival.getTime();
+            long diff = dateDeparture.getTime() - (dateArrival.getTime()+3600000);
+
             long hours = TimeUnit.MILLISECONDS.toHours(diff);
             long minutes = TimeUnit.MILLISECONDS.toMinutes(diff) - hours*60;
+            System.out.println("hours: " + hours);
+            System.out.println("minutes: " + minutes);
 
             if(hours>168) {
                 return Integer.toString((int)(hours/168)) + w;
@@ -63,7 +67,7 @@ public class Utils {
             }else if(hours<24 && hours>1){
                 return Integer.toString((int)(hours)) + h;
             }else {
-                return Integer.toString((int)(minutes)) + m;
+                return Integer.toString((int)(minutes)+1) + m;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -131,7 +135,7 @@ public class Utils {
         ArrayList<PendingIntent> delivered = new ArrayList<>();
         sent.add(deliveredPI);
 
-        System.out.println("TRY TO SEND message: " + message + " to " + phoneNumber);
+        //System.out.println("TRY TO SEND message: " + message + " to " + phoneNumber);
         SmsManager sms = SmsManager.getDefault();
 
         String format_message =

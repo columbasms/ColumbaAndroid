@@ -120,7 +120,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
                 }
                 TextView topic = holder.topic;
-                topic.setText(topics);
+                topic.setText(topicList.get(0).getName());
                 topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
                 topic.setOnClickListener(new View.OnClickListener() {
                     @Override
