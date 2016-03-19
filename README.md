@@ -10,7 +10,7 @@ Columba is under development for [Google Technologies for Cloud and Web Developm
 
 
 Now publicly available as open-beta, get it on [Google play](https://play.google.com/apps/testing/com.columbasms.columbasms)!
-Instruction:
+Instructions:
   - Follow to this [link](https://play.google.com/apps/testing/com.columbasms.columbasms)
   - Log-in with your Google account
   - Click on "Become a Tester"
