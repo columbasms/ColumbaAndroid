@@ -9,7 +9,8 @@ Columba is a no-profit and open-source service for charity agencies that permits
 Columba is under development for [Google Technologies for Cloud and Web Development](https://sites.google.com/a/dis.uniroma1.it/google-technologies-for-cloud-and-web-development-2015/) university workshop.
 
 
-Now publicly available as open-beta, get it on [Google play](https://play.google.com/apps/testing/com.columbasms.columbasms)!. Instruction:
+Now publicly available as open-beta, get it on [Google play](https://play.google.com/apps/testing/com.columbasms.columbasms)!
+Instruction:
   - Follow to this [link](https://play.google.com/apps/testing/com.columbasms.columbasms)
   - Log-in with your Google account
   - Click on "Become a Tester"
