@@ -10,7 +10,9 @@
         android:title="@string/feedback"
         app:showAsAction="never" />
 
+
     <item android:id="@+id/action_guide"
+          android:visible="false"
         android:title="@string/guide"
         app:showAsAction="never" />
 
