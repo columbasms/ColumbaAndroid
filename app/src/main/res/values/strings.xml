@@ -138,4 +138,6 @@
     <string name="network_error">Network error.\nPlease check your connection and try again</string>
 
     <string name="more_campaign_info">More informations: </string>
+
+    <string name="no_notifications">There is not notifications.</string>
 </resources>

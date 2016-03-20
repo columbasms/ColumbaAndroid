@@ -216,6 +216,7 @@ public class CampaignsTabFragment extends Fragment implements NoSocialsSnackbarC
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                layout_noCampaigns.setVisibility(View.VISIBLE);
                 System.out.println(error.toString());
             }
         });
