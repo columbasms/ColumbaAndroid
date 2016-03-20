@@ -1,8 +1,11 @@
 package com.columbasms.columbasms.activity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
@@ -27,6 +30,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.ContactsGroupAdapter;
@@ -60,11 +64,13 @@ public class GroupsSelectionActivity extends AppCompatActivity{
     private String CAMPAIGN_ID;
     private String USER_ID;
     private String ASSOCIATION_NAME;
-    private String ASSOCIATION_KEY;
-    private String ASSOCIATION_ID;
+    private static String ASSOCIATION_KEY;
+    private static String ASSOCIATION_ID;
     private String CAMPAIGN_MESSAGE;
 
     private static SharedPreferences sp;
+
+    private static Activity activity;
 
     private int groups_count;
     private int groups_contacts;
@@ -101,6 +107,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }else {
                         try {
                             groups_count+=temp.getContactList().length();
@@ -117,7 +124,9 @@ public class GroupsSelectionActivity extends AppCompatActivity{
             editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
             editor_account_information.apply();
 
-            if(getIntent().getStringExtra("flag")!=null)GroupsSelectionActivity.this.finish();
+            if(getIntent().getStringExtra("flag")!=null){
+                sendTrustConfirmation();
+            }
 
 
 
@@ -135,6 +144,8 @@ public class GroupsSelectionActivity extends AppCompatActivity{
         setContentView(R.layout.activity_select_groups);
 
         ButterKnife.bind(this);
+
+        activity = this;
 
         //GET CAMPAIGN_ID, USER_ID, ASSOCIATION NAME FOR THIS CAMPAIGN AND CREATE KEY,
         p = PreferenceManager.getDefaultSharedPreferences(this);
@@ -220,6 +231,12 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
         if (contactsList.length() != 0) {
 
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.show();
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.dialog_progress);
+
             final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
 
             System.out.println(URL);
@@ -258,6 +275,9 @@ public class GroupsSelectionActivity extends AppCompatActivity{
                         groups_contacts+=contacts.length();
                         //SE E' L'ULTIMO GRUPPO STAMPA SNACKBAR E CHIUDI L'ACTIVITY
                         if(toClose){
+
+                            dialog.dismiss();
+
                             //SE HAI PROVATO A INVIARE E NON CI SONO ERRORI
                             int contact_alreadyReached = groups_count-groups_contacts;
                             if(contacts.length()==0){
@@ -277,6 +297,7 @@ public class GroupsSelectionActivity extends AppCompatActivity{
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    dialog.dismiss();
                     NetworkResponse networkResponse = error.networkResponse;
                     if(networkResponse!=null)
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
@@ -298,6 +319,59 @@ public class GroupsSelectionActivity extends AppCompatActivity{
 
     }
 
+
+    public static void sendTrustConfirmation(){
+
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        final String URL = API_URL.USERS_URL + "/" + sp.getString("user_id","") + API_URL.ASSOCIATIONS + "/" + ASSOCIATION_ID;
+        String parameter = "true";
+
+        final ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.show();
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_progress);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+        final String URL_TRUSTING = URL + "?trusted=" + parameter;
+
+        System.out.println(URL_TRUSTING);
+
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        activity.setResult(Activity.RESULT_OK, null);
+                        activity.finish();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.toString());
+                        dialog.dismiss();
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if(networkResponse!=null)
+                            Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                return headers;
+            }
+
+        };
+        requestQueue.add(putRequest);
+    }
 
 
 

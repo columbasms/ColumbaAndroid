@@ -67,7 +67,8 @@ public class AskContactsInputFragment extends DialogFragment {
                         i.putExtra("message",CAMPAIGN_MESSAGE);
                         i.putExtra("campaign_id", CAMPAIGN_ID);
                         i.putExtra("flag", flag);
-                        getActivity().startActivity(i);
+                        getActivity().startActivityForResult(i, 1);
+                        //getActivity().startActivity(i);
                         break;
                     case 1:
                         Intent g = new Intent(getActivity(), GroupsSelectionActivity.class);
@@ -76,7 +77,8 @@ public class AskContactsInputFragment extends DialogFragment {
                         g.putExtra("message", CAMPAIGN_MESSAGE);
                         g.putExtra("campaign_id", CAMPAIGN_ID);
                         g.putExtra("flag", flag);
-                        getActivity().startActivity(g);
+                        getActivity().startActivityForResult(g,1);
+                        //getActivity().startActivity(g);
                         break;
                 };
             }

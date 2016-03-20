@@ -127,6 +127,8 @@
 
     <string name="mess_succ_sent">messages succesfully sent</string>
 
+    <string name="mess_number_over"> MANCA</string>
+
     <string name="no_mess_succ_sent">No message succesfully sent</string>
 
     <string name="all_contacts_already_reached">All contacts selected has been already reached</string>

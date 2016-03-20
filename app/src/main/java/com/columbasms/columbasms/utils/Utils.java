@@ -57,8 +57,6 @@ public class Utils {
 
             long hours = TimeUnit.MILLISECONDS.toHours(diff);
             long minutes = TimeUnit.MILLISECONDS.toMinutes(diff) - hours*60;
-            System.out.println("hours: " + hours);
-            System.out.println("minutes: " + minutes);
 
             if(hours>168) {
                 return Integer.toString((int)(hours/168)) + w;

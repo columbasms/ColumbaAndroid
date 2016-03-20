@@ -107,6 +107,11 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
                     @Override
                     public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
                         Picasso.with(profileImageView.getContext())
                                 .load(user.getProfile_image())
                                 .transform(new RoundedTransformationBuilder()
@@ -125,11 +130,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
                                     }
                                 });
-                    }
-
-                    @Override
-                    public void onError() {
-
                     }
                 });
     }

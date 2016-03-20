@@ -203,7 +203,80 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     @Override
                     public void onClick(View v) {
 
-                        //BUG NOT FIXED: IF USER DOESN'T SELECT A CONTACT HE CAN TRUST
+                        final SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
+                        if (parameter.equals("true")){
+
+
+                            if (p.getString("thereIsaGroup", "").equals("")){
+                                Intent i = new Intent(activity, ContactsSelectionActivity.class);
+                                i.putExtra("flag","true");
+                                i.putExtra("association_id", association.getId());
+                                activity.startActivityForResult(i,1);
+                            }else{
+                                AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("flag", "true");
+                                bundle.putString("association_id", association.getId());
+                                newFragment.setArguments(bundle);
+                                newFragment.show(fragmentManager, null);
+                            }
+
+                        }else{
+
+                            final ProgressDialog dialog = new ProgressDialog(activity);
+                            dialog.show();
+                            dialog.setCancelable(false);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            dialog.setContentView(R.layout.dialog_progress);
+
+                            RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+                            final String URL_TRUSTING = URL + "?trusted=" + parameter;
+
+                            System.out.println(URL_TRUSTING);
+
+                            StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
+                                    new Response.Listener<String>()
+                                    {
+                                        @Override
+                                        public void onResponse(String response) {
+                                            //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
+                                            SharedPreferences.Editor editor_account_information = p.edit();
+                                            editor_account_information.remove(association.getId() + "_groups_forTrusting");
+                                            editor_account_information.remove(association.getId() + "_contacts_forTrusting");
+                                            editor_account_information.apply();
+
+                                            dialog.dismiss();
+                                            adapterCallback.onMethodCallback();
+                                        }
+                                    },
+                                    new Response.ErrorListener()
+                                    {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            System.out.println(error.toString());
+                                            dialog.dismiss();
+                                            NetworkResponse networkResponse = error.networkResponse;
+                                            if(networkResponse!=null)
+                                                Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                                            else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                            ) {
+
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<>();
+                                    headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                                    return headers;
+                                }
+
+                            };
+                            requestQueue.add(putRequest);
+                        }
+
+                       /*OLD VERSION
                         final ProgressDialog dialog = new ProgressDialog(activity);
                         dialog.show();
                         dialog.setCancelable(false);
@@ -228,7 +301,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                             if (p.getString("thereIsaGroup", "").equals("")){
                                                 Intent i = new Intent(activity, ContactsSelectionActivity.class);
                                                 i.putExtra("flag","true");
-                                                i.putExtra("association_id",association.getId());
+                                                i.putExtra("association_id", association.getId());
+                                                //activity.startActivityForResult(i,1);
                                                 activity.startActivity(i);
                                             }else{
                                                 AskContactsInputFragment newFragment = new AskContactsInputFragment();
@@ -281,6 +355,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                         };
                         requestQueue.add(putRequest);
+                        */
 
                     }
                 });

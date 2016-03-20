@@ -2,6 +2,7 @@ package com.columbasms.columbasms.activity;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -51,6 +52,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -148,6 +150,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if(state.getString("c4", null)==null){
+            state.edit().clear().apply();
+
+            clearApplicationData();
+            SharedPreferences.Editor e = state.edit();
+            e.putString("c4","true");
+            e.apply();
+        }
+
+
         ButterKnife.bind(this);
 
 
@@ -189,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToggle.syncState();
 
 
-        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
 
         if (state.getString("firstLaunch",null)==null && state.getString("splashed",null)==null) {
             // Show the splash screen at the beginning
@@ -242,40 +257,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        header = navView.getHeaderView(0);
 
-        TextView navHeader_phoneNumber = (TextView) header.findViewById(R.id.phone_number);
-        String phone_number = state.getString("phone_number", null);
-        TextView navHeader_userName = (TextView) header.findViewById(R.id.name);
-        String userName = state.getString("user_name", null);
 
-        if (phone_number == null) {
-            navHeader_phoneNumber.setText(getIntent().getStringExtra("phone_number"));
+            header = navView.getHeaderView(0);
+
+            TextView navHeader_phoneNumber = (TextView) header.findViewById(R.id.phone_number);
+            String phone_number = state.getString("phone_number", null);
+            TextView navHeader_userName = (TextView) header.findViewById(R.id.name);
+            String userName = state.getString("user_name", null);
+
+            if (phone_number == null) {
+                navHeader_phoneNumber.setText(getIntent().getStringExtra("phone_number"));
+            }
+            navHeader_phoneNumber.setText(phone_number);
+
+            if (userName == null) {
+                navHeader_userName.setText(getIntent().getStringExtra("user_name"));
+            }
+            navHeader_userName.setText(userName);
+
+            AUTH_TOKEN = state.getString("auth_token", null);
+            if (AUTH_TOKEN == null) getIntent().getStringExtra("auth_token");
+            else System.out.println("AUTH_TOKEN: " + AUTH_TOKEN);
+
+            USER_ID = state.getString("user_id", null);
+            if (USER_ID == null) getIntent().getStringExtra("user_id");
+
+
+            if (USER_ID != null) {
+                getUser();
+                if (state.getString("subscribeLogin", null) == null) {
+                    subscribeFollowedAssociations();
+                }
+            }
+
+
+
+
+    }
+
+    public void clearApplicationData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if(appDir.exists()){
+            String[] children = appDir.list();
+            for(String s : children){
+                if(!s.equals("lib")){
+                    deleteDir(new File(appDir, s));
+                }
+            }
         }
-        navHeader_phoneNumber.setText(phone_number);
+    }
 
-        if (userName == null) {
-            navHeader_userName.setText(getIntent().getStringExtra("user_name"));
-        }
-        navHeader_userName.setText(userName);
-
-        AUTH_TOKEN = state.getString("auth_token", null);
-        if (AUTH_TOKEN == null) getIntent().getStringExtra("auth_token");
-        System.out.println("AUTH_TOKEN: " + AUTH_TOKEN);
-
-        USER_ID = state.getString("user_id", null);
-        if (USER_ID == null) getIntent().getStringExtra("user_id");
-
-
-        if(USER_ID != null){
-            getUser();
-            if(state.getString("subscribeLogin",null)==null){
-                subscribeFollowedAssociations();
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
             }
         }
 
-
-
+        return dir.delete();
     }
 
     private static void getUser(){
@@ -477,6 +522,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor_account_information.apply();
         */
     }
+
+
+
+
 
 
 }

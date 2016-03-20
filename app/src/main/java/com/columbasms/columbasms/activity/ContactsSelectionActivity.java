@@ -1,11 +1,15 @@
 package com.columbasms.columbasms.activity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,6 +37,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.ContactsAdapter;
@@ -67,7 +72,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     private String USER_ID;
     private String ASSOCIATION_NAME;
     private String ASSOCIATION_KEY;
-    private String ASSOCIATION_ID;
+    private static String ASSOCIATION_ID;
     private String CAMPAIGN_MESSAGE;
 
     private static int MAX_SMS;
@@ -77,6 +82,8 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     private static JSONArray groupToAdd_contacts; //JSON ARRAY USED TO STORE THE USER CONTACTS SELECTION IF HE WANTS TO SAVE IT AS A GROUP
 
     private ContactsAdapter adapter;
+
+    private static Activity activity;
 
     @Bind(R.id.toolbar)Toolbar t;
     @Bind(R.id.save_as_a_group)ImageView save_as_a_group;
@@ -113,7 +120,14 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     @Bind(R.id.cancel)TextView cancel;
     @OnClick(R.id.cancel)
     public void OnCancel(){
+
+        /*
+        if(getIntent().getStringExtra("flag")!=null){
+            setResult(Activity.RESULT_CANCELED,null);
+        }
+        */
         ContactsSelectionActivity.this.finish();
+
     }
 
 
@@ -149,6 +163,8 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
         ButterKnife.bind(this);
 
+        activity = this;
+
         //Toolbar setup
         t.setTitle(getResources().getString(R.string.dialog_contacts_title));
         t.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -177,7 +193,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         MAX_SMS = Integer.parseInt(p.getString("msg_number", "50"));
         SENT_SMS = Integer.parseInt(p.getString("sent_msg_number", "0"));
         System.out.println("LIMITE MESSAGGI DA INVIARE: " + MAX_SMS);
-        System.out.println("LIMITE MESSAGGI DA INVIARE: " + SENT_SMS);
+        System.out.println("MESSAGGI INVIATI: " + SENT_SMS);
 
 
         //RECYCLER VIEW SETUP
@@ -316,7 +332,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         contacts_withSelection = new ArrayList<>();
         Contact temp;
         final JSONArray j = new JSONArray();
-        for (int i = 0; i < adapter.getItemCount(); i++) {
+        for (int i = 0; i < contacts_list.size(); i++) {
             temp = contacts_list.get(i);
             if (temp.isSelected()) {
                 contacts_withSelection.add(temp);
@@ -343,111 +359,140 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
             if (contacts_withSelection.size() != 0) {
 
+                //CHECK IF MESSAGE LIMIT NUMBER IS OVER
+                /*
+                if(contacts_withSelection.size() + SENT_SMS > MAX_SMS){
 
-                final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
+                    System.out.println("LIMITE MESSAGGI SUPERATO!");
 
-                System.out.println(URL);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.mess_number_over) + ")", Toast.LENGTH_LONG).show();
 
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                    ContactsSelectionActivity.this.finish();
 
-                JSONObject body = new JSONObject();
-
-                try {
-                    body.put("users", j);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println(body.toString());
+                //}else{*/
+                    final ProgressDialog dialog = new ProgressDialog(this);
+                    dialog.show();
+                    dialog.setCancelable(false);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.setContentView(R.layout.dialog_progress);
 
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                    final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
 
-                        try {
-                            contacts = new JSONArray(response.getString("users"));
-                            System.out.println(contacts.toString());
-                            for (int i = 0; i < contacts.length(); i++) {
-                                try {
-                                    JSONObject r = contacts.getJSONObject(i);
-                                    String NUMBER = contacts_withSelection.get(r.getInt("index")).getContact_number();
-                                    String STOP_LINK =  r.getString("stop_url");
-                                    Utils.sendSMS(ASSOCIATION_NAME, NUMBER, CAMPAIGN_MESSAGE, STOP_LINK, getResources(), getApplicationContext());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        //SAVE GROUP IF SAVE AS A GROUPS IS ACTIVED
-                        if (save_as_a_group.getTag().equals("1")){
+                    System.out.println(URL);
 
-                            final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            final SharedPreferences.Editor editor_account_information = state.edit();
+                    RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-                            String s = group_name.getText().toString();
-                            int size = s.length();
-                            String groupToAdd_name = s.substring(2,size-1); //GROUP NAME
-                            JSONArray allGroups = null; //ALL GROUPS STORED IN THE PHONE
-                            JSONObject newGroup = new JSONObject(); //NEW GROUP TO SAVE
+                    JSONObject body = new JSONObject();
+
+                    try {
+                        body.put("users", j);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println(body.toString());
+
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
                             try {
-                                //GET ALL GROUPS ARRAY (IF THERE ISN'T A GROUP CREATE THE RESOURCE)
-                                String allGroupsString = state.getString("groups","");
-                                if(allGroupsString.equals("")) allGroups = new JSONArray();
-                                else allGroups = new JSONArray(allGroupsString);
-
-                                //CREATE A JSON OBJECT WITH NEW GROUP DATA AND ADD IT TO ALL GROUPS LIST
-                                newGroup.put("name", groupToAdd_name);
-                                newGroup.put("contacts", groupToAdd_contacts.toString());
-                                allGroups.put(newGroup);
-
+                                contacts = new JSONArray(response.getString("users"));
+                                System.out.println(contacts.toString());
+                                for (int i = 0; i < contacts.length(); i++) {
+                                    try {
+                                        JSONObject r = contacts.getJSONObject(i);
+                                        String NUMBER = contacts_withSelection.get(r.getInt("index")).getContact_number();
+                                        String STOP_LINK =  r.getString("stop_url");
+                                        Utils.sendSMS(ASSOCIATION_NAME, NUMBER, CAMPAIGN_MESSAGE, STOP_LINK, getResources(), getApplicationContext());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            //SAVE GROUP IF SAVE AS A GROUPS IS ACTIVED
+                            if (save_as_a_group.getTag().equals("1")){
 
-                            System.out.println(allGroups.toString());
+                                final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                final SharedPreferences.Editor editor_account_information = state.edit();
 
-                            if (state.getString("thereIsaGroup", "").equals(""))editor_account_information.putString("thereIsaGroup","true");
+                                String s = group_name.getText().toString();
+                                int size = s.length();
+                                String groupToAdd_name = s.substring(2,size-1); //GROUP NAME
+                                JSONArray allGroups = null; //ALL GROUPS STORED IN THE PHONE
+                                JSONObject newGroup = new JSONObject(); //NEW GROUP TO SAVE
+                                try {
+                                    //GET ALL GROUPS ARRAY (IF THERE ISN'T A GROUP CREATE THE RESOURCE)
+                                    String allGroupsString = state.getString("groups","");
+                                    if(allGroupsString.equals("")) allGroups = new JSONArray();
+                                    else allGroups = new JSONArray(allGroupsString);
 
-                            //UPDATE ALL GROUPS CREATED BY USER IN A SHARED PREFERENCES
-                            editor_account_information.putString("groups", allGroups.toString());
-                            editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
-                            editor_account_information.apply();
+                                    //CREATE A JSON OBJECT WITH NEW GROUP DATA AND ADD IT TO ALL GROUPS LIST
+                                    newGroup.put("name", groupToAdd_name);
+                                    newGroup.put("contacts", groupToAdd_contacts.toString());
+                                    allGroups.put(newGroup);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                System.out.println(allGroups.toString());
+
+                                if (state.getString("thereIsaGroup", "").equals(""))editor_account_information.putString("thereIsaGroup","true");
+
+                                //UPDATE ALL GROUPS CREATED BY USER IN A SHARED PREFERENCES
+                                editor_account_information.putString("groups", allGroups.toString());
+                                editor_account_information.remove(ASSOCIATION_ID + "_contacts_forTrusting");
+                                editor_account_information.apply();
+                            }
+
+                            dialog.dismiss();
+
+                            int contact_alreadyReached = contacts_withSelection.size()-contacts.length();
+                            if(contacts.length()==0){
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.all_contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                            }else if(contacts.length()==contacts_withSelection.size()){
+                                Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent), Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent) + "\n( " + contact_alreadyReached + " " + getResources().getString(R.string.contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
+                            }
+
+                            //Update SENT_SMS
+                            //p.edit().putString("sent_msg_number",Integer.toString(SENT_SMS + contacts.length())).apply();
+
+                            ContactsSelectionActivity.this.finish();
                         }
-
-                        int contact_alreadyReached = contacts_withSelection.size()-contacts.length();
-                        if(contacts.length()==0){
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.all_contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
-                        }else if(contacts.length()==contacts_withSelection.size()){
-                            Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent), Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(getApplicationContext(), contacts.length() + " " + getResources().getString(R.string.of) +  " " + contacts_withSelection.size() + " " + getResources().getString(R.string.mess_succ_sent) + "\n( " + contact_alreadyReached + " " + getResources().getString(R.string.contacts_already_reached) + ")", Toast.LENGTH_LONG).show();
-                        }
-                        ContactsSelectionActivity.this.finish();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        NetworkResponse networkResponse = error.networkResponse;
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            dialog.dismiss();
+                            NetworkResponse networkResponse = error.networkResponse;
                             if(networkResponse!=null)
                                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
                             else Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
-                        System.out.println(error.toString());
-                    }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("X-Auth-Token", p.getString("auth_token", null));
-                        return headers;
-                    }
+                            System.out.println(error.toString());
+                        }
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<>();
+                            headers.put("X-Auth-Token", p.getString("auth_token", null));
+                            return headers;
+                        }
 
-                };
+                    };
 
-                requestQueue.add(jsonObjectRequest);
+                    requestQueue.add(jsonObjectRequest);
+                //}
+
+            }else{
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.select_atLeast_a_contact) + "(E)",Toast.LENGTH_SHORT ).show();
             }
+
         }else{
 
 
@@ -501,9 +546,74 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                 editor.putString(ASSOCIATION_ID + "_contacts_forTrusting", j.toString());
                 editor.apply();
             }
-            ContactsSelectionActivity.this.finish();
+
+            //SEND CONFIRMATION TO SERVER
+            sendTrustConfirmation();
         }
     }
+
+
+
+
+
+
+
+
+    public static void sendTrustConfirmation(){
+
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        final String URL = API_URL.USERS_URL + "/" + sp.getString("user_id","") + API_URL.ASSOCIATIONS + "/" + ASSOCIATION_ID;
+        String parameter = "true";
+
+        final ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.show();
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_progress);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+        final String URL_TRUSTING = URL + "?trusted=" + parameter;
+
+        System.out.println(URL_TRUSTING);
+
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        activity.setResult(Activity.RESULT_OK, null);
+                        activity.finish();
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.toString());
+                        dialog.dismiss();
+                        NetworkResponse networkResponse = error.networkResponse;
+                        if(networkResponse!=null)
+                            Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                return headers;
+            }
+
+        };
+        requestQueue.add(putRequest);
+    }
+
+
+
 
 
 

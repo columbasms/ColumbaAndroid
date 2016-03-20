@@ -122,6 +122,8 @@
 
     <string name="all_contacts_already_reached">Tutti i contatti selezionati sono già stati raggiunti</string>
 
+    <string name="mess_number_over"> MANCA</string>
+
     <string name="contacts_already_reached"> contatti selezionati sono già stati raggiunti</string>
 
     <string name="mess_succ_sent">messaggi inviati con successo</string>

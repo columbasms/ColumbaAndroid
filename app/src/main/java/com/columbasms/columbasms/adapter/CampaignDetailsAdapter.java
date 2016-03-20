@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,7 +202,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         LinearLayout lld = holder.layout_longDescr;
         if(c.getLongDescription().length()>0 && !c.getLongDescription().equals("null")) {
             lld.setVisibility(View.VISIBLE);
-            longDescr.setText(res.getString(R.string.more_campaign_info) + " " + c.getLongDescription());
+            longDescr.setText(res.getString(R.string.more_campaign_info) + " " + Html.fromHtml(c.getLongDescription()).toString());
         }else {
             lld.setVisibility(View.GONE);
         }
