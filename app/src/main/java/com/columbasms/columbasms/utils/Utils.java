@@ -94,19 +94,19 @@ public class Utils {
                         switch(getResultCode())
                         {
                             case Activity.RESULT_OK:
-                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " RESULT_OK");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + " IS: " + " RESULT_OK");
                                 break;
                             case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " GENERIC_FAILURE");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + " IS: " + " GENERIC_FAILURE");
                                 break;
                             case SmsManager.RESULT_ERROR_NO_SERVICE:
-                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_NO_SERVICE");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + " IS: " + " ERROR_NO_SERVICE");
                                 break;
                             case SmsManager.RESULT_ERROR_NULL_PDU:
-                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_NULL_PDU");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + " IS: " + " ERROR_NULL_PDU");
                                 break;
                             case SmsManager.RESULT_ERROR_RADIO_OFF:
-                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + "IS: " + " ERROR_RADIO_OFF");
+                                System.out.println("RESULT OF SENDING: " + message + "  TO " + phoneNumber + " IS: " + " ERROR_RADIO_OFF");
                                 break;
                         }
                     }
@@ -133,14 +133,12 @@ public class Utils {
         ArrayList<PendingIntent> delivered = new ArrayList<>();
         sent.add(deliveredPI);
 
-        //System.out.println("TRY TO SEND message: " + message + " to " + phoneNumber);
         SmsManager sms = SmsManager.getDefault();
 
         String format_message =
-                associationSender + ":\n"+
-                message + "\n" +
-                res.getString(R.string.sms_footer) + "\n" +
-                res.getString(R.string.sms_stop) + stop_link;
+                message + "\n\n" +
+                res.getString(R.string.sms_footer) + " " +  associationSender  + ", " +
+                res.getString(R.string.sms_stop) + " " + stop_link;
 
         ArrayList<String> parts = sms.divideMessage(format_message);
         sms.sendMultipartTextMessage(phoneNumber, null, parts, sent, delivered);

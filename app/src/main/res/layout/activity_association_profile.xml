@@ -8,7 +8,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AssociationProfileActivity">
+    tools:context=".activity.AssociationProfileActivity">
 
             <android.support.v4.widget.SwipeRefreshLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"

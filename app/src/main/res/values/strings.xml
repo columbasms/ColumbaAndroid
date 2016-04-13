@@ -53,8 +53,10 @@
     <string name="associations">Associations</string>
     <string name="campaigns">Campaigns</string>
 
-    <string name="sms_footer">Powered By Columba</string>
-    <string name="sms_stop">To stop receiving this SMS:\n</string>
+
+    <string name="sms_footer">Powered By Columba for</string>
+    <string name="sms_stop">Info/Stop:</string>
+
 
 
     <string name="dialog_contacts_title">Select contacts</string>

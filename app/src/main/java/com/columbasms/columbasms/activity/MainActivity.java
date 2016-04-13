@@ -153,14 +153,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if(state.getString("c4", null)==null){
-            state.edit().clear().apply();
+        /*
+        if(state.getString("clearAll", null)==null){
+            state.edit().clear().commit();
 
             clearApplicationData();
             SharedPreferences.Editor e = state.edit();
-            e.putString("c4","true");
+            e.putString("clearAll","true");
             e.apply();
         }
+        */
 
 
         ButterKnife.bind(this);

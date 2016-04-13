@@ -54,8 +54,8 @@ import io.fabric.sdk.android.Fabric;
 public class IntroActivity extends AppIntro {
 
     private static final float BACKOFF_MULT = 1.0f;
-    private static final int TIMEOUT_MS = 4000;
-    private static final int MAX_RETRIES = 4;
+    private static final int TIMEOUT_MS = 10000;
+    private static final int MAX_RETRIES = 0;
 
 
 
@@ -127,7 +127,7 @@ public class IntroActivity extends AppIntro {
 
                         System.out.println("AUTHSUCCESSO");
 
-                        SharedPreferences.Editor editor_account_information = sp.edit();
+                        final SharedPreferences.Editor editor_account_information = sp.edit();
                         editor_account_information.putString("firstLaunch", "true");
                         editor_account_information.apply();
 
@@ -147,7 +147,6 @@ public class IntroActivity extends AppIntro {
                         String credentials = "47ccf9098174f48be281f86103b9" + ":" + "c5906274ba1a14711a816db53f0d";
                         String credBase64 = Base64.encodeToString(credentials.getBytes(), Base64.DEFAULT).replace("\n", "");
                         authHeaders.put("Authorization", "Basic " + credBase64);
-
 
                         CustomRequest authRequest = new CustomRequest(Request.Method.POST, API_URL.USERS_URL, authHeaders, new Response.Listener<NetworkResponse>() {
                             @Override
@@ -174,7 +173,7 @@ public class IntroActivity extends AppIntro {
                                     editor_account_information.putString("auth_token", digitsClient.getString("auth_token"));
                                     editor_account_information.putString("phone_number", phoneNumber);
                                     editor_account_information.putString("firstLaunch", "false");
-                                    editor_account_information.apply();
+                                    editor_account_information.commit();
 
 
                                     Intent i = new Intent(getApplicationContext(),MainActivity.class);
@@ -194,6 +193,7 @@ public class IntroActivity extends AppIntro {
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                editor_account_information.clear().commit();
                                 System.out.println(error.toString());
                                 System.out.println("AUTHFALLITA");
                                 finish();

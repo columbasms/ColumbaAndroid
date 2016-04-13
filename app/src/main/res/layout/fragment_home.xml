@@ -7,7 +7,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
             <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
@@ -19,6 +19,7 @@
                             android:id="@+id/rv_feed"
                             android:scrollbars="vertical"
                             android:paddingTop="8dp"
+                            android:background="#f5f5f5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 

@@ -6,6 +6,7 @@
         android:title="@string/disable_notify">
     </CheckBoxPreference>
     <EditTextPreference
+        android:enabled="false"
         android:key="msg_number"
         android:title="@string/msg_number"
         android:inputType="number">
