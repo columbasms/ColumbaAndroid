@@ -2,17 +2,12 @@ package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
@@ -20,13 +15,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,14 +38,10 @@ import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -230,19 +218,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View v) {
 
-
-                /*
-                final ProgressDialog dialog;
-                if(Build.VERSION.SDK_INT >= 21) {
-                    dialog = new ProgressDialog(mainActivity,android.R.style.Theme_Material_NoActionBar_Fullscreen);
-                }else  dialog = new ProgressDialog(mainActivity,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-
-                dialog.show();
-                dialog.setCancelable(false);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-                dialog.setContentView(R.layout.dialog_progress);
-                */
-
                 final Dialog nagDialog = new Dialog(mainActivity,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
                 nagDialog.show();
                 nagDialog.setCancelable(true);
@@ -284,12 +259,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         nagDialog.dismiss();
                     }
                 });
-
-
-
-
-
-
             }
         });
 

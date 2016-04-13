@@ -1,6 +1,7 @@
 package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,9 +19,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +36,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.CampaignsDetailsActivity;
 import com.columbasms.columbasms.activity.ContactsSelectionActivity;
 import com.columbasms.columbasms.activity.MapsActivity;
+import com.columbasms.columbasms.activity.TopicProfileActivity;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
@@ -48,6 +53,8 @@ import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.google.android.gms.gcm.GcmPubSub;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +64,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by Matteo Brienza on 2/1/16.
@@ -98,6 +106,10 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
         @Bind(R.id.timestamp)TextView timestamp;
         @Bind(R.id.profile_image)ImageView profile_image;
 
+        @Bind(R.id.layout_share)LinearLayout layout_share;
+        @Bind(R.id.layout_locate)LinearLayout layout_locate;
+        @Bind(R.id.layout_send)LinearLayout layout_send;
+
         public GroupViewHolder(View parent) {
             super(parent);
             ButterKnife.bind(this, parent);
@@ -126,7 +138,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
         }
     }
 
-
+    private PhotoViewAttacher mAttacher;
 
 
     public AssociationProfileAdapter(List<CharityCampaign> il,Association a,Resources r, Activity ay, FragmentManager f, AdapterCallback ac, NoSocialsSnackbarCallback s) {
@@ -457,11 +469,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
 
 
-                final ImageView cover = holder1.coverImage;
-                Utils.downloadImage(association.getCover_normal(),cover,false,false);
+                final ImageView coverp = holder1.coverImage;
+                Utils.downloadImage(association.getCover_normal(),coverp,false,false);
 
-                final ImageView p = holder1.thumbnailImage;
-                Utils.downloadImage(association.getAvatar_normal(),p,true,true);
+                final ImageView pp = holder1.thumbnailImage;
+                Utils.downloadImage(association.getAvatar_normal(),pp,true,true);
 
 
                 break;
@@ -473,8 +485,58 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 final CharityCampaign c = mItemList.get(position-1);
                 final Association a = c.getOrganization();
 
-                CardView ctc = holder2.cardToClick;
-                ctc.setOnClickListener(new View.OnClickListener() {
+                Resources res = activity.getResources();
+                final String share_via = res.getString(R.string.share);
+
+
+                ImageView profile_image = holder2.profile_image;
+                profile_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(v.getContext(), AssociationProfileActivity.class);
+                        i.putExtra("ass_id",a.getId());
+                        i.putExtra("ass_name",a.getOrganization_name());
+                        v.getContext().startActivity(i);
+                    }
+                });
+
+                TextView an = holder2.associationName;
+                an.setText(a.getOrganization_name());
+                an.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(v.getContext(), AssociationProfileActivity.class);
+                        i.putExtra("ass_id",a.getId());
+                        i.putExtra("ass_name",a.getOrganization_name());
+                        v.getContext().startActivity(i);
+                    }
+                });
+
+
+                final List<Topic> topicList = c.getTopics();
+                String topics = "";
+                if(topicList.size()>0) {
+                    for (int i = 0; i < topicList.size(); i++) {
+                        topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
+                    }
+                    TextView topic = holder2.topic;
+                    topic.setText(topicList.get(0).getName());
+                    topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
+                    topic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TEMPORARY SUPPORT FOR ONLY ONE TOPIC FOR CAMPAIGN
+                            Intent i = new Intent(v.getContext(), TopicProfileActivity.class);
+                            i.putExtra("topic_name", topicList.get(0).getName());
+                            i.putExtra("topic_id", topicList.get(0).getId());
+                            v.getContext().startActivity(i);
+                        }
+                    });
+                }
+
+                final TextView message = holder2.message;
+                message.setText(c.getMessage());
+                message.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //MANCA UN TAG PER DIRE CHE ACTIVITY SEI..SE FOSSI IL PROFILO NEI DETTAGLI NON DEVONO APPARIRE I BOTTONI SEND/RECEIVE
@@ -484,50 +546,36 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     }
                 });
 
-                final TextView an = holder2.associationName;
-                an.setText(c.getOrganization().getOrganization_name());
-
-                final List<Topic> topicList = c.getTopics();
-                String topics = "";
-                for (int i = 0; i<topicList.size(); i++){
-                    topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
-                }
-                TextView topic = holder2.topic;
-                topic.setText(topicList.get(0).getName());
-                topic.setTextColor(Color.parseColor(topicList.get(0).getMainColor()));
-
-                TextView message = holder2.message;
-                message.setText(c.getMessage());
-
-                ImageView s = holder2.send;
-                s.setOnClickListener(new View.OnClickListener() {
+                LinearLayout send = holder2.layout_send;
+                send.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
 
-                        if (p.getString("thereIsaGroup", "").equals("")){
+                        if (p.getString("thereIsaGroup", "").equals("")) {
                             Intent i = new Intent(activity, ContactsSelectionActivity.class);
-                            i.putExtra("association_name",a.getOrganization_name());
-                            i.putExtra("association_id",a.getId());
-                            i.putExtra("message",c.getMessage());
+                            i.putExtra("association_name", a.getOrganization_name());
+                            i.putExtra("association_id", a.getId());
+                            i.putExtra("message", c.getMessage());
                             i.putExtra("campaign_id", c.getId());
                             activity.startActivity(i);
-                        }else{
+                        } else {
                             AskContactsInputFragment newFragment = new AskContactsInputFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString("association_name",a.getOrganization_name());
+                            bundle.putString("association_name", a.getOrganization_name());
                             bundle.putString("association_id", a.getId());
                             bundle.putString("message", c.getMessage());
                             bundle.putString("campaign_id", c.getId());
                             newFragment.setArguments(bundle);
                             newFragment.show(fragmentManager, a.getOrganization_name());
                         }
+
                     }
                 });
 
-                ImageView share = holder2.share;
+                LinearLayout share = holder2.layout_share;
                 share.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         SocialNetworkUtils.launchSocialNetworkChooser(activity, noSocialsSnackbarCallback, c.getMessage());
@@ -535,18 +583,11 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 });
 
-                final ImageView pi = holder2.profile_image;
-                Utils.downloadImage(association.getAvatar_normal(), pi, true, false);
-
-                TextView time = holder2.timestamp;
-                time.setText(c.getTimestamp());
-
                 ImageView locate = holder2.locate;
-                RelativeLayout locateBack = holder2.locate_layout;
+                LinearLayout locate_layout = holder2.layout_locate;
                 if(c.getAddresses().size()!=0) {
-                    locate.setVisibility(View.VISIBLE);
-                    locateBack.setVisibility(View.VISIBLE);
-                    locate.setOnClickListener(new View.OnClickListener() {
+                    locate.setAlpha(1f);
+                    locate_layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(activity, MapsActivity.class);
@@ -557,17 +598,72 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                     });
                 }else{
-                    locate.setVisibility(View.GONE);
-                    locateBack.setVisibility(View.GONE);
+                    locate.setAlpha(0.4f);
                 }
 
-                final ImageView cover_item = holder2.cover_image;
+                TextView time = holder2.timestamp;
+                time.setText(c.getTimestamp());
+                final ImageView p = holder2.profile_image;
+                Utils.downloadImage(a.getAvatar_normal(), p, true, false);
+
+
+
+
+
+                final ImageView cover = holder2.cover_image;
                 PercentRelativeLayout prl = holder2.prl;
                 if(!c.getPhoto().equals("https://www.columbasms.com/images/invalid")) {
                     prl.setVisibility(View.VISIBLE);
-                    Utils.downloadImage(c.getPhoto(), cover_item, false, false);
+                    Utils.downloadImage(c.getPhoto(), cover, false, false);
                 }else prl.setVisibility(View.GONE);
 
+                cover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        final Dialog nagDialog = new Dialog(activity,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                        nagDialog.show();
+                        nagDialog.setCancelable(true);
+                        nagDialog.setContentView(R.layout.preview_image);
+
+                        WindowManager.LayoutParams attrs = nagDialog.getWindow().getAttributes();
+                        attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                        nagDialog.getWindow().setAttributes(attrs);
+
+                        final ImageView btnClose = (ImageView) nagDialog.findViewById(R.id.btnIvClose);
+                        final ProgressBar progressBar = (ProgressBar) nagDialog.findViewById(R.id.progressBar);
+                        final ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
+                        final ImageView error = (ImageView)nagDialog.findViewById(R.id.error);
+
+                        Callback imageLoadedCallback = new Callback() {
+
+                            @Override
+                            public void onSuccess() {
+                                mAttacher = new PhotoViewAttacher(ivPreview);
+                                progressBar.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onError() {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+                                error.setVisibility(View.VISIBLE);
+                            }
+
+                        };
+
+                        Picasso.with(activity)
+                                .load(c.getPhoto())
+                                .into(ivPreview,imageLoadedCallback);
+
+                        btnClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View arg0) {
+                                nagDialog.dismiss();
+                            }
+                        });
+                    }
+                });
                 break;
         }
     }
