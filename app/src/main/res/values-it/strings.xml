@@ -65,6 +65,7 @@
     <string name="Profile">Profilo</string>
     <string name="Settings">Impostazioni</string>
     <string name="Leaderboard">Classifica</string>
+    <string name="Logout">Logout</string>
 
     <string name="edit_profile">MODIFICA PROFILO</string>
     <string name="edit_bar">Modifica profilo</string>

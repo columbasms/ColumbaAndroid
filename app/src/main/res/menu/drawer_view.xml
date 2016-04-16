@@ -13,5 +13,8 @@
             android:id="@+id/leaderboard"
             android:title="@string/Leaderboard"
             android:icon="@drawable/ic_assessment_black_24dp"/>
+        <item
+            android:id="@+id/logout"
+            android:title="@string/Logout"/>
     </group>
 </menu>

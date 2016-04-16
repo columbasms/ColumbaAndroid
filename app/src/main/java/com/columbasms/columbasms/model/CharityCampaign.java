@@ -18,6 +18,7 @@ public class CharityCampaign {
     private String longDescription;
     private String photo;
     private List<Address>addresses;
+    //private boolean isExpired;
 
     public CharityCampaign(){}
 

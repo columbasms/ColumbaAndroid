@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,6 +47,10 @@ import com.columbasms.columbasms.fragment.AskGroupName;
 import com.columbasms.columbasms.model.Contact;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +66,12 @@ import butterknife.OnClick;
 /**
  * Created by Matteo Brienza on 2/29/16.
  */
-public class ContactsSelectionActivity extends AppCompatActivity implements AskGroupName.GroupNameInsertedCallback{
+public class ContactsSelectionActivity extends AppCompatActivity implements AskGroupName.GroupNameInsertedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    GoogleApiClient mGoogleApiClient;
+    private static double LATITUDE;
+    private static double LONGITUDE;
+
 
     private List<Contact> contactList;
     private List<Contact> allContacts;
@@ -162,6 +173,15 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         setContentView(R.layout.activity_select_contacts);
 
         ButterKnife.bind(this);
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         activity = this;
 
@@ -387,6 +407,8 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
                     try {
                         body.put("users", j);
+                        body.put("latitude",LATITUDE);
+                        body.put("longitude",LONGITUDE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -631,7 +653,9 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     Contact c = new Contact(name,phoneNumber,false);
 
-                    if (!mobileNoSet.contains(name)) {
+                    //if(c.getContact_number()==null)System.out.println(name + "è un contatto nullo");
+
+                    if (!mobileNoSet.contains(name) && c.getContact_number()!=null) { //CONTACT NUMBER MAY BE NULL FOR A NO SENSE REASON
                         contactList.add(c);
                         allContacts.add(c);
                         mobileNoSet.add(name);
@@ -726,5 +750,33 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     }
 
 
+    //GET LAST KNOWN LOCATION
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            LATITUDE = mLastLocation.getLatitude();
+            LONGITUDE = mLastLocation.getLongitude();
+        }else System.out.println("No location found");
+    }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 }

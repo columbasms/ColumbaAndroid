@@ -81,8 +81,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         //BUG
         private void setFlagAtIndex(List<Contact> l, Contact c){
             for (int i = 0; i<l.size();i++){
-                if(l.get(i).getContact_number().equals(c.getContact_number())) {
-                    l.get(i).setSelected(c.isSelected());
+                String name = l.get(i).getContact_number();
+                if(name!=null) {
+                    if (l.get(i).getContact_number().equals(c.getContact_number())) {
+                        l.get(i).setSelected(c.isSelected());
+                    }
                 }
             }
         }

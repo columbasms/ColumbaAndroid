@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.MenuItemCompat;
@@ -37,6 +38,9 @@ import com.columbasms.columbasms.adapter.ContactsGroupAdapter;
 import com.columbasms.columbasms.model.ContactsGroup;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +58,11 @@ import butterknife.OnClick;
 /**
  * Created by Matteo Brienza on 3/13/16.
  */
-public class GroupsSelectionActivity extends AppCompatActivity{
+public class GroupsSelectionActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
+    GoogleApiClient mGoogleApiClient;
+    private static double LATITUDE;
+    private static double LONGITUDE;
 
     private static ContactsGroupAdapter adapter;
 
@@ -144,6 +152,15 @@ public class GroupsSelectionActivity extends AppCompatActivity{
         setContentView(R.layout.activity_select_groups);
 
         ButterKnife.bind(this);
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         activity = this;
 
@@ -474,5 +491,31 @@ public class GroupsSelectionActivity extends AppCompatActivity{
     }
 
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            LATITUDE = mLastLocation.getLatitude();
+            LONGITUDE = mLastLocation.getLongitude();
+        }else System.out.println("No location found");
+    }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 }

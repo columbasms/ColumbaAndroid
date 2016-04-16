@@ -431,6 +431,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item){
 
+
+        final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+
         switch(item.getItemId()){
             case R.id.user_profile:
                 startActivity(new Intent(this, UserProfileActivity.class));
@@ -442,6 +446,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.leaderboard:
                 startActivity(new Intent(this, LeaderboardActivity.class));
+                break;
+            case R.id.logout:
+                state.edit().clear().commit();
+                clearApplicationData();
+                MainActivity.this.finish();
+                System.exit(0);
                 break;
         }
 
