@@ -490,28 +490,9 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
 
                 ImageView profile_image = holder2.profile_image;
-                profile_image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(v.getContext(), AssociationProfileActivity.class);
-                        i.putExtra("ass_id",a.getId());
-                        i.putExtra("ass_name",a.getOrganization_name());
-                        v.getContext().startActivity(i);
-                    }
-                });
 
                 TextView an = holder2.associationName;
                 an.setText(a.getOrganization_name());
-                an.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(v.getContext(), AssociationProfileActivity.class);
-                        i.putExtra("ass_id",a.getId());
-                        i.putExtra("ass_name",a.getOrganization_name());
-                        v.getContext().startActivity(i);
-                    }
-                });
-
 
                 final List<Topic> topicList = c.getTopics();
                 String topics = "";

@@ -450,8 +450,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.logout:
                 state.edit().clear().commit();
                 clearApplicationData();
+                Intent intro = new Intent(getApplicationContext(), IntroActivity.class);
+                startActivity(intro);
                 MainActivity.this.finish();
-                System.exit(0);
                 break;
         }
 

@@ -63,19 +63,22 @@
 
         <TextView
             android:id="@+id/cancel"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
+            android:padding="8dp"
+            android:background="?selectableItemBackground"
             android:fontFamily="sans-serif-medium"
+            android:layout_marginRight="8dp"
             android:text="@string/cancel"/>
 
         <TextView
             android:id="@+id/send"
-            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
+            android:padding="8dp"
+            android:background="?selectableItemBackground"
             android:fontFamily="sans-serif-medium"
             android:text="@string/send"/>
 

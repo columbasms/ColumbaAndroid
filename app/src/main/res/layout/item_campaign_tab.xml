@@ -30,16 +30,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_weight="8"
+                android:layout_marginLeft="8dp"
                 android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/ass_name"
+                    android:background="?selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimaryText"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:layout_marginLeft="8dp"/>
+                    android:padding="2dp"/>
 
             </LinearLayout>
 
@@ -79,12 +81,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f5f5f5">
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.percent.PercentRelativeLayout
                 android:id="@+id/percentRelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:layout_height="wrap_content"
                 >
@@ -102,87 +109,90 @@
 
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f5f5f5">
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/button_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp">
+            >
 
             <LinearLayout
+                android:id="@+id/layout_share"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_weight="1"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:gravity="center"
                 >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/share"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_share_black_24dp"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_locate"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_width="0dp"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <RelativeLayout
                     android:id="@+id/locate_layout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp">
+                    android:layout_height="wrap_content">
                     <ImageView
                         android:id="@+id/locate"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:background="@drawable/ic_location_on_black_24dp"/>
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/circle_button"
-                        android:layout_below="@id/percentRelativeLayout_usr"/>
                 </RelativeLayout>
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_send"
+                android:padding="8dp"
+                android:layout_margin="8dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:id="@+id/share"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/ic_share_black_24dp"/>
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/update_profile_button2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/circle_button"
-                        android:layout_below="@id/percentRelativeLayout_usr"/>
-                </RelativeLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="end">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp">
-                    <ImageView
                         android:id="@+id/send"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:background="@drawable/ic_send_black_24dp"/>
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/circle_button"
-                        android:layout_below="@id/percentRelativeLayout_usr"/>
                 </RelativeLayout>
 
             </LinearLayout>

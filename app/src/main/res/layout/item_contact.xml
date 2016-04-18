@@ -8,9 +8,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="26dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="26dp"
         android:layout_height="78dp"
+        android:background="@drawable/ripple_effect"
         android:id="@+id/contact_layout"
         android:orientation="horizontal"
         >

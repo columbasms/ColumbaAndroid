@@ -54,8 +54,8 @@ import io.fabric.sdk.android.Fabric;
 public class IntroActivity extends AppIntro {
 
     private static final float BACKOFF_MULT = 1.0f;
-    private static final int TIMEOUT_MS = 10000;
-    private static final int MAX_RETRIES = 0;
+    private static final int TIMEOUT_MS = 3000;
+    private static final int MAX_RETRIES = 4;
 
 
 
@@ -87,19 +87,21 @@ public class IntroActivity extends AppIntro {
             editor_account_information.commit();
 
             //TUTORIAL SCREEN SETTINGS
-            Resources r = getResources();
-            int color = Color.parseColor("#009688");
-            addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro1_title), r.getString(R.string.appIntro1_description), R.drawable.app_intro1, color));
-            addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro2_title), r.getString(R.string.appIntro2_description), R.drawable.app_intro2,color));
-            addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro3_title), r.getString(R.string.appIntro3_description), R.drawable.app_intro3,color));
-            addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro4_title), r.getString(R.string.appIntro4_description), R.drawable.app_intro4,color));
+                Resources r = getResources();
+                int color = Color.parseColor("#009688");
+                addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro1_title), r.getString(R.string.appIntro1_description), R.drawable.app_intro1, color));
+                addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro2_title), r.getString(R.string.appIntro2_description), R.drawable.app_intro2, color));
+                addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro3_title), r.getString(R.string.appIntro3_description), R.drawable.app_intro3, color));
+                addSlide(AppIntroFragment.newInstance(r.getString(R.string.appIntro4_title), r.getString(R.string.appIntro4_description), R.drawable.app_intro4, color));
 
-            setBarColor(Color.parseColor("#00796B"));
-            setSeparatorColor(Color.parseColor("#B2DFDB"));
+                setBarColor(Color.parseColor("#00796B"));
+                setSeparatorColor(Color.parseColor("#B2DFDB"));
+
 
             // Hide Skip/Done button.
             showSkipButton(true);
             setProgressButtonEnabled(true);
+
 
             //START GCM SERVICE
             Intent i = new Intent(this, RegistrationService.class);
@@ -116,6 +118,8 @@ public class IntroActivity extends AppIntro {
                 //Digits by Twitter Authentication with phone number
                 TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
                 Fabric.with(this, new TwitterCore(authConfig), new Digits());
+
+                Digits.getSessionManager().clearActiveSession();
 
                 //Customize SIGN IN button
                 digitsButton = new DigitsAuthButton(this);

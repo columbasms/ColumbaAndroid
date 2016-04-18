@@ -1,6 +1,7 @@
 package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -14,10 +15,14 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.ContactsSelectionActivity;
@@ -31,12 +36,15 @@ import com.columbasms.columbasms.model.CharityCampaign;
 import com.columbasms.columbasms.model.Topic;
 import com.columbasms.columbasms.utils.SocialNetworkUtils;
 import com.columbasms.columbasms.utils.Utils;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by Matteo Brienza on 3/15/16.
@@ -49,6 +57,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private NoSocialsSnackbarCallback noSocialsSnackbarCallback;
 
     private int lastPosition;
+
+    private PhotoViewAttacher mAttacher;
 
     public CampaignDetailsAdapter(CharityCampaign c,FragmentManager ft,Resources r,Activity a, NoSocialsSnackbarCallback s) {
         campaign = c;
@@ -125,9 +135,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         final TextView message = holder.message;
-        message.setText(c.getMessage());
+        CharSequence messWithDetails = c.getMessage();
+        message.setText(Utils.trimTrailingWhitespace(messWithDetails));
 
-        ImageView send = holder.send;
+        LinearLayout send = holder.layout_send;
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +166,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         });
 
-        ImageView share = holder.share;
+        LinearLayout share = holder.layout_share;
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,30 +176,31 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         });
 
         ImageView locate = holder.locate;
-        RelativeLayout locateBack = holder.locate_layout;
+        LinearLayout locate_layout = holder.layout_locate;
         if(c.getAddresses().size()!=0) {
-            locate.setVisibility(View.VISIBLE);
-            locateBack.setVisibility(View.VISIBLE);
-            locate.setOnClickListener(new View.OnClickListener() {
+            locate.setAlpha(1f);
+            locate_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(mainActivity, MapsActivity.class);
-                    i.putExtra("color_marker", c.getTopics().get(0).getMainColor());
+                    i.putExtra("color_marker", topicList.get(0).getMainColor());
                     i.putParcelableArrayListExtra("address_list", (ArrayList<Address>) c.getAddresses());
                     mainActivity.startActivity(i);
                 }
 
             });
         }else{
-            locate.setVisibility(View.GONE);
-            locateBack.setVisibility(View.GONE);
+            locate.setAlpha(0.4f);
         }
-
 
         TextView time = holder.timestamp;
         time.setText(c.getTimestamp());
         final ImageView p = holder.profile_image;
         Utils.downloadImage(a.getAvatar_normal(), p, true, false);
+
+
+
+
 
         final ImageView cover = holder.cover_image;
         PercentRelativeLayout prl = holder.prl;
@@ -196,6 +208,57 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             prl.setVisibility(View.VISIBLE);
             Utils.downloadImage(c.getPhoto(), cover, false, false);
         }else prl.setVisibility(View.GONE);
+
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog nagDialog = new Dialog(mainActivity,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                nagDialog.show();
+                nagDialog.setCancelable(true);
+                nagDialog.setContentView(R.layout.preview_image);
+
+                WindowManager.LayoutParams attrs = nagDialog.getWindow().getAttributes();
+                attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                nagDialog.getWindow().setAttributes(attrs);
+
+                final ImageView btnClose = (ImageView) nagDialog.findViewById(R.id.btnIvClose);
+                final ProgressBar progressBar = (ProgressBar) nagDialog.findViewById(R.id.progressBar);
+                final ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
+                final ImageView error = (ImageView)nagDialog.findViewById(R.id.error);
+
+                Callback imageLoadedCallback = new Callback() {
+
+                    @Override
+                    public void onSuccess() {
+                        mAttacher = new PhotoViewAttacher(ivPreview);
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+                        error.setVisibility(View.VISIBLE);
+                    }
+
+                };
+
+                Picasso.with(mainActivity)
+                        .load(c.getPhoto())
+                        .into(ivPreview,imageLoadedCallback);
+
+                btnClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        nagDialog.dismiss();
+                    }
+                });
+            }
+        });
+
+
+
 
 
         final TextView longDescr = holder.long_description;
@@ -232,6 +295,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Bind(R.id.locate)ImageView locate;
         @Bind(R.id.locate_layout)RelativeLayout locate_layout;
         @Bind(R.id.cover_image)ImageView cover_image;
+
+        @Bind(R.id.layout_share)LinearLayout layout_share;
+        @Bind(R.id.layout_locate)LinearLayout layout_locate;
+        @Bind(R.id.layout_send)LinearLayout layout_send;
 
         public RecyclerItemViewHolder(final View parent) {
             super(parent);

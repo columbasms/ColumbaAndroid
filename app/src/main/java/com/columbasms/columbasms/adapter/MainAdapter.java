@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -289,6 +290,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Bind(R.id.layout_share)LinearLayout layout_share;
         @Bind(R.id.layout_locate)LinearLayout layout_locate;
         @Bind(R.id.layout_send)LinearLayout layout_send;
+
 
         public RecyclerItemViewHolder(final View parent) {
             super(parent);

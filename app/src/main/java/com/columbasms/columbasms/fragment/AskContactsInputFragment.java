@@ -55,7 +55,9 @@ public class AskContactsInputFragment extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        builder.setCustomTitle(inflater.inflate(R.layout.dialog_ask_contacts_input, null));
+        builder.setTitle(getResources().getString(R.string.select_receivers));
+        //builder.setCustomTitle(inflater.inflate(R.layout.dialog_ask_contacts_input, null));
+
         builder.setItems(array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
