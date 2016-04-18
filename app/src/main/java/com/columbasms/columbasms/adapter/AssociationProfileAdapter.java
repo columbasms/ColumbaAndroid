@@ -16,6 +16,7 @@ import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
     private static final int TYPE_PROFILE = 0;
     private static final int TYPE_GROUP = 1;
+
+    private static boolean isExpanded = false;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(View v) {
@@ -177,7 +180,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
-
+                final CardView v = holder1.cardView;
+                final String parameter;
 
                 final String URL = API_URL.USERS_URL + "/" + sp.getString("user_id","") + API_URL.ASSOCIATIONS + "/" + association.getId();
 
@@ -190,10 +194,31 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 holder1.assOtherInfo.setText(info);
 
-                holder1.assDescription.setText(association.getDescription());
+                final TextView description = holder1.assDescription;
+                description.setText(association.getDescription());
+                description.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(isExpanded == false) {
+                            description.setEllipsize(null);
+                            description.setMaxLines(Integer.MAX_VALUE);
+                            isExpanded = true;
+                        }else{
+                            description.setEllipsize(TextUtils.TruncateAt.END);
+                            description.setMaxLines(3);
+                            isExpanded = false;
+                        }
+                        v.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                card_size = v.getHeight();
+                            }
 
-                final CardView v = holder1.cardView;
-                final String parameter;
+                        });
+                    }
+                });
+
+
                 Button t = holder1.trust;
 
                 if(association.isTrusting()){
@@ -287,87 +312,6 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                             };
                             requestQueue.add(putRequest);
                         }
-
-                       /*OLD VERSION
-                        final ProgressDialog dialog = new ProgressDialog(activity);
-                        dialog.show();
-                        dialog.setCancelable(false);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                        dialog.setContentView(R.layout.dialog_progress);
-
-                        RequestQueue requestQueue = Volley.newRequestQueue(activity);
-
-                        final String URL_TRUSTING = URL + "?trusted=" + parameter;
-
-                        System.out.println(URL_TRUSTING);
-
-                        StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
-                                new Response.Listener<String>()
-                                {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
-                                        if (parameter.equals("true")){
-
-
-                                            if (p.getString("thereIsaGroup", "").equals("")){
-                                                Intent i = new Intent(activity, ContactsSelectionActivity.class);
-                                                i.putExtra("flag","true");
-                                                i.putExtra("association_id", association.getId());
-                                                //activity.startActivityForResult(i,1);
-                                                activity.startActivity(i);
-                                            }else{
-                                                AskContactsInputFragment newFragment = new AskContactsInputFragment();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("flag", "true");
-                                                bundle.putString("association_id", association.getId());
-                                                newFragment.setArguments(bundle);
-                                                newFragment.show(fragmentManager, null);
-                                            }
-
-                                            //association.setTrusting(true);
-
-                                        }else{
-
-                                            //association.setTrusting(false);
-
-                                            //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
-                                            SharedPreferences.Editor editor_account_information = p.edit();
-                                            editor_account_information.remove(association.getId() + "_groups_forTrusting");
-                                            editor_account_information.remove(association.getId() + "_contacts_forTrusting");
-                                            editor_account_information.apply();
-                                        }
-
-                                        dialog.dismiss();
-                                        //notifyDataSetChanged();
-                                        adapterCallback.onMethodCallback();
-                                    }
-                                },
-                                new Response.ErrorListener()
-                                {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        System.out.println(error.toString());
-                                        dialog.dismiss();
-                                        NetworkResponse networkResponse = error.networkResponse;
-                                        if(networkResponse!=null)
-                                            Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
-                                        else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
-
-                                    }
-                                }
-                        ) {
-
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                HashMap<String, String> headers = new HashMap<String, String>();
-                                headers.put("X-Auth-Token", sp.getString("auth_token", null));
-                                return headers;
-                            }
-
-                        };
-                        requestQueue.add(putRequest);
-                        */
 
                     }
                 });

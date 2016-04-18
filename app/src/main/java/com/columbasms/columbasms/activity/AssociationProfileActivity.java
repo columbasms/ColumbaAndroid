@@ -27,7 +27,6 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.columbasms.columbasms.adapter.TopicsAdapter;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
@@ -163,6 +162,9 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int card_size = associationProfileAdapter.getCardSize();
+
+                System.out.println(card_size);
+
                 scrollDy += dy;
 
                 if (card_size == 0) {

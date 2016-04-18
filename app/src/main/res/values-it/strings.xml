@@ -135,4 +135,6 @@
 
     <string name="no_notifications">Non ci sono notifiche.</string>
 
+    <string name="private_profile">Profilo privato</string>
+
 </resources>

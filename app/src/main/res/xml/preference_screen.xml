@@ -12,5 +12,20 @@
         android:inputType="number">
     </EditTextPreference>
 
+    <CheckBoxPreference
+        android:enabled="false"
+        android:key="private_profile"
+        android:summary="coming soon"
+        android:title="@string/private_profile">
+    </CheckBoxPreference>
+
+    <PreferenceScreen
+        android:enabled="false"
+        android:key="group_customization"
+        android:title="Modifica gruppi"
+        android:summary="coming soon">
+        <intent android:action="com.columbasms.columbasms.activity.MainActivity"/>
+    </PreferenceScreen>
+
 </PreferenceScreen>
 
