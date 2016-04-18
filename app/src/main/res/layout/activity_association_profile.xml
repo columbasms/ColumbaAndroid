@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Toolbar_Theme"
-            android:background="@android:color/transparent"
+            android:background="@drawable/toolbar_gradient"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     </RelativeLayout>

@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -58,6 +63,8 @@ import butterknife.ButterKnife;
 public class AssociationProfileActivity extends AppCompatActivity implements AdapterCallback,NoSocialsSnackbarCallback {
 
     @Bind(R.id.toolbar_profile)Toolbar toolbar;
+
+    int i = 0;
 
 
     private static RecyclerView  rvAssociationProfile;
@@ -116,15 +123,18 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
         rvAssociationProfile = (RecyclerView)findViewById(R.id.rv_association_profile);
 
+
         cd = new ColorDrawable(getResources().getColor(R.color.colorPrimary));
         cd.setAlpha(0);
+
+
 
         //TOP TOOLBAR SETUP
         toolbar.bringToFront();
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setVisibility(View.VISIBLE);
-        toolbar.setBackgroundDrawable(cd);
+        //toolbar.setBackgroundDrawable(cd);
         //GET HEIGHT OF TOOLBAR TO FADE ANIMATION
         toolbar.post(new Runnable() {
             @Override
@@ -154,6 +164,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
 
             int scrollDy = 0;
 
+
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -162,23 +174,34 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int card_size = associationProfileAdapter.getCardSize();
-
-                System.out.println(card_size);
-
+                int coverImg_size = associationProfileAdapter.getCoverImgSize();
                 scrollDy += dy;
 
+                System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
+
                 if (card_size == 0) {
-                    cd.setAlpha(0);
+                    //cd.setAlpha(100);
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
                     toolbar.setTitle("");
                 } else if (scrollDy > card_size) {
                     cd.setAlpha(255);
+                    toolbar.setBackgroundDrawable(cd);
                     toolbar.setTitle(ASSOCIATION_NAME);
                 } else if (scrollDy <= 0) {
-                    cd.setAlpha(0);
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
                     toolbar.setTitle("");
-                } else {
-                    cd.setAlpha((int) ((255.0 / card_size) * scrollDy));
-                    toolbar.setTitle("");
+                } else if (scrollDy >= coverImg_size) {
+                    if (i == 0) {
+                        cd.setAlpha(0);
+                        toolbar.setBackgroundDrawable(cd);
+                        i = 1;
+                    }else {
+                        cd.setAlpha((int) ((255.0 / (card_size-coverImg_size)) * (scrollDy-coverImg_size)));
+                        toolbar.setTitle("");
+                    }
+                } else if (scrollDy < coverImg_size) {
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    i=0;
                 }
             }
         });

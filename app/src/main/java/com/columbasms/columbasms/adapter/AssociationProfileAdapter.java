@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -77,6 +78,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     private List<CharityCampaign> mItemList;
     private Association association;
     private int card_size;
+    private int coverImg_size;
     private Drawable profile_image;
     private Resources res;
     private static Activity activity;
@@ -415,6 +417,12 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 final ImageView coverp = holder1.coverImage;
                 Utils.downloadImage(association.getCover_normal(),coverp,false,false);
+                coverp.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        coverImg_size = coverp.getHeight();
+                    }
+                });
 
                 final ImageView pp = holder1.thumbnailImage;
                 Utils.downloadImage(association.getAvatar_normal(),pp,true,true);
@@ -602,6 +610,10 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
     public int getCardSize(){
         return card_size;
+    }
+
+    public int getCoverImgSize(){
+        return coverImg_size;
     }
 
     private void subscribeTopic() {
