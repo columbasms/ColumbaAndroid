@@ -43,6 +43,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     private List<Association> association_list;
     private User user;
     private int card_size;
+    private int coverImg_size;
     private Drawable profile_image;
     private Resources res;
     private Activity activity;
@@ -175,6 +176,12 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
                 final ImageView cover = holder1.coverImage;
                 Utils.downloadImage(user.getCover_image(), cover, false, false);
+                cover.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        coverImg_size = cover.getHeight();
+                    }
+                });
 
                 final ImageView p = holder1.thumbnailImage;
                 Utils.downloadImage(user.getProfile_image(), p, true, true);
@@ -294,6 +301,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
     public int getCardSize(){
         return card_size;
+    }
+
+    public int getCoverImgSize(){
+        return coverImg_size;
     }
 
 }

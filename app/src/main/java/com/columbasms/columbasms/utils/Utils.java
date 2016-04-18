@@ -65,6 +65,7 @@ public class Utils {
             }else if(hours<24 && hours>1){
                 return Integer.toString((int)(hours)) + h;
             }else {
+                if((Integer.toString((int)(minutes)+1)+m).equals("60m"))return a.getResources().getString(R.string.now);
                 return Integer.toString((int)(minutes)+1) + m;
             }
         } catch (ParseException e) {

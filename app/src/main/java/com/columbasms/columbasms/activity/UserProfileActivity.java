@@ -61,6 +61,8 @@ public class UserProfileActivity extends AppCompatActivity {
     @Bind(R.id.toolbar_profile)Toolbar toolbar;
     private static RecyclerView rvUserProfile;
 
+    int i = 0;
+
     private static CoordinatorLayout coordinatorLayout;
     private static List<CharityCampaign> campaigns_list;
     private static List<Association> associations_list;
@@ -138,20 +140,34 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int card_size = userProfileAdapter.getCardSize();
+                int coverImg_size = userProfileAdapter.getCoverImgSize();
                 scrollDy += dy;
-                if(card_size==0){
-                    cd.setAlpha(0);
+
+                System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
+
+                if (card_size == 0) {
+                    //cd.setAlpha(100);
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
                     toolbar.setTitle("");
-                    scrollDy=0;
-                }else if (scrollDy > card_size) {
+                } else if (scrollDy > card_size) {
                     cd.setAlpha(255);
+                    toolbar.setBackgroundDrawable(cd);
                     toolbar.setTitle(usrName);
                 } else if (scrollDy <= 0) {
-                    cd.setAlpha(0);
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
                     toolbar.setTitle("");
-                } else {
-                    cd.setAlpha((int) ((255.0 / card_size) * scrollDy));
-                    toolbar.setTitle("");
+                } else if (scrollDy >= coverImg_size) {
+                    if (i == 0) {
+                        cd.setAlpha(0);
+                        toolbar.setBackgroundDrawable(cd);
+                        i = 1;
+                    }else {
+                        cd.setAlpha((int) ((255.0 / (card_size-coverImg_size)) * (scrollDy-coverImg_size)));
+                        toolbar.setTitle("");
+                    }
+                } else if (scrollDy < coverImg_size) {
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    i=0;
                 }
             }
         });
