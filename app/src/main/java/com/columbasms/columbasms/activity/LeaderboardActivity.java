@@ -66,7 +66,6 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     private static String AUTH_TOKEN;
 
-
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -83,6 +82,12 @@ public class LeaderboardActivity extends AppCompatActivity {
             }
         });
 
+
+        /*mTourGuideHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
+                .setPointer(new Pointer())
+                .setToolTip(new ToolTip().setTitle("Welcome!").setDescription("Click on Get Started to begin..."))
+                .setOverlay(new Overlay())
+                .playOn(toolbar);*/
 
         mainActivity = this;
 

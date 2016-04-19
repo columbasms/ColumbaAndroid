@@ -1,2 +1,313 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="01a90bbb9495a8bbf6f3cfdf12f1b35caaa9524b">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-8.3.0_1df11b602ba376c9f55413c0186631cf1e7fd9b8/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.1.1_ffac6ab77645cc6310fb63ee93556fbc0661409d/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.19/a8f23f65fc1e522ee4a1a697ee569901a46741fa/library-1.0.19.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a8f23f65fc1e522ee4a1a697ee569901a46741fa">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/library-1.0.19_da0a9777819c46a6f09ff82b857d4a23ae423b0b/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="71eda10e33212e44245524b5087366ff8d805825">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-8.3.0_0bdb10db20c2a4e192f1fd4e3fb830211a7f8a42/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-tasks/1.4.0/d85884acf6810a3bbbecb587f239005cbc846dc4/bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-tasks-1.4.0_3ecc1a5dfedeacea72a6af533799e4b893b5cf0f/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/okio-1.4.0_e3c8457864338195f335ade44be3306a84ead719/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.digits.sdk.android/digits/1.9.2/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="682bdcfcd0211820edd4f2b2a5cfc79c993b87a4">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.digits.sdk.android-digits-1.9.2_3a740d2bfe712f89121198b551a56fa2aefca401/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/picasso-2.5.2_af6c334d16c9b0f931e88c1307c7b2ccf0d481c4/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.twitter/twitter-text/1.13.0/78415b95ae3184c5926d593feab64bfc0b73b2dd/twitter-text-1.13.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="78415b95ae3184c5926d593feab64bfc0b73b2dd">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/twitter-text-1.13.0_ebe603ade38a07d9e6fbb4e5385784d25076da2c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.orhanobut/dialogplus/1.11/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="184f86117c6463267c1f0deba84d4853cb165c40">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.orhanobut-dialogplus-1.11_98ef7e59e5da76ae5dc4d2472f31f1ea9a079bf4/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/io.fabric.sdk.android/fabric/1.3.10/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a5db9a2dd46d84285ef737f65030b74b6e8ee2a4">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/io.fabric.sdk.android-fabric-1.3.10_abfe5c40ab4d921c9429b253eadd5e32e8d1fc6c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.twitter.sdk.android/tweet-composer/1.0.3/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0ea42614d0d3d5e9f507cb2f432ae821307cd0dc">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.twitter.sdk.android-tweet-composer-1.0.3_7d8fef4d099915d2de4ecbc71dbd6a8cc7f7b18d/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.2.1_7d6bc1b22169370366eb2807f7aacf75e658ee16/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.commit451/PhotoView/1.2.5/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="526e8a982e8d1453c548b8d3a63968ee61667a15">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.commit451-PhotoView-1.2.5_fd4ffba6db91986dad01501b91156b722e6efa83/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.2.1_1255482857c376db48d1a58063f288eeea774f51/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/customtabs/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0e5a66a941515d873a34065fe44fbba6ef422a1b">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-customtabs-23.2.1_dd2ad65abf036911435a7ad91e7acd46a7db8b9e/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.github.paolorotolo/appintro/3.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="6226784544a521018b23203d335f89f268314645">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.paolorotolo-appintro-3.4.0_b3226c8da2c4bbcee575104e858cd8e82c48e022/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="dcb0621f0960cc6971d7cd9477418a3f0a4fccd4">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_fcd4fa2acb982971bcbbfad4ded07bfe115f31ac/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/jp.wasabeef/recyclerview-animators/2.2.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="1e90b641e3b5c9e9c63dc0b320d8dc1fe649bc9f">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/jp.wasabeef-recyclerview-animators-2.2.0_14f175e736bff6f1658495161836de4bd3a52697/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3/5fc52c41ef0239d1093a1eb7c3697036183677ce/gson-2.3.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.3_0edcd66026d3c2d79df0060beaeb338a28da0d70/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.0/8873bd0bb5cb9ee37f1b04578eb7e26fcdd44cb0/commons-lang3-3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8873bd0bb5cb9ee37f1b04578eb7e26fcdd44cb0">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/commons-lang3-3.0_23d68427d98ea6f3e7a391fb3a66ed4556f385b5/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/2.0.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="031e8b3ab2df4ab43b1017f84417d7e10dfbb8d2">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/de.hdodenhof-circleimageview-2.0.0_88a13278e0fac0f23aad163613da3b6b770f7bf4/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.amulyakhare/com.amulyakhare.textdrawable/1.0.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="d237556caead5b93d97e18a071059a2c0045978e">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.amulyakhare-com.amulyakhare.textdrawable-1.0.1_9ba6466a2dfdbea7692f4afa880f25475f77a0c6/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="6d9ed9a288364688e7fcf6704776284dac1eb42e">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-8.3.0_69376fc15364ea9730e317f81abe1b29afe99b15/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.8.0/a517f29ed06be2b2879524fcd94b6e9b36e2e0b5/retrofit-1.8.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="a517f29ed06be2b2879524fcd94b6e9b36e2e0b5">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/retrofit-1.8.0_0d50c7da82a79bc280a6b44cdb34e4ade46ebf6b/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.twitter.sdk.android/twitter-core/1.6.4/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="61807f257226cc1e6e2774d1e7a876260a808038">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.twitter.sdk.android-twitter-core-1.6.4_d81ab53e681383cb55e1f6998229b9310b0efd99/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-applinks/1.4.0/8ad21bf21784dacce5f2043afb97218cc377e835/bolts-applinks-1.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-applinks-1.4.0_46f0c98baa997443f39aa66eed27ed2e29fd6414/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/library-2.4.0_2b3110e81e1144962ff364d524d61ae8a3f6af75/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.11.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="86da97c30f50a67ddabe2cf7040713ad17153fce">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.11.0_872c29a62cb0e896b96b4ea382ae222b43c43dcc/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/butterknife-7.0.1_fab669593d38d7afc343069d439d5c2ce5fd0694/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/libs/internal_impl-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.2.1_e26d5791ab2ee3abc6261e5bcfe15206a118eb4d/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="b000ecceb9877fefcdc7ab1959ff03df91551656">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-measurement-8.3.0_3f67edeefe0e6d3a8a88235ef8be74e69bb58b21/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.1.1_e48acb78ae919c46ec74abb0d372b2ef750b6207/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.github.deano2390/MaterialShowcaseView/1.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5df25893bd9dc52e46b78f132f2c3232a641c20e">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.deano2390-MaterialShowcaseView-1.1.0_bece0ef9995947209079a289b4b484367d727966/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/okhttp-2.4.0_a93f22846bcba989623929decd3d9f10f43e34c8/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="cb86970df0f0f25f766d320b279c7858c1ca0003">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-cardview-v7-23.2.1_1883b7ff1b595949227ed5157192c0ac3d396006/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.makeramen/roundedimageview/2.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="814fc0c3ec69a944add398217d90077301501a74">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.makeramen-roundedimageview-2.2.1_cfe7c8a76b989e2041c17d84edb625c5741df1e7/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.quinny898.library.persistentsearch/library/1.1.0-SNAPSHOT/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4c7250baed60ef7694c1c55723750831f3dbee67">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.quinny898.library.persistentsearch-library-1.1.0-SNAPSHOT_0cf2dcd5f41ae7248b0b92f312ea3e2bfa7b25e2/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.1.1_05baa261a248f0640a3ff0253a53c04a966caa63/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="77f9593d979f4347344be233bd0d888315f79517">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-maps-8.3.0_cad586fe7ea5e8258c6317729664727e8aeced6c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0af4f577b4a21eb9be2a7f52e33b077b67e6d9f8">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-8.3.0_951a88a6a896307d95b3a8c4f5d5eca118d8201c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.android.support/percent/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="1badcc3d0af60cfcab190ea7b78d060e824cfb1e">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-percent-23.1.1_85c442af3a3cca250a6487e5da9ba6864955f222/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="86b1df15adeb9b2d98e30a951d8a04fd481cd1c2">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_f95dd57648394a3ac5b25b8ea17e075870680074/classes.dex" />
+    </item>
+    <item
+        jar="/Users/Federico/ColumbaAndroid/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="345a1b5cf5b144ce18ba6962bc66a7e2f26c1c1b">
+        <dex dex="/Users/Federico/ColumbaAndroid/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-8.3.0_e25a5800e6f2c03c9bbe5f827562affbf8dc33f9/classes.dex" />
+    </item>
+
+</items>
