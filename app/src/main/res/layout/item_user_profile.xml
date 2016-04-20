@@ -29,6 +29,7 @@
                 <android.support.percent.PercentRelativeLayout
                     android:id="@+id/percentRelativeLayout_usr"
                     android:layout_width="match_parent"
+                    android:background="@color/colorText"
                     android:layout_height="wrap_content"
                     >
                     <ImageView
@@ -50,10 +51,61 @@
                     android:layout_below="@id/percentRelativeLayout_usr"
                     android:layout_marginTop="-34dp"
                     android:layout_gravity="center"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/percentRelativeLayout_usr">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="24"
+                            android:textColor="@color/colorText"
+                            android:textSize="22sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SMS mensili"
+                            android:textColor="@color/colorText"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="11"
+                            android:textColor="@color/colorText"
+                            android:textSize="22sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SMS totali"
+                            android:textColor="@color/colorText"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
             </RelativeLayout>
-
-
-
 
             <LinearLayout
                 android:id="@+id/info_layout"
@@ -74,6 +126,7 @@
                     android:gravity="center"
                     android:textColor="@color/colorText"
                     android:textSize="34sp"
+                    android:text="Matteo"
                     android:paddingBottom="8dp"/>
 
             </LinearLayout>

@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,16 +42,22 @@ public class GCMService extends GcmListenerService {
     private static String ASSOCIATION_ID;
     private static String ASSOCIATION_NAME;
 
+    private static int MAX_SMS;
+    private static int SENT_SMS;
+
     @Override
     public void onMessageReceived(String from, Bundle data) {
 
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
 
         ASSOCIATION_ID = from.split("_")[1];
         String USER_ID = state.getString("user_id", "");
         final String message = data.getString("message");
         String CAMPAIGN_ID = data.getString("campaign_id");
         ASSOCIATION_NAME = data.getString("organization_name");
+        MAX_SMS = Integer.parseInt(state.getString("msg_number", "50"));
+        SENT_SMS = Integer.parseInt(state.getString("sent_msg_number", "0"));
 
         Log.d("App", "from: " + from);
         Log.d("App", "message: " + message);
@@ -60,68 +67,85 @@ public class GCMService extends GcmListenerService {
             String contacts = state.getString(ASSOCIATION_ID + "_contacts_forTrusting", "");
             String groupsForTrustingString = state.getString(ASSOCIATION_ID + "_groups_forTrusting", "");
 
+            JSONArray arrayOfContacts = null;
+            try {
+                arrayOfContacts = new JSONArray(contacts);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             if(!contacts.equals("")){
 
-                System.out.println("AUTOMATIC SMS SENDING TO SELECT CONTACS: " + contacts);
+                //CHECK IF MESSAGE LIMIT NUMBER IS OVER
+                if(arrayOfContacts.length() + SENT_SMS > MAX_SMS){
 
-                //SEND SMS TO CONTACTS SELECTED WHEN TRUSTING (EVEN IF YOU DON'T SAVE THEM TO A GROUP)
-                final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
+                    System.out.println("LIMITE MESSAGGI SUPERATO!");
 
-                System.out.println(URL);
+                    sendAutomaticSendFailNotification(ASSOCIATION_NAME, message);
 
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                }else {
+                    System.out.println("AUTOMATIC SMS SENDING TO SELECT CONTACS: " + contacts);
 
-                JSONObject body = new JSONObject();
-                try {
-                    j = new JSONArray(contacts);
-                    body.put("users", j);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    //SEND SMS TO CONTACTS SELECTED WHEN TRUSTING (EVEN IF YOU DON'T SAVE THEM TO A GROUP)
+                    final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
 
-                System.out.println("AUTOMATIC SENDING TO: " + body.toString());
+                    System.out.println(URL);
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                    RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-                        System.out.println("Invio a: ");
-                        try {
-                            JSONArray c = new JSONArray(response.getString("users"));
-                            System.out.println(c.toString());
-                            for (int i = 0; i < c.length(); i++) {
-                                try {
-                                    JSONObject r = c.getJSONObject(i);
-                                    String NUMBER = j.getJSONObject(r.getInt("index")).getString("number");
-                                    String STOP_LINK =  r.getString("stop_url");
-                                    System.out.println("NUMERO: " + NUMBER);
-                                    Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                    JSONObject body = new JSONObject();
+                    try {
+                        j = new JSONArray(contacts);
+                        body.put("users", j);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println("AUTOMATIC SENDING TO: " + body.toString());
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            System.out.println("Invio a: ");
+                            try {
+                                JSONArray c = new JSONArray(response.getString("users"));
+                                System.out.println(c.toString());
+                                for (int i = 0; i < c.length(); i++) {
+                                    try {
+                                        JSONObject r = c.getJSONObject(i);
+                                        String NUMBER = j.getJSONObject(r.getInt("index")).getString("number");
+                                        String STOP_LINK = r.getString("stop_url");
+                                        System.out.println("NUMERO: " + NUMBER);
+                                        Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+                                //Update SENT_SMS
+                                state.edit().putString("sent_msg_number", Integer.toString(SENT_SMS + c.length())).apply();
+                                sendNotification(ASSOCIATION_NAME, message, true);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            sendNotification(ASSOCIATION_NAME,message,true);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println(error.toString());
-                    }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("X-Auth-Token", state.getString("auth_token", null));
-                        return headers;
-                    }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println(error.toString());
+                        }
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("X-Auth-Token", state.getString("auth_token", null));
+                            return headers;
+                        }
 
-                };
+                    };
 
-                requestQueue.add(jsonObjectRequest);
+                    requestQueue.add(jsonObjectRequest);
+                }
             }else if(!groupsForTrustingString.equals("")){
                 //SEND SMS TO GROUPS SELECTED WHEN TRUSTING
                 System.out.println("AUTOMATIC SMS SENDING TO GROUP: " + groupsForTrustingString);
@@ -275,6 +299,38 @@ public class GCMService extends GcmListenerService {
                     notificationManager.notify(1, notificationBuilder.build());
         }
 
+    }
+
+    public void sendAutomaticSendFailNotification(String associationName,String message){
+
+
+            String notificationContent = getResources().getString(R.string.notification_trust_message_fail1) + " " + associationName + getResources().getString(R.string.notification_trust_message_fail2);
+
+            Intent resultIntent = new Intent(this, AssociationProfileActivity.class);
+            resultIntent.putExtra("ass_id", ASSOCIATION_ID);
+            resultIntent.putExtra("ass_name", ASSOCIATION_NAME);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            // Adds the back stack
+            stackBuilder.addParentStack(AssociationProfileActivity.class);
+            // Adds the Intent to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            // Gets a PendingIntent containing the entire back stack
+            PendingIntent pendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.app_intro1)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setVibrate(new long[]{1, 1, 1})
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setContentTitle("ColumbaSMS")
+                    .setContentIntent(pendingIntent)
+                    .setContentText(notificationContent);
+            notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+            notificationBuilder.setColor(getResources().getColor(R.color.colorPrimary));
+            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, notificationBuilder.build());
     }
 
 

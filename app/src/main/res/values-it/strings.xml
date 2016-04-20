@@ -26,6 +26,8 @@
 
     <string name="notification_follow_message">ha lanciato una nuova campagna!</string>
     <string name="notification_trust_message">Hai appena condiviso una campagna per</string>
+    <string name="notification_trust_message_fail1">Non puoi condividere una campagna per</string>
+    <string name="notification_trust_message_fail2">: limite SMS raggiunto!</string>
 
     <string name="save_as_a_group">Salva come gruppo</string>
     <string name="group_setting">Impostazioni Gruppi</string>
@@ -72,7 +74,7 @@
     <string name="save">SALVA</string>
 
     <string name="disable_notify">Disattiva notifiche push</string>
-    <string name="msg_number">Numero limite di messaggi</string>
+    <string name="msg_number">Numero limite di SMS mensili</string>
     <string name="manage">Gestisci liste contatti</string>
 
     <string name="edit_name">Modifica username</string>
@@ -123,7 +125,7 @@
 
     <string name="all_contacts_already_reached">Tutti i contatti selezionati sono già stati raggiunti</string>
 
-    <string name="mess_number_over"> MANCA</string>
+    <string name="mess_number_over">Hai raggiunto il limite di SMS, incrementalo in Impostazioni</string>
 
     <string name="contacts_already_reached"> contatti selezionati sono già stati raggiunti</string>
 

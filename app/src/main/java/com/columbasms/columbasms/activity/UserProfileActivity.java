@@ -20,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
@@ -29,7 +28,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.adapter.AssociationsTabAdapter;
 import com.columbasms.columbasms.adapter.UserProfileAdapter;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
@@ -143,18 +141,18 @@ public class UserProfileActivity extends AppCompatActivity {
                 int coverImg_size = userProfileAdapter.getCoverImgSize();
                 scrollDy += dy;
 
-                System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
+                //System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
 
                 if (card_size == 0) {
                     //cd.setAlpha(100);
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     toolbar.setTitle("");
                 } else if (scrollDy > card_size) {
                     cd.setAlpha(255);
                     toolbar.setBackgroundDrawable(cd);
                     toolbar.setTitle(usrName);
                 } else if (scrollDy <= 0) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     toolbar.setTitle("");
                 } else if (scrollDy >= coverImg_size) {
                     if (i == 0) {
@@ -166,7 +164,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         toolbar.setTitle("");
                     }
                 } else if (scrollDy < coverImg_size) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     i=0;
                 }
             }

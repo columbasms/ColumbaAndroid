@@ -380,7 +380,6 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
             if (contacts_withSelection.size() != 0) {
 
                 //CHECK IF MESSAGE LIMIT NUMBER IS OVER
-                /*
                 if(contacts_withSelection.size() + SENT_SMS > MAX_SMS){
 
                     System.out.println("LIMITE MESSAGGI SUPERATO!");
@@ -389,7 +388,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
 
                     ContactsSelectionActivity.this.finish();
 
-                //}else{*/
+                }else{
                     final ProgressDialog dialog = new ProgressDialog(this);
                     dialog.show();
                     dialog.setCancelable(false);
@@ -484,7 +483,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                             }
 
                             //Update SENT_SMS
-                            //p.edit().putString("sent_msg_number",Integer.toString(SENT_SMS + contacts.length())).apply();
+                            p.edit().putString("sent_msg_number",Integer.toString(SENT_SMS + contacts.length())).apply();
 
                             ContactsSelectionActivity.this.finish();
                         }
@@ -509,7 +508,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                     };
 
                     requestQueue.add(jsonObjectRequest);
-                //}
+                }
 
             }else{
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.select_atLeast_a_contact) + "(E)",Toast.LENGTH_SHORT ).show();

@@ -13,6 +13,8 @@
 
     <string name="notification_follow_message">started a new campaign!</string>
     <string name="notification_trust_message">You just shared a campaign for</string>
+    <string name="notification_trust_message_fail1">You can\'t share a campaign for</string>
+    <string name="notification_trust_message_fail2">: SMS limit exceeded!</string>
 
     <string name="save_as_a_group">Save as a group</string>
     <string name="save_as">Save as </string>
@@ -80,7 +82,7 @@
     <string name="save">SAVE</string>
 
     <string name="disable_notify">Disable push notifications</string>
-    <string name="msg_number">Messages number limit</string>
+    <string name="msg_number">Montly messages number limit</string>
     <string name="manage">Manage contacts lists</string>
 
     <string name="edit_name">Edit username</string>
@@ -130,7 +132,7 @@
 
     <string name="mess_succ_sent">messages succesfully sent</string>
 
-    <string name="mess_number_over"> MANCA</string>
+    <string name="mess_number_over">SMS limit exceeded, increase it in Settings</string>
 
     <string name="no_mess_succ_sent">No message succesfully sent</string>
 
@@ -147,4 +149,6 @@
     <string name="now">now</string>
 
     <string name="private_profile">Private profile</string>
+
+
 </resources>

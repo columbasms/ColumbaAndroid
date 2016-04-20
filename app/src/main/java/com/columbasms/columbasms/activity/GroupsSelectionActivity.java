@@ -78,6 +78,9 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
 
     private static SharedPreferences sp;
 
+    private static int MAX_SMS;
+    private static int SENT_SMS;
+
     private static Activity activity;
 
     private int groups_count;
@@ -103,6 +106,10 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
 
             JSONArray groupsForTrusting = new JSONArray();
             List<ContactsGroup> allGroups_withSelection = adapter.getAllContactsGroupsWithSelection();
+
+
+            int total_groups_number = 0;
+
             for(int i = 0; i<allGroups_withSelection.size(); i++){
                 ContactsGroup temp = allGroups_withSelection.get(i);
                     if(getIntent().getStringExtra("flag")!=null){
@@ -117,12 +124,39 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
                         }
 
                     }else {
-                        try {
-                            groups_count+=temp.getContactList().length();
-                            if(i==allGroups_withSelection.size()-1)sendSmsToGroup(temp,true); //IF IT IS THE LAST GROUP NOTIFY CLOSING
-                            else sendSmsToGroup(temp,false);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                        if(i == 0){
+
+                            total_groups_number = getTotalGroupsNumbers(allGroups_withSelection);
+
+                            //CHECK IF MESSAGE LIMIT NUMBER IS OVER
+                            if(total_groups_number + SENT_SMS > MAX_SMS){
+
+                                System.out.println("LIMITE MESSAGGI SUPERATO! (" + total_groups_number + ")");
+
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_mess_succ_sent) + "\n(" + getResources().getString(R.string.mess_number_over) + ")", Toast.LENGTH_LONG).show();
+
+                                GroupsSelectionActivity.this.finish();
+
+                            }else {
+                                try {
+                                    groups_count += temp.getContactList().length();
+                                    if (i == allGroups_withSelection.size() - 1)
+                                        sendSmsToGroup(temp, true); //IF IT IS THE LAST GROUP NOTIFY CLOSING
+                                    else sendSmsToGroup(temp, false);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }else {
+                            try {
+                                groups_count += temp.getContactList().length();
+                                if (i == allGroups_withSelection.size() - 1)
+                                    sendSmsToGroup(temp, true); //IF IT IS THE LAST GROUP NOTIFY CLOSING
+                                else sendSmsToGroup(temp, false);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
             }
@@ -135,8 +169,6 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
             if(getIntent().getStringExtra("flag")!=null){
                 sendTrustConfirmation();
             }
-
-
 
 
         }else Toast.makeText(getApplicationContext(), getResources().getString(R.string.select_atLeast_a_group), Toast.LENGTH_SHORT).show();
@@ -173,6 +205,10 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
         CAMPAIGN_ID = getIntent().getStringExtra("campaign_id");
         USER_ID = p.getString("user_id", "NOID");
 
+        MAX_SMS = Integer.parseInt(p.getString("msg_number", "50"));
+        SENT_SMS = Integer.parseInt(p.getString("sent_msg_number", "0"));
+        System.out.println("LIMITE MESSAGGI DA INVIARE: " + MAX_SMS);
+        System.out.println("MESSAGGI INVIATI: " + SENT_SMS);
 
         //Toolbar setup
         t.setTitle(getResources().getString(R.string.dialog_contactsGroups_title));
@@ -230,9 +266,14 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
 
     }
 
+    public static int getTotalGroupsNumbers(List<ContactsGroup> l){
+        int tot = 0;
+        for(int i = 0; i<l.size(); i++)tot+=l.get(i).getContactList().length();
+        return tot;
+    }
 
 
-    public void sendSmsToGroup(ContactsGroup group, final boolean toClose) throws JSONException {
+    public void sendSmsToGroup(final ContactsGroup group, final boolean toClose) throws JSONException {
         final JSONArray contactsList = group.getContactList();
 
         //CREATE ARRAY FOR COLLISION AVOIDANCE
@@ -290,6 +331,9 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
                             }
                         }
                         groups_contacts+=contacts.length();
+                        //Update SENT_SMS
+                        System.out.println("Gruppo " + group.getName()  + " n°contatti raggiunti: " +  contacts.length());
+                        p.edit().putString("sent_msg_number", Integer.toString(SENT_SMS + contacts.length())).apply();
                         //SE E' L'ULTIMO GRUPPO STAMPA SNACKBAR E CHIUDI L'ACTIVITY
                         if(toClose){
 

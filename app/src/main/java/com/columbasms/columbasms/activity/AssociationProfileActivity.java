@@ -5,12 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -177,18 +172,18 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                 int coverImg_size = associationProfileAdapter.getCoverImgSize();
                 scrollDy += dy;
 
-                System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
+                //System.out.println("cover: " + coverImg_size + ", card: " + card_size + ", scroll: " +scrollDy );
 
                 if (card_size == 0) {
                     //cd.setAlpha(100);
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     toolbar.setTitle("");
                 } else if (scrollDy > card_size) {
                     cd.setAlpha(255);
                     toolbar.setBackgroundDrawable(cd);
                     toolbar.setTitle(ASSOCIATION_NAME);
                 } else if (scrollDy <= 0) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     toolbar.setTitle("");
                 } else if (scrollDy >= coverImg_size) {
                     if (i == 0) {
@@ -200,7 +195,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                         toolbar.setTitle("");
                     }
                 } else if (scrollDy < coverImg_size) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient));
+                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.toolbar_gradient_teal));
                     i=0;
                 }
             }

@@ -115,10 +115,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String topics = "";
             if(topicList.size()>0) {
                 for (int i = 0; i < topicList.size(); i++) {
-                    topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
+                    topics += topicList.get(i).getName() + ", "; //IF MULTITOPIC ADD "\N"
                 }
                 TextView topic = holder.topic;
                 topic.setText(topicList.get(0).getName());
+                //topic.setText(topics);
                 topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
                 topic.setOnClickListener(new View.OnClickListener() {
                     @Override
