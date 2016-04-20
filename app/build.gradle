@@ -79,4 +79,5 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.commit451:PhotoView:1.2.5'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.1.0'
 }

@@ -13,8 +13,6 @@
 
     <string name="notification_follow_message">started a new campaign!</string>
     <string name="notification_trust_message">You just shared a campaign for</string>
-    <string name="notification_trust_message_fail1">You can\'t share a campaign for</string>
-    <string name="notification_trust_message_fail2">: SMS limit exceeded!</string>
 
     <string name="save_as_a_group">Save as a group</string>
     <string name="save_as">Save as </string>
@@ -82,7 +80,7 @@
     <string name="save">SAVE</string>
 
     <string name="disable_notify">Disable push notifications</string>
-    <string name="msg_number">Montly messages number limit</string>
+    <string name="msg_number">Messages number limit</string>
     <string name="manage">Manage contacts lists</string>
 
     <string name="edit_name">Edit username</string>
@@ -132,7 +130,7 @@
 
     <string name="mess_succ_sent">messages succesfully sent</string>
 
-    <string name="mess_number_over">SMS limit exceeded, increase it in Settings</string>
+    <string name="mess_number_over"> MANCA</string>
 
     <string name="no_mess_succ_sent">No message succesfully sent</string>
 
@@ -149,6 +147,49 @@
     <string name="now">now</string>
 
     <string name="private_profile">Private profile</string>
+    
+    // TUTORIAL STRINGS:
 
+    //HOME
+    <string name="t_share">Touch here to SHARE the campaign on social networks!</string>
+    
+    <string name="t_discover">Touch here to DISCOVER where's the campaign's event!</string>
+    
+    <string name="t_spread">Touch here to SPREAD the campaign through yours SMS!</string>
+
+    <string name="t_contact_select">Select contacts that you want to spread the campaign
+    trough your SMS</string>
+
+    <string name="t_contact_list">Save the selected contacts list for future sending</string>
+    
+    <string name="t_campaign">This is active association's campaign</string>
+
+    //NAVDRAWER
+    <string name="t_profile_btn">Touch here to show the user's profile</string>
+    
+    <string name="t_settings_btn">Touch here to show settings</string>
+    
+    <string name="t_leaderboard_btn">Touch here to show the leaderboard</string>
+    
+    <string name="t_logout_btn">Touch here to logout</string>
+
+    //ASSOCIATIONS
+    <string name="t_desc_ass">This is the association's description</string>
+
+    <string name="t_follow_btn">Click here to follow an association and enable push notifications
+    for every new association's campaigns</string>
+
+    <string name="t_trust_btn">Click here to TRUST an association and enable the auto-spreading of every
+        new association's campaigns! (You have to select manually the contacts that will be reached
+    by SMSs)</string>
+
+    //SETTINGS
+    <string name="t_SMS_limit">Set the max number of SMS that Columba can send</string>
+
+    //TOPICS
+    <string name="t_topic_details">See the topic details clicking here</string>
+
+    <string name="t_topic_follow">Touch FOLLOW to stay tuned about every campaigns of your
+    favorite topic</string>
 
 </resources>

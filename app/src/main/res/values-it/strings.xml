@@ -141,4 +141,48 @@
 
     <string name="now">adesso</string>
 
+    // STRINGHE TUTORIAL:
+
+    //HOME
+    <string name="t_share">Tocca qui per CONDIVIDERE la campagna sui social network!</string>
+
+    <string name="t_discover">Tocca qui per SCOPRIRE dove si svolge la campagna!</string>
+
+    <string name="t_spread">Tocca qui per DIFFONDERE la campagna con i tuoi SMS!</string>
+
+    <string name="t_contact_select">Seleziona i contatti a cui vuoi inviare la campagna</string>
+
+    <string name="t_contact_list">Salva la lista dei contatti selezionati per riutilizzarla in
+        futuro</string>
+
+    <string name="t_campaign">Questa è una campagna attiva</string>
+
+    //NAVDRAWER
+    <string name="t_profile_btn">Tocca qui per accedere al profilo utente</string>
+
+    <string name="t_settings_btn">Tocca qui per accedere alle impostazioni</string>
+
+    <string name="t_leaderboard_btn">Tocca qui per accedere alla classifica</string>
+
+    <string name="t_logout_btn">Tocca qui per disconnetterti</string>
+
+    //ASSOCIATIONS
+    <string name="t_desc_ass">Questa è la descrizione dell'associazione</string>
+
+    <string name="t_follow_btn">Tocca qui per seguire un'associazione e abilitare le notifiche
+        push per ogni sua nuova campagna</string>
+
+    <string name="t_trust_btn">Tocca qui per SOSTENERE un'associazione e abilitare l'invio
+        automatico di ogni sua nuova campagna! (Devi selezionare manualmente i contatti che vuoi
+        ragiungere con i tuoi SMS)</string>
+
+    //SETTINGS
+    <string name="t_SMS_limit">Imposta il numero massimo di SMS che Columba può inviare</string>
+
+    //TOPICS
+    <string name="t_topic_details">Visualizza i dettagli della tematiche toccando qui</string>
+
+    <string name="t_topic_follow">Tocca SEGUI per restare aggiornato su ogni campagna
+        della tua tematica preferita</string>
+
 </resources>
