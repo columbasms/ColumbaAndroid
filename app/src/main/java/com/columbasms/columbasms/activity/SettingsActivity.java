@@ -4,15 +4,15 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -40,6 +40,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     private static String last_value;
 
+    private static boolean last_value_private;
+
     @Override
     protected void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -61,14 +63,90 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             last_value = editTextPreference.getText();
         }
 
+        Preference preference2 = findPreference("private_profile");
+        if(preference2!=null) {
+            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference2;
+            last_value_private = checkBoxPreference.isChecked();
+        }
+
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key){
 
         if(key.equals("msg_number")){
             updatePreference(key,true);
+        }else if (key.equals("private_profile")){
+            sendProfilePrivateValue();
         }
 
+    }
+
+    private void sendProfilePrivateValue(){
+        Preference preference = findPreference("private_profile");
+        if(preference!=null) {
+            final CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+            final  boolean isPrivate = checkBoxPreference.isChecked();
+
+            final ProgressDialog dialog;
+            dialog = new ProgressDialog(this);
+            dialog.show();
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.dialog_progress);
+
+
+            final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            JSONObject body = new JSONObject();
+            try {
+                body.put("is_private", isPrivate);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String URL = API_URL.USERS_URL + "/" + sp.getString("user_id", null);
+
+            JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, URL, body,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("private_profile", isPrivate);
+                            editor.apply();
+                            dialog.dismiss();
+                            System.out.println(response.toString());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("private_profile", last_value_private);
+                            editor.apply();
+                            checkBoxPreference.setChecked(last_value_private);
+                            dialog.dismiss();
+                            NetworkResponse networkResponse = error.networkResponse;
+                            if(networkResponse!=null)
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
+                            System.out.println(error.toString());
+                        }
+                    }
+            ) {
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                    return headers;
+                }
+
+            };
+
+            requestQueue.add(putRequest);
+        }
     }
 
     private void updatePreference(String key,boolean sendToServer){
@@ -164,16 +242,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         updatePreference("msg_number",false);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         updatePreference("msg_number",false);
     }
 }

@@ -167,12 +167,12 @@
     <string name="t_logout_btn">Tocca qui per disconnetterti</string>
 
     //ASSOCIATIONS
-    <string name="t_desc_ass">Questa è la descrizione dell'associazione</string>
+    <string name="t_desc_ass">Questa è la descrizione dell\'associazione</string>
 
-    <string name="t_follow_btn">Tocca qui per seguire un'associazione e abilitare le notifiche
+    <string name="t_follow_btn">Tocca qui per seguire un\'associazione e abilitare le notifiche
         push per ogni sua nuova campagna</string>
 
-    <string name="t_trust_btn">Tocca qui per SOSTENERE un'associazione e abilitare l'invio
+    <string name="t_trust_btn">Tocca qui per SOSTENERE un\'associazione e abilitare l\'invio
         automatico di ogni sua nuova campagna! (Devi selezionare manualmente i contatti che vuoi
         ragiungere con i tuoi SMS)</string>
 

@@ -153,7 +153,7 @@
     //HOME
     <string name="t_share">Touch here to SHARE the campaign on social networks!</string>
     
-    <string name="t_discover">Touch here to DISCOVER where's the campaign's event!</string>
+    <string name="t_discover">Touch here to DISCOVER where\'s the campaign\'s event!</string>
     
     <string name="t_spread">Touch here to SPREAD the campaign through yours SMS!</string>
 
@@ -162,10 +162,10 @@
 
     <string name="t_contact_list">Save the selected contacts list for future sending</string>
     
-    <string name="t_campaign">This is active association's campaign</string>
+    <string name="t_campaign">This is active association\'s campaign</string>
 
     //NAVDRAWER
-    <string name="t_profile_btn">Touch here to show the user's profile</string>
+    <string name="t_profile_btn">Touch here to show the user\'s profile</string>
     
     <string name="t_settings_btn">Touch here to show settings</string>
     
@@ -174,13 +174,13 @@
     <string name="t_logout_btn">Touch here to logout</string>
 
     //ASSOCIATIONS
-    <string name="t_desc_ass">This is the association's description</string>
+    <string name="t_desc_ass">This is the association\'s description</string>
 
     <string name="t_follow_btn">Click here to follow an association and enable push notifications
-    for every new association's campaigns</string>
+    for every new association\'s campaigns</string>
 
     <string name="t_trust_btn">Click here to TRUST an association and enable the auto-spreading of every
-        new association's campaigns! (You have to select manually the contacts that will be reached
+        new association\'s campaigns! (You have to select manually the contacts that will be reached
     by SMSs)</string>
 
     //SETTINGS

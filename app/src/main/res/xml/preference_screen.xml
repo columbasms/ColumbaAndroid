@@ -13,7 +13,7 @@
     </EditTextPreference>
 
     <CheckBoxPreference
-        android:enabled="false"
+        android:enabled="true"
         android:key="private_profile"
         android:title="@string/private_profile">
     </CheckBoxPreference>
