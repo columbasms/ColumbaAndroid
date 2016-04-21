@@ -1,7 +1,5 @@
 package com.columbasms.columbasms.model;
 
-import com.columbasms.columbasms.utils.Utils;
-
 /**
  * Created by Matteo Brienza on 2/9/16.
  */
@@ -18,6 +16,8 @@ public class User {
     private int campForwarder;
     private int score;
     private int rank;
+    private int sms_sended_total;
+    private int sms_sended_month;
 
     public User(String id,String digits_id, String digits_token,String phone_number){
         this.id = id;
@@ -32,12 +32,14 @@ public class User {
         this.cover_image = cover_image;
     }
 
-    public User(String fullName, String profile_image, String cover_image, int assFollowed,int campForwarder){
+    public User(String fullName, String profile_image, String cover_image, int assFollowed,int campForwarder, int sms_sended_month, int sms_sended_total){
         this.fullName = fullName;
         this.profile_image = profile_image;
         this.cover_image = cover_image;
         this.assFollowed = assFollowed;
         this.campForwarder = campForwarder;
+        this.sms_sended_month = sms_sended_month;
+        this.sms_sended_total = sms_sended_total;
     }
 
     public User(String fullName, String profile_image, int score,int rank){
@@ -89,5 +91,13 @@ public class User {
 
     public int getScore() {
         return score;
+    }
+
+    public int getSms_sended_month() {
+        return sms_sended_month;
+    }
+
+    public int getSms_sended_total() {
+        return sms_sended_total;
     }
 }

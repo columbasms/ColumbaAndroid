@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.activity.EditProfileActivity;
@@ -106,6 +107,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
         @Bind(R.id.edit)Button edit;
         @Bind(R.id.cover_image_usr) ImageView coverImage;
         @Bind(R.id.thumbnail_image) ImageView thumbnailImage;
+        @Bind(R.id.sms_month)TextView sms_month;
+        @Bind(R.id.sms_total)TextView sms_total;
 
 
         public ProfileViewHolder(View itemView) {
@@ -161,9 +164,6 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                 SharedPreferences.Editor editor_account_information = sp.edit();
 
                 holder1.usrName.setText(user.getFullName());
-
-                String info = "100" + " followers" + " - " + mItemList.size() + " campaigns";
-
                 final CardView v = holder1.cardView;
 
                 v.post(new Runnable() {
@@ -209,6 +209,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                         activity.startActivity(i);
                     }
                 });
+
+                holder1.sms_month.setText(Integer.toString(user.getSms_sended_month()));
+
+                holder1.sms_total.setText(Integer.toString(user.getSms_sended_total()));
 
                 break;
 
