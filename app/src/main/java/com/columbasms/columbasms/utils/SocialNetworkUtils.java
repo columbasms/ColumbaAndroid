@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
 import com.columbasms.columbasms.R;
-import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.adapter.SocialAdapter;
 import com.columbasms.columbasms.adapter.TopicsAdapter;
+import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
+import com.columbasms.columbasms.model.CharityCampaign;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.plus.PlusShare;
@@ -20,8 +22,12 @@ import com.orhanobut.dialogplus.OnItemClickListener;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -32,6 +38,7 @@ public class SocialNetworkUtils {
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "aia3X5hWUyqgTZBdWNy2DVjfR";
     private static final String TWITTER_SECRET = "JKEWdIt0Q0h4xliBhvhxUP5ls5tMaZWFXo0uWiLvTEuZPWALu2";
+
 
     public static List<String> getSocialInstalled(Activity mainActivity){
         List<String> social_apps = new ArrayList<>();
@@ -59,57 +66,72 @@ public class SocialNetworkUtils {
 
 
 
-    public static void launchSocialNetworkChooser(final Activity mainActivity,NoSocialsSnackbarCallback noSocialsSnackbarCallback, final String message){
+    public static void launchSocialNetworkChooser(final Activity mainActivity, NoSocialsSnackbarCallback noSocialsSnackbarCallback, CharityCampaign c){
         List<String> socials = SocialNetworkUtils.getSocialInstalled(mainActivity);
-        if(socials.size()!=0){
 
-            SocialAdapter adapter = new SocialAdapter(mainActivity,socials);
-            TopicsAdapter a = new TopicsAdapter(null,null,0,null);
-            DialogPlus dialog = DialogPlus.newDialog(mainActivity)
-                    .setAdapter(adapter)
-                    .setHeader(R.layout.social_header)
-                    .setGravity(Gravity.BOTTOM)
-                    .setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+        final String CAMPAIGN_ID = c.getId();
+        final String MESSAGE = c.getMessage();
+        final String ASSOCIATION = c.getOrganization().getOrganization_name();
 
-                            TextView social_name = (TextView)view.findViewById(R.id.social_name);
-                            String sn = social_name.getText().toString();
-                            if(sn.equals("Google+")){
-                                // Launch the Google+ share dialog with attribution to your app.
-                                Intent shareIntent = new PlusShare.Builder(mainActivity)
-                                        .setType("text/plain")
-                                        .setText(message)
-                                        .getIntent();
-                                mainActivity.startActivityForResult(shareIntent, 0);
-                            }else if(sn.equals("Facebook")){
-                                ShareDialog shareDialog = new ShareDialog(mainActivity);
-                                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                                            .setContentTitle("ColumbaSMS")
-                                            .setContentDescription("Donate your wasted SMS for charity!")
-                                            .setContentUrl(Uri.parse("https://www.columbasms.com"))
-                                            .build();
-                                    shareDialog.show(linkContent);
+        String BASE = "http://www.columbasms.com/blog/campaigns/";
+
+        try {
+            final URL url = new URL(BASE + CAMPAIGN_ID);
+            final Uri uri = Uri.parse(BASE + CAMPAIGN_ID);
+            if(socials.size()!=0){
+
+                SocialAdapter adapter = new SocialAdapter(mainActivity,socials);
+                TopicsAdapter a = new TopicsAdapter(null,null,0,null);
+                DialogPlus dialog = DialogPlus.newDialog(mainActivity)
+                        .setAdapter(adapter)
+                        .setHeader(R.layout.social_header)
+                        .setGravity(Gravity.BOTTOM)
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+
+                                TextView social_name = (TextView)view.findViewById(R.id.social_name);
+                                String sn = social_name.getText().toString();
+                                if(sn.equals("Google+")){
+                                    // Launch the Google+ share dialog with attribution to your app.
+                                    Intent shareIntent = new PlusShare.Builder(mainActivity)
+                                            .setType("text/plain")
+                                            .setContentUrl(uri)
+                                            .getIntent();
+                                    mainActivity.startActivityForResult(shareIntent, 0);
+                                }else if(sn.equals("Facebook")){
+                                    ShareDialog shareDialog = new ShareDialog(mainActivity);
+                                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                                        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                                                .setContentTitle("ColumbaSMS - " + ASSOCIATION)
+                                                .setContentDescription(MESSAGE)
+                                                .setContentUrl(uri)
+                                                .build();
+                                        shareDialog.show(linkContent);
+                                    }
+
+                                }else{
+                                    TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
+                                    Fabric.with(mainActivity, new TwitterCore(authConfig), new TweetComposer());
+                                    TweetComposer.Builder builder = new TweetComposer.Builder(mainActivity).text(ASSOCIATION + " " + mainActivity.getResources().getString(R.string.social_twitter_header)).url(url);
+                                    builder.show();
                                 }
+                                dialog.dismiss();
 
-                            }else{
-                                TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
-                                Fabric.with(mainActivity, new TwitterCore(authConfig), new TweetComposer());
-                                TweetComposer.Builder builder = new TweetComposer.Builder(mainActivity).text(message);
-                                builder.show();
                             }
-                            dialog.dismiss();
+                        })
+                        .setExpanded(false)
+                        .create();
+                dialog.show();
 
-                        }
-                    })
-                    .setExpanded(false)
-                    .create();
-            dialog.show();
-
-        }else{
-            noSocialsSnackbarCallback.notifyNoSocialInstalled();
+            }else{
+                noSocialsSnackbarCallback.notifyNoSocialInstalled();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
+
+
     }
 
 

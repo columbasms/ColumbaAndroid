@@ -185,4 +185,7 @@
     <string name="t_topic_follow">Tocca SEGUI per restare aggiornato su ogni campagna
         della tua tematica preferita</string>
 
+    //SOCIAL
+    <string name="social_twitter_header">ha lanciato una nuova campagna con COLUMBA!\n</string>
+
 </resources>

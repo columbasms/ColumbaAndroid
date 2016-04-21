@@ -170,7 +170,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, noSocialsSnackbarCallback, c.getMessage());
+                SocialNetworkUtils.launchSocialNetworkChooser(mainActivity, noSocialsSnackbarCallback, c);
             }
 
         });

@@ -192,4 +192,7 @@
     <string name="t_topic_follow">Touch FOLLOW to stay tuned about every campaigns of your
     favorite topic</string>
 
+    //SOCIAL
+    <string name="social_twitter_header">has started a new campaign with COLUMBA!\n</string>
+
 </resources>

@@ -37,13 +37,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.columbasms.columbasms.activity.AssociationProfileActivity;
+import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.CampaignsDetailsActivity;
 import com.columbasms.columbasms.activity.ContactsSelectionActivity;
 import com.columbasms.columbasms.activity.MapsActivity;
 import com.columbasms.columbasms.activity.TopicProfileActivity;
 import com.columbasms.columbasms.callback.AdapterCallback;
-import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
 import com.columbasms.columbasms.model.Address;
@@ -62,7 +61,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.RunnableFuture;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -511,7 +509,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SocialNetworkUtils.launchSocialNetworkChooser(activity, noSocialsSnackbarCallback, c.getMessage());
+                        SocialNetworkUtils.launchSocialNetworkChooser(activity, noSocialsSnackbarCallback, c);
                     }
 
                 });
