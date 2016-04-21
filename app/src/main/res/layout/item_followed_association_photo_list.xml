@@ -7,7 +7,7 @@
         android:id="@+id/association_photo"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
 </LinearLayout>

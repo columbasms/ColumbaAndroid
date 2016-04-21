@@ -73,11 +73,13 @@ public class SocialNetworkUtils {
         final String MESSAGE = c.getMessage();
         final String ASSOCIATION = c.getOrganization().getOrganization_name();
 
-        String BASE = "http://www.columbasms.com/blog/campaigns/";
+        String BASE = "https://www.columbasms.com/blog/campaigns/" + CAMPAIGN_ID;
+        System.out.println(BASE);
+
 
         try {
             final URL url = new URL(BASE + CAMPAIGN_ID);
-            final Uri uri = Uri.parse(BASE + CAMPAIGN_ID);
+            final Uri uri = Uri.parse(BASE);
             if(socials.size()!=0){
 
                 SocialAdapter adapter = new SocialAdapter(mainActivity,socials);
@@ -102,11 +104,7 @@ public class SocialNetworkUtils {
                                 }else if(sn.equals("Facebook")){
                                     ShareDialog shareDialog = new ShareDialog(mainActivity);
                                     if (ShareDialog.canShow(ShareLinkContent.class)) {
-                                        ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                                                .setContentTitle("ColumbaSMS - " + ASSOCIATION)
-                                                .setContentDescription(MESSAGE)
-                                                .setContentUrl(uri)
-                                                .build();
+                                        ShareLinkContent linkContent = new ShareLinkContent.Builder().setContentUrl(uri).build();
                                         shareDialog.show(linkContent);
                                     }
 
