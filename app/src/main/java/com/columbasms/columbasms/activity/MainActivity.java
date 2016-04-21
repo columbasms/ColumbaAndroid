@@ -2,23 +2,22 @@ package com.columbasms.columbasms.activity;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +56,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -348,6 +348,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         editor.putString("msg_number", Integer.toString(MAX_SMS));
                         editor.apply();
                     }
+
+                    /*
+                    SMS_SENDED_MONTH = o.getInt("max_sms");
+                    if(prefs.getString("msg_number",null)==null) {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("msg_number", Integer.toString(MAX_SMS));
+                        editor.apply();
+                    }
+                    */
 
 
                     ImageView profile = (ImageView)header.findViewById(R.id.profile_image);
