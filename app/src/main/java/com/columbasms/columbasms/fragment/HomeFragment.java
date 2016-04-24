@@ -89,7 +89,8 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
         tb = (Toolbar)mainActivity.findViewById(R.id.toolbar_bottom);
 
-        mySwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2, R.color.refresh_progress_3, R.color.refresh_progress_4);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1,
+                R.color.refresh_progress_2, R.color.refresh_progress_3, R.color.refresh_progress_4);
         mySwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -129,7 +130,8 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
         getData(null, coordinatorLayout);
 
 
-        /*NB: WITHOUT THIS SNIPPET, RECYCLER VIEW SCROLL POSITION SAVING DOESN'T WORK IF NEW CAMPAIGN IS STARTED; YOU HAVE TO ALSO PUT FALSE IN SP INSIDE MAIN ACTIVITY ONDESTROY()
+        /*NB: WITHOUT THIS SNIPPET, RECYCLER VIEW SCROLL POSITION SAVING DOESN'T WORK IF NEW CAMPAIGN
+        IS STARTED; YOU HAVE TO ALSO PUT FALSE IN SP INSIDE MAIN ACTIVITY ONDESTROY()
         if (!sp.getBoolean("homeFragment_alreadyLoaded",false)) {
             getData(null, coordinatorLayout);
             final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(mainActivity);
@@ -165,11 +167,13 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
         if(!isNetworkConnected()) notifyNoInternetConnection(c);
 
-        String URL = API_URL.CAMPAIGNS_URL + "?order_field=created_at" + "&" + "user_id=" + USER_ID + "&locale=" + Locale.getDefault().getLanguage();
+        String URL = API_URL.CAMPAIGNS_URL + "?order_field=created_at" + "&" + "user_id=" + USER_ID
+                + "&locale=" + Locale.getDefault().getLanguage();
 
         System.out.println(URL);
 
-        CacheRequest cacheRequest = new CacheRequest(sp.getString("auth_token", null),0, URL, new Response.Listener<NetworkResponse>() {
+        CacheRequest cacheRequest = new CacheRequest(sp.getString("auth_token", null),0, URL,
+                new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
@@ -193,7 +197,8 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
                                 JSONArray topics = new JSONArray(o.getString("topics"));
                                 for(int j = 0; j< topics.length(); j++){
                                     JSONObject t = topics.getJSONObject(j);
-                                    topicList.add(new Topic(t.getString("id"),t.getString("name"),false,t.getString("main_color"), t.getString("status_color"),null));
+                                    topicList.add(new Topic(t.getString("id"),t.getString("name"),
+                                            false,t.getString("main_color"), t.getString("status_color"),null));
                                 }
 
                                 List<Address> addressList = new ArrayList<>();
@@ -201,14 +206,19 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
                                 JSONArray addresses = new JSONArray(o.getString("campaign_addresses"));
                                 for(int j = 0; j< addresses.length(); j++){
                                     JSONObject t = addresses.getJSONObject(j);
-                                    addressList.add(new Address(t.getString("address"), t.getDouble("lat"), t.getDouble("lng")));
+                                    addressList.add(new Address(t.getString("address"), t.getDouble("lat"),
+                                            t.getDouble("lng")));
                                 }
 
 
                                 JSONObject a = new JSONObject(o.getString("organization"));
-                                Association ass = new Association(a.getString("id"),a.getString("organization_name"),a.getString("avatar_normal"),null,null);
+                                Association ass = new Association(a.getString("id"),a.getString("organization_name"),
+                                        a.getString("avatar_normal"),null,null);
 
-                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), addressList );
+                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),
+                                        ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19),
+                                        mainActivity),o.getString("long_description"), o.getString("photo_mobile"),
+                                        addressList );
 
                                 campaigns_list.add(0, m);
 
@@ -276,7 +286,8 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
 
     public void notifyNoSocialInstalled() {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_social) , Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, mainActivity.getResources().getString(R.string.no_social),
+                Snackbar.LENGTH_LONG);
         View view = snackbar.getView();
         CoordinatorLayout.LayoutParams params =(CoordinatorLayout.LayoutParams)view.getLayoutParams();
         params.bottomMargin = tb.getHeight();

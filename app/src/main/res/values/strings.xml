@@ -151,11 +151,11 @@
     // TUTORIAL STRINGS:
 
     //HOME
-    <string name="t_share">Touch here to SHARE the campaign on social networks!</string>
+    <string name="t_share">Tap here to SHARE the campaign on social networks!</string>
     
-    <string name="t_discover">Touch here to DISCOVER where\'s the campaign\'s event!</string>
+    <string name="t_discover">Tap here to DISCOVER where\'s the campaign\'s event!</string>
     
-    <string name="t_spread">Touch here to SPREAD the campaign through yours SMS!</string>
+    <string name="t_spread">Tap here to SPREAD the campaign through yours SMS!</string>
 
     <string name="t_contact_select">Select contacts that you want to spread the campaign
     trough your SMS</string>
@@ -165,21 +165,21 @@
     <string name="t_campaign">This is active association\'s campaign</string>
 
     //NAVDRAWER
-    <string name="t_profile_btn">Touch here to show the user\'s profile</string>
+    <string name="t_profile_btn">Tap here to show the user\'s profile</string>
     
-    <string name="t_settings_btn">Touch here to show settings</string>
+    <string name="t_settings_btn">Tap here to show settings</string>
     
-    <string name="t_leaderboard_btn">Touch here to show the leaderboard</string>
+    <string name="t_leaderboard_btn">Tap here to show the leaderboard</string>
     
-    <string name="t_logout_btn">Touch here to logout</string>
+    <string name="t_logout_btn">Tap here to logout</string>
 
     //ASSOCIATIONS
     <string name="t_desc_ass">This is the association\'s description</string>
 
-    <string name="t_follow_btn">Click here to follow an association and enable push notifications
+    <string name="t_follow_btn">Tap here to follow an association and enable push notifications
     for every new association\'s campaigns</string>
 
-    <string name="t_trust_btn">Click here to TRUST an association and enable the auto-spreading of every
+    <string name="t_trust_btn">Tap here to TRUST an association and enable the auto-spreading of every
         new association\'s campaigns! (You have to select manually the contacts that will be reached
     by SMSs)</string>
 
@@ -187,9 +187,9 @@
     <string name="t_SMS_limit">Set the max number of SMS that Columba can send</string>
 
     //TOPICS
-    <string name="t_topic_details">See the topic details clicking here</string>
+    <string name="t_topic_details">See the topic details tapping here</string>
 
-    <string name="t_topic_follow">Touch FOLLOW to stay tuned about every campaigns of your
+    <string name="t_topic_follow">Tap FOLLOW to stay tuned about every campaigns of your
     favorite topic</string>
 
     //SOCIAL
