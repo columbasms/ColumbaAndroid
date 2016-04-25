@@ -5,18 +5,19 @@
         android:key="disable_notify"
         android:title="@string/disable_notify">
     </CheckBoxPreference>
-    <EditTextPreference
-        android:enabled="true"
-        android:key="msg_number"
-        android:title="@string/msg_number"
-        android:inputType="number">
-    </EditTextPreference>
 
     <CheckBoxPreference
         android:enabled="true"
         android:key="private_profile"
         android:title="@string/private_profile">
     </CheckBoxPreference>
+
+    <EditTextPreference
+        android:enabled="true"
+        android:key="msg_number"
+        android:title="@string/msg_number"
+        android:inputType="number">
+    </EditTextPreference>
 
     <PreferenceScreen
         android:enabled="false"

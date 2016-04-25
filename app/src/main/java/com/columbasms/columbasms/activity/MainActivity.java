@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static String USER_ID;
     private static String AUTH_TOKEN;
     private static int MAX_SMS;
+    private static int MONTHLY_SMS;
+    private static boolean PRIVATE_PROFILE;
 
     @Bind(R.id.home_text)TextView home_text;
     @Bind(R.id.topics_text)TextView topics_text;
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         /*
+        CLEAN DATA
         if(state.getString("clearAll", null)==null){
             state.edit().clear().commit();
 
@@ -350,13 +353,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
                     /*
-                    SMS_SENDED_MONTH = o.getInt("max_sms");
-                    if(prefs.getString("msg_number",null)==null) {
+                    MONTHLY_SMS = o.getInt("sms_last_month");
+                    if(prefs.getString("sent_msg_number",null)==null) {
                         SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("msg_number", Integer.toString(MAX_SMS));
+                        editor.putString("sent_msg_number", Integer.toString(MONTHLY_SMS));
                         editor.apply();
                     }
                     */
+
+                   PRIVATE_PROFILE = o.getBoolean("is_private");
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("private_profile", PRIVATE_PROFILE);
+                    editor.apply();
+
 
 
                     ImageView profile = (ImageView)header.findViewById(R.id.profile_image);
