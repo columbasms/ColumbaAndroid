@@ -1,19 +1,16 @@
 package com.columbasms.columbasms.service;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -67,14 +64,16 @@ public class GCMService extends GcmListenerService {
             String contacts = state.getString(ASSOCIATION_ID + "_contacts_forTrusting", "");
             String groupsForTrustingString = state.getString(ASSOCIATION_ID + "_groups_forTrusting", "");
 
-            JSONArray arrayOfContacts = null;
-            try {
-                arrayOfContacts = new JSONArray(contacts);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
 
             if(!contacts.equals("")){
+
+                JSONArray arrayOfContacts = null;
+                try {
+                    arrayOfContacts = new JSONArray(contacts);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 //CHECK IF MESSAGE LIMIT NUMBER IS OVER
                 if(arrayOfContacts.length() + SENT_SMS > MAX_SMS){
@@ -147,95 +146,107 @@ public class GCMService extends GcmListenerService {
                     requestQueue.add(jsonObjectRequest);
                 }
             }else if(!groupsForTrustingString.equals("")){
-                //SEND SMS TO GROUPS SELECTED WHEN TRUSTING
-                System.out.println("AUTOMATIC SMS SENDING TO GROUP: " + groupsForTrustingString);
 
-                //STEP1: RETRIEVE GROUP FOR THIS ASSOCIATION
-                JSONArray groupsForTrusting = null;
-                try {
-                    groupsForTrusting = new JSONArray(groupsForTrustingString);
-                    for(int i = 0;i<groupsForTrusting.length(); i++){
+                int total_groups_number = getTotalGroupsNumbers(groupsForTrustingString);
 
-                        //FRO EACH GROUPS DO FOLLOWING STEPS:
+                //CHECK IF MESSAGE LIMIT NUMBER IS OVER
+                if(total_groups_number + SENT_SMS > MAX_SMS){
 
-                        JSONObject g = new JSONObject(groupsForTrusting.get(i).toString());
+                    System.out.println("LIMITE MESSAGGI SUPERATO!");
 
-                        ContactsGroup group = new ContactsGroup(g.getString("name"),new JSONArray(g.getString("contacts")),true);
+                    sendAutomaticSendFailNotification(ASSOCIATION_NAME, message);
 
-                        //STEP2: CREATE JSON ARRAY FOR COLLISION DETECTION
-                        final JSONArray contactsList = group.getContactList();
-                        JSONArray j = new JSONArray();
-                        for(int x = 0; x<contactsList.length(); x++){
-                            JSONObject singleContact = new JSONObject(contactsList.getString(x));
-                            JSONObject temp = new JSONObject();
-                            temp.put("number",singleContact.getString("number"));
-                            j.put(temp);
-                        }
+                }else {
+                    //SEND SMS TO GROUPS SELECTED WHEN TRUSTING
+                    System.out.println("AUTOMATIC SMS SENDING TO GROUP: " + groupsForTrustingString);
 
-                        //STEP3: SEND JSON OBJECT DERIVED FROM JSONARRAY TO SERVER (IF THE GROUP IS NON EMPTY)
-                        if (contactsList.length() != 0) {
+                    //STEP1: RETRIEVE GROUP FOR THIS ASSOCIATION
+                    JSONArray groupsForTrusting = null;
+                    try {
+                        groupsForTrusting = new JSONArray(groupsForTrustingString);
+                        for (int i = 0; i < groupsForTrusting.length(); i++) {
 
-                            final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
+                            //FRO EACH GROUPS DO FOLLOWING STEPS:
 
-                            System.out.println(URL);
+                            JSONObject g = new JSONObject(groupsForTrusting.get(i).toString());
 
-                            RequestQueue requestQueue = Volley.newRequestQueue(this);
+                            ContactsGroup group = new ContactsGroup(g.getString("name"), new JSONArray(g.getString("contacts")), true);
 
-                            JSONObject body = new JSONObject();
-
-                            try {
-                                body.put("users", j);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            //STEP2: CREATE JSON ARRAY FOR COLLISION DETECTION
+                            final JSONArray contactsList = group.getContactList();
+                            JSONArray j = new JSONArray();
+                            for (int x = 0; x < contactsList.length(); x++) {
+                                JSONObject singleContact = new JSONObject(contactsList.getString(x));
+                                JSONObject temp = new JSONObject();
+                                temp.put("number", singleContact.getString("number"));
+                                j.put(temp);
                             }
 
+                            //STEP3: SEND JSON OBJECT DERIVED FROM JSONARRAY TO SERVER (IF THE GROUP IS NON EMPTY)
+                            if (contactsList.length() != 0) {
 
-                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    //STEP4: ON RESPONSE FROM SERVER SEND SMS TO ALLOWED NUMBER
-                                    System.out.println("Invio a: ");
-                                    try {
-                                        JSONArray contacts = new JSONArray(response.getString("users"));
-                                        System.out.println(contacts.toString());
-                                        for (int i = 0; i < contacts.length(); i++) {
-                                            try {
-                                                JSONObject r = contacts.getJSONObject(i);
-                                                String NUMBER = contactsList.getJSONObject(r.getInt("index")).getString("number");
-                                                String STOP_LINK =  r.getString("stop_url");
-                                                System.out.println("NUMERO: " + NUMBER);
-                                                Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                final String URL = API_URL.USERS_URL + "/" + USER_ID + API_URL.CAMPAIGNS + "/" + CAMPAIGN_ID;
+
+                                System.out.println(URL);
+
+                                RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+                                JSONObject body = new JSONObject();
+
+                                try {
+                                    body.put("users", j);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, body, new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        //STEP4: ON RESPONSE FROM SERVER SEND SMS TO ALLOWED NUMBER
+                                        System.out.println("Invio a: ");
+                                        try {
+                                            JSONArray contacts = new JSONArray(response.getString("users"));
+                                            System.out.println(contacts.toString());
+                                            for (int i = 0; i < contacts.length(); i++) {
+                                                try {
+                                                    JSONObject r = contacts.getJSONObject(i);
+                                                    String NUMBER = contactsList.getJSONObject(r.getInt("index")).getString("number");
+                                                    String STOP_LINK = r.getString("stop_url");
+                                                    System.out.println("NUMERO: " + NUMBER);
+                                                    Utils.sendSMS(ASSOCIATION_NAME, NUMBER, message, STOP_LINK, getResources(), getApplicationContext());
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
+                                            sendNotification(ASSOCIATION_NAME, message, true);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
-                                        sendNotification(ASSOCIATION_NAME,message,true);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    System.out.println(error.toString());
-                                }
-                            }) {
-                                @Override
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    HashMap<String, String> headers = new HashMap<String, String>();
-                                    headers.put("X-Auth-Token", state.getString("auth_token", null));
-                                    return headers;
-                                }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        System.out.println(error.toString());
+                                    }
+                                }) {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        HashMap<String, String> headers = new HashMap<String, String>();
+                                        headers.put("X-Auth-Token", state.getString("auth_token", null));
+                                        return headers;
+                                    }
 
-                            };
+                                };
 
-                            requestQueue.add(jsonObjectRequest);
+                                requestQueue.add(jsonObjectRequest);
+                            }
+
                         }
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
 
             }else{
@@ -331,6 +342,21 @@ public class GCMService extends GcmListenerService {
             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(1, notificationBuilder.build());
+    }
+
+    public static int getTotalGroupsNumbers(String groupsForTrustingString){
+        int tot = 0;
+        JSONArray groupsForTrusting = null;
+        try {
+            groupsForTrusting = new JSONArray(groupsForTrustingString);
+            for (int i = 0; i < groupsForTrusting.length(); i++) {
+                JSONObject g = new JSONObject(groupsForTrusting.get(i).toString());
+                tot += new JSONArray(g.getString("contacts")).length();
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tot;
     }
 
 
