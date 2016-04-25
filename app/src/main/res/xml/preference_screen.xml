@@ -13,6 +13,7 @@
     </CheckBoxPreference>
 
     <EditTextPreference
+        android:id="@+id/SMSlimit"
         android:enabled="true"
         android:key="msg_number"
         android:title="@string/msg_number"

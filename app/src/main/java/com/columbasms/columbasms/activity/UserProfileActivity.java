@@ -122,6 +122,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         campaigns_list = new ArrayList<>();
         associations_list = new ArrayList<>();
+        user = new User();
 
 
         // Set layout manager to position the items
@@ -170,6 +171,12 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        userProfileAdapter = new UserProfileAdapter(campaigns_list,associations_list, user, res, activity);
+        rvUserProfile.setLayoutManager(layoutManager);
+        rvUserProfile.setAdapter(userProfileAdapter);
+
         getData();
     }
 
@@ -205,7 +212,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     usrName = o.getString("user_name");
 
-                    user = new User(usrName, o.getString("avatar_normal"), o.getString("cover_normal"),o.getInt("organizations_count"),o.getInt("forwarded_campaigns_count"),o.getInt("sms_last_month"),o.getInt("sms_total"));
+                    user.setFullName(usrName);
+                    user.setProfile_image(o.getString("avatar_normal"));
+                    user.setCover_image(o.getString("cover_normal"));
+                    user.setAssFollowed(o.getInt("organizations_count"));
+                    user.setCampForwarder(o.getInt("forwarded_campaigns_count"));
+                    user.setSms_sended_month(o.getInt("sms_last_month"));
+                    user.setSms_sended_total(o.getInt("sms_total"));
+
+                    //user = new User(usrName, o.getString("avatar_normal"), o.getString("cover_normal"),o.getInt("organizations_count"),o.getInt("forwarded_campaigns_count"),o.getInt("sms_last_month"),o.getInt("sms_total"));
 
                     CacheRequest userCampaignsRequest = getUserCampaigns();
 
@@ -327,11 +342,15 @@ public class UserProfileActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                userProfileAdapter.notifyDataSetChanged();
+
+                /*
                 final LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 userProfileAdapter = new UserProfileAdapter(campaigns_list,associations_list, user, res, activity);
                 rvUserProfile.setLayoutManager(layoutManager);
                 rvUserProfile.setAdapter(userProfileAdapter);
+                */
 
             }
         }, new Response.ErrorListener() {

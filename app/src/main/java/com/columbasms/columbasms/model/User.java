@@ -19,6 +19,9 @@ public class User {
     private int sms_sended_total;
     private int sms_sended_month;
 
+    public User(){
+    }
+
     public User(String id,String digits_id, String digits_token,String phone_number){
         this.id = id;
         this.digits_id = digits_id;
@@ -100,4 +103,57 @@ public class User {
     public int getSms_sended_total() {
         return sms_sended_total;
     }
+
+    public void setAssFollowed(int assFollowed) {
+        this.assFollowed = assFollowed;
+    }
+
+    public void setCampForwarder(int campForwarder) {
+        this.campForwarder = campForwarder;
+    }
+
+    public void setCover_image(String cover_image) {
+        this.cover_image = cover_image;
+    }
+
+    public void setDigits_id(String digits_id) {
+        this.digits_id = digits_id;
+    }
+
+    public void setDigits_token(String digits_token) {
+        this.digits_token = digits_token;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
+    public void setProfile_image(String profile_image) {
+        this.profile_image = profile_image;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setSms_sended_month(int sms_sended_month) {
+        this.sms_sended_month = sms_sended_month;
+    }
+
+    public void setSms_sended_total(int sms_sended_total) {
+        this.sms_sended_total = sms_sended_total;
+    }
 }
+
