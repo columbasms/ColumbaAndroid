@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#009688</color>
+    <color name="colorShowCasePrimary">#99009688</color>
     <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorShowCasePrimaryDark">#dd00796B</color>
     <color name="colorPrimaryLight">#B2DFDB</color>
     <color name="colorAccent">#00BFA5</color>
+    <color name="colorShowCaseAccent">#dd00BFA5</color>
     <color name="prova">#A7FFEB</color>
 
     <color name="colorText">#FFFFFF</color>

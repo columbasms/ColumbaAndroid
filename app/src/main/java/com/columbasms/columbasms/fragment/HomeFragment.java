@@ -141,6 +141,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
             editor_account_information.apply();
         }
         */
+
     }
 
 

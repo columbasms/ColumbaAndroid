@@ -2,9 +2,11 @@ package com.columbasms.columbasms;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -14,10 +16,10 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  */
 public class HomeShowcaseSequence extends AppCompatActivity implements View.OnClickListener{
 
-    private Button shareButton;
-    private Button locateButton;
-    private Button sendButton;
-    private Button campaignButton;
+    private ImageView shareButton;
+    private ImageView locateButton;
+    private ImageView sendButton;
+    private CardView campaignButton;
 
     public static final String SHOWCASE_ID = "HomeSequence";
 
@@ -25,17 +27,17 @@ public class HomeShowcaseSequence extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstance) {
 
         super.onCreate(savedInstance);
-        setContentView(R.layout.fragment_home);
-        shareButton = (Button) findViewById(R.id.share);
+        setContentView(R.layout.item_feed);
+        shareButton = (ImageView) findViewById(R.id.share);
         shareButton.setOnClickListener(this);
 
-        locateButton = (Button) findViewById(R.id.locate);
+        locateButton = (ImageView) findViewById(R.id.locate);
         locateButton.setOnClickListener(this);
 
-        sendButton = (Button) findViewById(R.id.send);
+        sendButton = (ImageView) findViewById(R.id.send);
         sendButton.setOnClickListener(this);
 
-        campaignButton = (Button) findViewById(R.id.message);
+        campaignButton = (CardView) findViewById(R.id.card_view_to_click);
         campaignButton.setOnClickListener(this);
 
         presentShowcaseSequence();

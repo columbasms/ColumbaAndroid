@@ -43,6 +43,9 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -73,6 +76,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feed, parent, false);
+
+
         return RecyclerItemViewHolder.newInstance(view);
     }
 
@@ -267,6 +272,9 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         });
 
+        if(position==0){
+            presentShowcaseSequence(mainActivity,share,locate_layout,send,message);
+        }
 
     }
 
@@ -303,6 +311,53 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static RecyclerItemViewHolder newInstance(View parent) {
             return new RecyclerItemViewHolder(parent);
         }
+    }
+
+    private String SHOWCASE_ID = "C";
+    private void presentShowcaseSequence(Activity a, LinearLayout share, LinearLayout locate, LinearLayout send, TextView message) {
+
+        int color = a.getResources().getColor(R.color.colorShowCasePrimaryDark);
+        ShowcaseConfig config =  new ShowcaseConfig();
+        config.setMaskColor(color);
+        config.setDelay(500);
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(a, SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(message, a.getString(R.string.t_campaign), "OK");
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(share)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_share))
+                        .withCircleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(locate)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_discover))
+                        .withCircleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(send)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_spread))
+                        .withCircleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.start();
     }
 
 
