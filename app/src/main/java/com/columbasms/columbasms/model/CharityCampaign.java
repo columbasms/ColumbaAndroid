@@ -17,8 +17,9 @@ public class CharityCampaign {
     //NEW DETAILS
     private String longDescription;
     private String photo;
+    private String photoOriginal;
     private List<Address>addresses;
-    //private boolean isExpired;
+    private boolean isExpired;
 
     public CharityCampaign(){}
 
@@ -30,7 +31,7 @@ public class CharityCampaign {
         this.timestamp = timestamp;
     }
 
-    public CharityCampaign(String id, String message, Association organization, List<Topic> topics,String timestamp, String longDescription, String photo, List<Address>addresses){
+    public CharityCampaign(String id, String message, Association organization, List<Topic> topics,String timestamp, String longDescription, String photo,String photoOriginal, List<Address>addresses){
         this.id = id;
         this.message = message;
         this.organization = organization;
@@ -38,7 +39,22 @@ public class CharityCampaign {
         this.timestamp = timestamp;
         this.longDescription = longDescription;
         this.photo = photo;
+        this.photoOriginal = photoOriginal;
         this.addresses = addresses;
+        this.isExpired = isExpired;
+    }
+
+    public CharityCampaign(String id, String message, Association organization, List<Topic> topics,String timestamp, String longDescription, String photo,String photoOriginal, List<Address>addresses, boolean isExpired){
+        this.id = id;
+        this.message = message;
+        this.organization = organization;
+        this.topics = topics;
+        this.timestamp = timestamp;
+        this.longDescription = longDescription;
+        this.photo = photo;
+        this.photoOriginal = photoOriginal;
+        this.addresses = addresses;
+        this.isExpired = isExpired;
     }
 
     public String getId() {
@@ -71,5 +87,13 @@ public class CharityCampaign {
 
     public List<Address> getAddresses() {
         return addresses;
+    }
+
+    public String getPhotoOriginal() {
+        return photoOriginal;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
     }
 }

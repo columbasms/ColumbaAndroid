@@ -13,6 +13,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -22,9 +23,11 @@ import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.activity.AssociationProfileActivity;
 import com.columbasms.columbasms.model.ContactsGroup;
+import com.columbasms.columbasms.model.MyNotification;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.google.android.gms.gcm.GcmListenerService;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +38,14 @@ import java.util.Map;
 
 public class GCMService extends GcmListenerService {
 
+    private static final float BACKOFF_MULT = 1.0f;
+    private static final int TIMEOUT_MS = 10000;
+    private static final int MAX_RETRIES = 4;
+
     private static JSONArray j;
     private static String ASSOCIATION_ID;
     private static String ASSOCIATION_NAME;
+    private static String ASSOCIATION_AVATAR;
 
     private static int MAX_SMS;
     private static int SENT_SMS;
@@ -53,8 +61,11 @@ public class GCMService extends GcmListenerService {
         final String message = data.getString("message");
         String CAMPAIGN_ID = data.getString("campaign_id");
         ASSOCIATION_NAME = data.getString("organization_name");
+        ASSOCIATION_AVATAR = data.getString("avatar_normal");
         MAX_SMS = Integer.parseInt(state.getString("msg_number", "50"));
         SENT_SMS = Integer.parseInt(state.getString("sent_msg_number", "0"));
+
+
 
         Log.d("App", "from: " + from);
         Log.d("App", "message: " + message);
@@ -142,7 +153,7 @@ public class GCMService extends GcmListenerService {
                         }
 
                     };
-
+                    jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, MAX_RETRIES, BACKOFF_MULT));
                     requestQueue.add(jsonObjectRequest);
                 }
             }else if(!groupsForTrustingString.equals("")){
@@ -238,7 +249,7 @@ public class GCMService extends GcmListenerService {
                                     }
 
                                 };
-
+                                jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, MAX_RETRIES, BACKOFF_MULT));
                                 requestQueue.add(jsonObjectRequest);
                             }
 
@@ -308,6 +319,8 @@ public class GCMService extends GcmListenerService {
                     notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(1, notificationBuilder.build());
+
+                    saveNotification(message);
         }
 
     }
@@ -342,6 +355,37 @@ public class GCMService extends GcmListenerService {
             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(notificationContent));
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(1, notificationBuilder.build());
+            saveNotification(message);
+    }
+
+    public void saveNotification(String message){
+
+        SharedPreferences state = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        updateMyActivity(this,"not");
+
+        MyNotification n = new MyNotification(ASSOCIATION_NAME,ASSOCIATION_AVATAR,message);
+        Gson gson = new Gson();
+        String n_json = gson.toJson(n);
+
+
+        JSONArray allNotificationsArray = null;
+        try {
+            String all = state.getString("allNotifications",null);
+            if (all != null) allNotificationsArray = new JSONArray(all);
+            else allNotificationsArray = new JSONArray();
+            allNotificationsArray.put(n_json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(allNotificationsArray.toString());
+
+        SharedPreferences.Editor editor = state.edit();
+        editor.putBoolean("thereIsNotification",true);
+        editor.putString("allNotifications",allNotificationsArray.toString());
+        editor.commit();
+
     }
 
     public static int getTotalGroupsNumbers(String groupsForTrustingString){
@@ -357,6 +401,17 @@ public class GCMService extends GcmListenerService {
             e.printStackTrace();
         }
         return tot;
+    }
+
+    static void updateMyActivity(Context context, String message) {
+
+        Intent intent = new Intent("unique_name");
+
+        //put whatever data you want to send, if any
+        intent.putExtra("message", message);
+
+        //send broadcast
+        context.sendBroadcast(intent);
     }
 
 

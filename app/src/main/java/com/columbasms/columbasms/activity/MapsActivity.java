@@ -3,6 +3,7 @@ package com.columbasms.columbasms.activity;
 /**
  * Created by Matteo Brienza on 3/15/16.
  */
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.model.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +29,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -66,11 +70,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        /*
+        Bitmap.Config conf = Bitmap.Config.RGB_565;
+        Bitmap bmp = Bitmap.createBitmap(48, 48, conf);
+        Canvas canvas1 = new Canvas(bmp);
+        //modify canvas
+        canvas1.drawColor(R.color.colorPrimary);
+        canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_favorite_black_24dp), 0,0, null);
+        */
+
         if(Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }else mMap.setMyLocationEnabled(true);
         }else mMap.setMyLocationEnabled(true);
+
 
 
         // Add a markers, and move the camera to Rome Centre.
@@ -79,6 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng latLng = new LatLng(a.getLatitude(), a.getLongitude());
             String newAddr = makeShort(a.getAddress());
             mMap.addMarker(new MarkerOptions().position(latLng).title(newAddr).icon(getMarkerIcon(getIntent().getStringExtra("color_marker"))));
+            //mMap.addMarker(new MarkerOptions().position(latLng).title(newAddr).icon(BitmapDescriptorFactory.fromBitmap(bmp)).anchor(0.5f, 1));
         }
 
         CameraPosition cameraPosition = new CameraPosition.Builder()

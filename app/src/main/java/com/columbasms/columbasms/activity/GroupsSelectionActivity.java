@@ -15,7 +15,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -45,6 +45,7 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,11 @@ import butterknife.OnClick;
  * Created by Matteo Brienza on 3/13/16.
  */
 public class GroupsSelectionActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
+    private static final float BACKOFF_MULT = 1.0f;
+    private static final int TIMEOUT_MS = 10000;
+    private static final int MAX_RETRIES = 4;
+
 
     GoogleApiClient mGoogleApiClient;
     private static double LATITUDE;
@@ -374,7 +380,7 @@ public class GroupsSelectionActivity extends AppCompatActivity implements Google
                 }
 
             };
-
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, MAX_RETRIES, BACKOFF_MULT));
             requestQueue.add(jsonObjectRequest);
         }
 

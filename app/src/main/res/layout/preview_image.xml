@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_error_white_36dp"/>
+        android:src="@drawable/ic_photo_white_48dp"/>
 
     <ImageView
         android:id="@+id/iv_preview_image"
@@ -29,12 +29,18 @@
         android:background="@drawable/toolbar_gradient_black"
         android:layout_height="56dp">
 
-        <ImageView
+        <LinearLayout
             android:id="@+id/btnIvClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:background="@drawable/ic_close_white_24dp"/>
+            android:layout_width="70dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/ic_close_white_24dp"/>
+        </LinearLayout>
+
+
 
 
 

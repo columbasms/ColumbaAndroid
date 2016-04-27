@@ -5,6 +5,12 @@
 
     <string name="version">v.0.3.1a</string>
 
+    <string name="disclaimer_SMS_limit">You\'re setting a monthly SMS amount limit that is less than the SMS amount you have sent in this month; in this way for this month you\'ll not send any SMS with Columba.</string>
+    <string name="disclaimer_SMS_limit_title">Caution!</string>
+
+    <string name="disclaimer_trust">With this function you\'ll send automatically to contacts you\'ll select every new campaign started by this association.</string>
+    <string name="disclaimer_trust_title">Remember!</string>
+
     <string name="info">Info</string>
     <string name="feedback">Feedback</string>
     <string name="guide">Guide</string>
@@ -147,6 +153,7 @@
     <string name="now">now</string>
 
     <string name="private_profile">Private profile</string>
+    <string name="private_profile_settings_summary">Hide your user profile in Leaderboard</string>
     
     // TUTORIAL STRINGS:
 

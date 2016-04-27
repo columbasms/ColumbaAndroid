@@ -2,15 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference
+        android:enabled="true"
+        android:key="private_profile"
+        android:title="@string/private_profile"
+        android:summary="@string/private_profile_settings_summary">
+    </CheckBoxPreference>
+
+    <CheckBoxPreference
         android:key="disable_notify"
         android:title="@string/disable_notify">
     </CheckBoxPreference>
 
-    <CheckBoxPreference
-        android:enabled="true"
-        android:key="private_profile"
-        android:title="@string/private_profile">
-    </CheckBoxPreference>
 
     <EditTextPreference
         android:id="@+id/SMSlimit"
@@ -19,13 +21,14 @@
         android:title="@string/msg_number"
         android:inputType="number">
     </EditTextPreference>
-
+    <!--
     <PreferenceScreen
         android:enabled="false"
         android:key="group_customization"
         android:title="Modifica gruppi">
         <intent android:action="com.columbasms.columbasms.activity.MainActivity"/>
     </PreferenceScreen>
+    -->
 
 </PreferenceScreen>
 

@@ -151,7 +151,7 @@ public class CampaignsDetailsActivity extends AppCompatActivity implements NoSoc
                     JSONObject a = new JSONObject(o.getString("organization"));
                     Association ass = new Association(a.getString("id"),a.getString("organization_name"),a.getString("avatar_normal"),null,null);
 
-                    campaign = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), addressList );
+                    campaign = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), o.getString("photo_original"),addressList ,Utils.knowIfCampaignIsExpired(o.getString("expires_at")));
 
                     adapter.setCampaign(campaign);
 

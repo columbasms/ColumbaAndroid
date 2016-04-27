@@ -1,5 +1,6 @@
 package com.columbasms.columbasms.activity;
 
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.fragment.DisclaimerSMSLimitDialogFragment;
 import com.columbasms.columbasms.utils.network.API_URL;
 
 import org.json.JSONException;
@@ -36,7 +38,7 @@ import java.util.Map;
 /**
  * Created by Federico on 13/02/16.
  */
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener, DisclaimerSMSLimitDialogFragment.DisclaimerDialogListener {
 
     private static String last_value;
 
@@ -74,7 +76,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key){
 
         if(key.equals("msg_number")){
-            updatePreference(key,true);
+            int MAX_SMS = Integer.parseInt(sharedPreferences.getString("msg_number", "50"));
+            int SENT_SMS = Integer.parseInt(sharedPreferences.getString("sent_msg_number", "0"));
+            if(MAX_SMS < SENT_SMS){
+                showNoticeDialog();
+            } else updatePreference(key,true);
         }else if (key.equals("private_profile")){
             sendProfilePrivateValue();
         }
@@ -251,5 +257,27 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         updatePreference("msg_number",false);
+    }
+
+    public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new DisclaimerSMSLimitDialogFragment();
+        dialog.show(getFragmentManager(), "NoticeDialogFragment");
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        updatePreference("msg_number",true);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Preference preference = findPreference("msg_number");
+        final EditTextPreference editTextPreference =  (EditTextPreference)preference;
+        editTextPreference.setText(last_value);
+        editTextPreference.setSummary(last_value);
     }
 }

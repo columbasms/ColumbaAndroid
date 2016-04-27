@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -230,10 +229,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                 nagDialog.getWindow().setAttributes(attrs);
 
-                final ImageView btnClose = (ImageView) nagDialog.findViewById(R.id.btnIvClose);
+                final LinearLayout btnClose = (LinearLayout) nagDialog.findViewById(R.id.btnIvClose);
                 final ProgressBar progressBar = (ProgressBar) nagDialog.findViewById(R.id.progressBar);
                 final ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
                 final ImageView error = (ImageView)nagDialog.findViewById(R.id.error);
+
 
                 Callback imageLoadedCallback = new Callback() {
 
@@ -252,9 +252,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                         };
 
+
                 Picasso.with(mainActivity)
-                        .load(c.getPhoto())
+                        .load(c.getPhotoOriginal())
                         .into(ivPreview,imageLoadedCallback);
+
 
                 btnClose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -278,7 +280,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.percentRelativeLayout)PercentRelativeLayout prl;
-        @Bind(R.id.card_view_to_click)CardView cardToClick;
         @Bind(R.id.locate)ImageView locate;
         @Bind(R.id.topic)TextView topic;
         @Bind(R.id.message)TextView message;

@@ -2,7 +2,10 @@ package com.columbasms.columbasms.activity;
 
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -67,7 +70,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static long SPLASH_SCREEN_DELAY = 1500; 
+    private static long SPLASH_SCREEN_DELAY = 1500;
     private ActionBarDrawerToggle mToggle;
     private static View header;
     private static Activity activity;
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static int MAX_SMS;
     private static int MONTHLY_SMS;
     private static boolean PRIVATE_PROFILE;
+
+    public static Menu menu;
 
     @Bind(R.id.home_text)TextView home_text;
     @Bind(R.id.topics_text)TextView topics_text;
@@ -97,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Bind(R.id.messages)LinearLayout map;
     @Bind(R.id.notifications)LinearLayout notifications;
 
+    boolean canAddItem = false;
+
     @OnClick({ R.id.home, R.id.topics,R.id.messages,R.id.notifications})
     public void onClick(View v) {
 
@@ -113,6 +120,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             prev_image = home_image;
             fr = new HomeFragment();
 
+            canAddItem = false;
+
+            if(menu.findItem(0)!=null){
+                menu.findItem(0).setVisible(false);
+            }
+
+            invalidateOptionsMenu();
+
         }else if(v == findViewById(R.id.topics)){
 
             topics_text.setTextColor(getResources().getColor(R.color.colorText));
@@ -121,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             prev_text = topics_text;
             prev_image = topics_image;
             fr = new TopicsFragment();
+
+            canAddItem = false;
+
+            if(menu.findItem(0)!=null){
+                menu.findItem(0).setVisible(false);
+            }
+
+            invalidateOptionsMenu();
 
         }else if(v == findViewById(R.id.messages)){
 
@@ -131,6 +154,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             prev_image = map_image;
             fr = new MapFragment();
 
+            canAddItem = false;
+
+            if(menu.findItem(0)!=null){
+                menu.findItem(0).setVisible(false);
+            }
+
+            invalidateOptionsMenu();
+
         }else{
 
             notifications_text.setTextColor(getResources().getColor(R.color.colorText));
@@ -139,6 +170,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             prev_text = notifications_text;
             prev_image = notifications_image;
             fr = new NotificationsFragment();
+
+            canAddItem = true;
+
+            invalidateOptionsMenu();
+
         }
 
         FragmentManager fm = getSupportFragmentManager();
@@ -296,10 +332,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
 
+        if(state.getBoolean("thereIsNotification",false) == true){
+            //For change icon when columba is closed
+            notifications_image.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_notifications_white_active_24dp));
+        }
 
-
-
+        this.registerReceiver(mMessageReceiver, new IntentFilter("unique_name"));
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.unregisterReceiver(mMessageReceiver);
+    }
+
 
     public void clearApplicationData() {
         File cache = getCacheDir();
@@ -346,25 +392,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MAX_SMS = o.getInt("max_sms");
                     System.out.println(o.toString());
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-                    if(prefs.getString("msg_number",null)==null) {
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("msg_number", Integer.toString(MAX_SMS));
-                        editor.apply();
-                    }
-
-                    /*
-                    MONTHLY_SMS = o.getInt("sms_last_month");
-                    if(prefs.getString("sent_msg_number",null)==null) {
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("sent_msg_number", Integer.toString(MONTHLY_SMS));
-                        editor.apply();
-                    }
-                    */
-
-                   PRIVATE_PROFILE = o.getBoolean("is_private");
                     SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("msg_number", Integer.toString(MAX_SMS));
+
+
+                    MONTHLY_SMS = o.getInt("sms_last_month");
+                    editor.putString("sent_msg_number", Integer.toString(MONTHLY_SMS));
+
+
+
+                    PRIVATE_PROFILE = o.getBoolean("is_private");
                     editor.putBoolean("private_profile", PRIVATE_PROFILE);
-                    editor.apply();
+                    editor.commit();
 
 
 
@@ -489,8 +528,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -555,7 +601,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            notifications_image.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_notifications_white_active_24dp));
+
+        }
+    };
 
 
 

@@ -3,6 +3,12 @@
 
     <string name="version">v.0.3.1a</string>
 
+    <string name="disclaimer_SMS_limit">Stai impostando un numero limite di SMS mensili da inviare inferiore agli SMS che in questo mese hai già inviato; così facendo per questo mese non potrai più inviare SMS tramite Columba.</string>
+    <string name="disclaimer_SMS_limit_title">Attenzione!</string>
+
+    <string name="disclaimer_trust">Con questa funzione invierai automaticamente ai contatti che selezionerai ogni nuova campagna lanciata da questa associazione.</string>
+    <string name="disclaimer_trust_title">Ricorda!</string>
+
     <string name="appIntro1_title">Columba</string>
     <string name="appIntro1_description">Con Columba puoi aiutare le associazioni di volontariato diffondendo le loro campagne ed eventi con i tuoi SMS inutilizzati!</string>
 
@@ -138,6 +144,7 @@
     <string name="no_notifications">Non ci sono notifiche.</string>
 
     <string name="private_profile">Profilo privato</string>
+    <string name="private_profile_settings_summary">Nasconde il tuo profilo utente nella classifica generale</string>
 
     <string name="now">adesso</string>
 

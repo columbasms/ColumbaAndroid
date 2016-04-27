@@ -2,6 +2,7 @@ package com.columbasms.columbasms.adapter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +26,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +45,7 @@ import com.columbasms.columbasms.activity.TopicProfileActivity;
 import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.fragment.AskContactsInputFragment;
+import com.columbasms.columbasms.fragment.DisclaimerTrustDialogFragment;
 import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
@@ -97,17 +98,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     public class GroupViewHolder extends ViewHolder {
 
         @Bind(R.id.percentRelativeLayout)PercentRelativeLayout prl;
-        @Bind(R.id.card_view_to_click)CardView cardToClick;
         @Bind(R.id.cover_image)ImageView cover_image;
         @Bind(R.id.locate)ImageView locate;
-        @Bind(R.id.locate_layout)RelativeLayout locate_layout;
         @Bind(R.id.topic)TextView topic;
         @Bind(R.id.message)TextView message;
         @Bind(R.id.ass_name)TextView associationName;
-        @Bind(R.id.send)ImageView send;
-        @Bind(R.id.share)ImageView share;
         @Bind(R.id.timestamp)TextView timestamp;
         @Bind(R.id.profile_image)ImageView profile_image;
+        @Bind(R.id.button_layout)LinearLayout button_layout;
 
         @Bind(R.id.layout_share)LinearLayout layout_share;
         @Bind(R.id.layout_locate)LinearLayout layout_locate;
@@ -122,13 +120,10 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     public class ProfileViewHolder extends ViewHolder {
 
 
-        @Bind(R.id.card_layout)LinearLayout lc;
-        @Bind(R.id.lc_background)LinearLayout lc_background;
         @Bind(R.id.profile_card)CardView cardView;
         @Bind(R.id.profile_ass_name)TextView assName;
         @Bind(R.id.profile_ass_description)TextView assDescription;
         @Bind(R.id.profile_ass_other_info)TextView assOtherInfo;
-        @Bind(R.id.association_campaigns)TextView assCampaignsTitle;
         @Bind(R.id.fol) Button trust;
         @Bind(R.id.fav) ImageView favourite;
         @Bind(R.id.cover_image) ImageView coverImage;
@@ -222,14 +217,12 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 Button t = holder1.trust;
 
                 if(association.isTrusting()){
-                    System.out.println(association.isTrusting() + "qui1");
                     t.setBackgroundResource(R.drawable.button_trusted);
                     t.setText(res.getString(R.string.trusted_btn));
                     t.setTextColor(Color.parseColor("#ffffff"));
                     parameter = "false";
                     t.setTag("1");
                 }else{
-                    System.out.println(association.isTrusting() + "qui2");
                     t.setBackgroundResource(android.R.color.white);
                     t.setText(res.getString(R.string.trust_btn));
                     t.setTextColor(res.getColor(R.color.colorPrimaryDark));
@@ -241,77 +234,89 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     public void onClick(View v) {
 
                         final SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(activity);
-                        if (parameter.equals("true")){
 
-
-                            if (p.getString("thereIsaGroup", "").equals("")){
-                                Intent i = new Intent(activity, ContactsSelectionActivity.class);
-                                i.putExtra("flag","true");
-                                i.putExtra("association_id", association.getId());
-                                activity.startActivityForResult(i,1);
-                            }else{
-                                AskContactsInputFragment newFragment = new AskContactsInputFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("flag", "true");
-                                bundle.putString("association_id", association.getId());
-                                newFragment.setArguments(bundle);
-                                newFragment.show(fragmentManager, null);
-                            }
-
+                        if(p.getString("disclaimer_trust",null)==null && !association.isTrusting()){
+                            DialogFragment dialog = new DisclaimerTrustDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("parameter", parameter);
+                            bundle.putString("association_id", association.getId());
+                            dialog.setArguments(bundle);
+                            dialog.show(activity.getFragmentManager(), "NoticeDialogFragment");
+                            p.edit().putString("disclaimer_trust","true").apply();
                         }else{
 
-                            final ProgressDialog dialog = new ProgressDialog(activity);
-                            dialog.show();
-                            dialog.setCancelable(false);
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                            dialog.setContentView(R.layout.dialog_progress);
+                            if (parameter.equals("true")){
 
-                            RequestQueue requestQueue = Volley.newRequestQueue(activity);
 
-                            final String URL_TRUSTING = URL + "?trusted=" + parameter;
-
-                            System.out.println(URL_TRUSTING);
-
-                            StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
-                                    new Response.Listener<String>()
-                                    {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
-                                            SharedPreferences.Editor editor_account_information = p.edit();
-                                            editor_account_information.remove(association.getId() + "_groups_forTrusting");
-                                            editor_account_information.remove(association.getId() + "_contacts_forTrusting");
-                                            editor_account_information.apply();
-
-                                            dialog.dismiss();
-                                            adapterCallback.onMethodCallback();
-                                        }
-                                    },
-                                    new Response.ErrorListener()
-                                    {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            System.out.println(error.toString());
-                                            dialog.dismiss();
-                                            NetworkResponse networkResponse = error.networkResponse;
-                                            if(networkResponse!=null)
-                                                Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
-                                            else Toast.makeText(activity, activity.getResources().getString(R.string.network_error) , Toast.LENGTH_SHORT).show();
-
-                                        }
-                                    }
-                            ) {
-
-                                @Override
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    HashMap<String, String> headers = new HashMap<>();
-                                    headers.put("X-Auth-Token", sp.getString("auth_token", null));
-                                    return headers;
+                                if (p.getString("thereIsaGroup", "").equals("")){
+                                    Intent i = new Intent(activity, ContactsSelectionActivity.class);
+                                    i.putExtra("flag","true");
+                                    i.putExtra("association_id", association.getId());
+                                    activity.startActivityForResult(i,1);
+                                }else{
+                                    AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("flag", "true");
+                                    bundle.putString("association_id", association.getId());
+                                    newFragment.setArguments(bundle);
+                                    newFragment.show(fragmentManager, null);
                                 }
 
-                            };
-                            requestQueue.add(putRequest);
+                            }else {
+
+                                final ProgressDialog dialog = new ProgressDialog(activity);
+                                dialog.show();
+                                dialog.setCancelable(false);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                dialog.setContentView(R.layout.dialog_progress);
+
+                                RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+                                final String URL_TRUSTING = URL + "?trusted=" + parameter;
+
+                                System.out.println(URL_TRUSTING);
+
+                                StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
+                                                SharedPreferences.Editor editor_account_information = p.edit();
+                                                editor_account_information.remove(association.getId() + "_groups_forTrusting");
+                                                editor_account_information.remove(association.getId() + "_contacts_forTrusting");
+                                                editor_account_information.apply();
+
+                                                dialog.dismiss();
+                                                adapterCallback.onMethodCallback();
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                System.out.println(error.toString());
+                                                dialog.dismiss();
+                                                NetworkResponse networkResponse = error.networkResponse;
+                                                if (networkResponse != null)
+                                                    Toast.makeText(activity, activity.getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                                                else
+                                                    Toast.makeText(activity, activity.getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }
+                                ) {
+
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        HashMap<String, String> headers = new HashMap<>();
+                                        headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                                        return headers;
+                                    }
+
+                                };
+                                requestQueue.add(putRequest);
+                            }
                         }
+
 
                     }
                 });
@@ -408,6 +413,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                         };
                         requestQueue.add(putRequest);
+
                     }
                 });
 
@@ -561,7 +567,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                         attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                         nagDialog.getWindow().setAttributes(attrs);
 
-                        final ImageView btnClose = (ImageView) nagDialog.findViewById(R.id.btnIvClose);
+                        final LinearLayout btnClose = (LinearLayout) nagDialog.findViewById(R.id.btnIvClose);
                         final ProgressBar progressBar = (ProgressBar) nagDialog.findViewById(R.id.progressBar);
                         final ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
                         final ImageView error = (ImageView)nagDialog.findViewById(R.id.error);
@@ -584,7 +590,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                         };
 
                         Picasso.with(activity)
-                                .load(c.getPhoto())
+                                .load(c.getPhotoOriginal())
                                 .into(ivPreview,imageLoadedCallback);
 
                         btnClose.setOnClickListener(new View.OnClickListener() {
@@ -595,6 +601,10 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                         });
                     }
                 });
+
+
+                if(c.isExpired())holder2.button_layout.setVisibility(View.GONE);
+                else holder2.button_layout.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -653,6 +663,8 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
         }.execute(null, null, null);;
     }
+
+
 
 
 }

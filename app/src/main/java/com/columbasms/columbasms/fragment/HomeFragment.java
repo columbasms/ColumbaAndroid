@@ -3,20 +3,16 @@ package com.columbasms.columbasms.fragment;
 /**
  * Created by Matteo Brienza on 1/29/16.
  */
-import android.Manifest;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,15 +22,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.adapter.MainAdapter;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
 import com.columbasms.columbasms.listener.HidingScrollListener;
-import com.columbasms.columbasms.adapter.MainAdapter;
 import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
@@ -42,13 +39,16 @@ import com.columbasms.columbasms.model.Topic;
 import com.columbasms.columbasms.utils.Utils;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.columbasms.columbasms.utils.network.CacheRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
     private static List<CharityCampaign> campaigns_list;
     private static Toolbar tb;
+    private static Toolbar tb_top;
     private static MainAdapter adapter;
     private static Activity mainActivity;
 
@@ -86,7 +87,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
         mainActivity = getActivity();
 
-
+        tb_top = (Toolbar)mainActivity.findViewById(R.id.toolbar_top);
         tb = (Toolbar)mainActivity.findViewById(R.id.toolbar_bottom);
 
         mySwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1,
@@ -108,12 +109,12 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
         rvFeed.setOnScrollListener(new HidingScrollListener() {
             @Override
             public void onHide() {
-                tb.animate().translationY(tb.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+                tb.animate().translationY(tb.getHeight()).setInterpolator(new AccelerateInterpolator(3));
             }
 
             @Override
             public void onShow() {
-                tb.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+                tb.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
             }
         });
 
@@ -217,7 +218,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
 
                                 CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),
                                         ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19),
-                                        mainActivity),o.getString("long_description"), o.getString("photo_mobile"),
+                                        mainActivity),o.getString("long_description"), o.getString("photo_mobile"),o.getString("photo_mobile_max"),
                                         addressList );
 
                                 campaigns_list.add(0, m);

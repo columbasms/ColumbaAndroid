@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -120,7 +119,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 topics += topicList.get(i).getName(); //IF MULTITOPIC ADD "\N"
             }
             TextView topic = holder.topic;
-            topic.setText(topics);
+            topic.setText(topicList.get(0).getName());
             topic.setTextColor(Color.parseColor(c.getTopics().get(0).getMainColor()));
             topic.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -222,7 +221,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                 nagDialog.getWindow().setAttributes(attrs);
 
-                final ImageView btnClose = (ImageView) nagDialog.findViewById(R.id.btnIvClose);
+                final LinearLayout btnClose = (LinearLayout) nagDialog.findViewById(R.id.btnIvClose);
                 final ProgressBar progressBar = (ProgressBar) nagDialog.findViewById(R.id.progressBar);
                 final ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
                 final ImageView error = (ImageView)nagDialog.findViewById(R.id.error);
@@ -245,7 +244,7 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 };
 
                 Picasso.with(mainActivity)
-                        .load(c.getPhoto())
+                        .load(c.getPhotoOriginal())
                         .into(ivPreview,imageLoadedCallback);
 
                 btnClose.setOnClickListener(new View.OnClickListener() {
@@ -270,6 +269,9 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             lld.setVisibility(View.GONE);
         }
 
+        if(c.isExpired())holder.button_layout.setVisibility(View.GONE);
+        else holder.button_layout.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -288,13 +290,11 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Bind(R.id.message)TextView message;
         @Bind(R.id.long_description)TextView long_description;
         @Bind(R.id.ass_name)TextView associationName;
-        @Bind(R.id.send)ImageView send;
-        @Bind(R.id.share)ImageView share;
         @Bind(R.id.timestamp)TextView timestamp;
         @Bind(R.id.profile_image)ImageView profile_image;
         @Bind(R.id.locate)ImageView locate;
-        @Bind(R.id.locate_layout)RelativeLayout locate_layout;
         @Bind(R.id.cover_image)ImageView cover_image;
+        @Bind(R.id.button_layout)LinearLayout button_layout;
 
         @Bind(R.id.layout_share)LinearLayout layout_share;
         @Bind(R.id.layout_locate)LinearLayout layout_locate;

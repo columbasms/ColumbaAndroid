@@ -5,12 +5,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,8 +29,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -54,11 +54,13 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -67,6 +69,10 @@ import butterknife.OnClick;
  * Created by Matteo Brienza on 2/29/16.
  */
 public class ContactsSelectionActivity extends AppCompatActivity implements AskGroupName.GroupNameInsertedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private static final float BACKOFF_MULT = 1.0f;
+    private static final int TIMEOUT_MS = 10000;
+    private static final int MAX_RETRIES = 4;
 
     GoogleApiClient mGoogleApiClient;
     private static double LATITUDE;
@@ -506,7 +512,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
                         }
 
                     };
-
+                    jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(TIMEOUT_MS, MAX_RETRIES, BACKOFF_MULT));
                     requestQueue.add(jsonObjectRequest);
                 }
 

@@ -1,6 +1,8 @@
 package com.columbasms.columbasms.activity;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,15 +25,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.columbasms.columbasms.callback.AdapterCallback;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.MyApplication;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.AssociationProfileAdapter;
+import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.callback.NoSocialsSnackbarCallback;
+import com.columbasms.columbasms.fragment.AskContactsInputFragment;
+import com.columbasms.columbasms.fragment.DisclaimerTrustDialogFragment;
 import com.columbasms.columbasms.model.Address;
 import com.columbasms.columbasms.model.Association;
 import com.columbasms.columbasms.model.CharityCampaign;
@@ -46,8 +55,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +66,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Matteo Brienza on 2/1/16.
  */
-public class AssociationProfileActivity extends AppCompatActivity implements AdapterCallback,NoSocialsSnackbarCallback {
+public class AssociationProfileActivity extends AppCompatActivity implements AdapterCallback,NoSocialsSnackbarCallback, DisclaimerTrustDialogFragment.DisclaimerDialogListener {
 
     @Bind(R.id.toolbar_profile)Toolbar toolbar;
 
@@ -316,7 +327,7 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
                                 JSONObject a = new JSONObject(o.getString("organization"));
                                 Association ass = new Association(a.getString("id"),a.getString("organization_name"),a.getString("avatar_normal"),null,null);
 
-                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), addressList );
+                                CharityCampaign m = new CharityCampaign(o.getString("id"),o.getString("message"),ass,topicList,Utils.getTimestamp(o.getString("created_at").substring(0,19), mainActivity),o.getString("long_description"), o.getString("photo_mobile"), o.getString("photo_original"),addressList, Utils.knowIfCampaignIsExpired(o.getString("expires_at")));
 
                                 campaigns_list.add(0, m);
 
@@ -430,6 +441,90 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
             getData();
         }
     }//onActivityResult
+
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog1, final String assId, String parameter) {
+
+        final SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (parameter.equals("true")){
+
+            if (p.getString("thereIsaGroup", "").equals("")){
+                Intent i = new Intent(this, ContactsSelectionActivity.class);
+                i.putExtra("flag","true");
+                i.putExtra("association_id", assId);
+                startActivityForResult(i,1);
+            }else{
+                AskContactsInputFragment newFragment = new AskContactsInputFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "true");
+                bundle.putString("association_id", assId);
+                newFragment.setArguments(bundle);
+                newFragment.show(fragmentManager, null);
+            }
+
+        }else {
+
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.show();
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            dialog.setContentView(R.layout.dialog_progress);
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+            final String URL = API_URL.USERS_URL + "/" + p.getString("user_id","") + API_URL.ASSOCIATIONS + "/" + assId;
+
+            final String URL_TRUSTING = URL + "?trusted=" + parameter;
+
+            System.out.println(URL_TRUSTING);
+
+            StringRequest putRequest = new StringRequest(Request.Method.PUT, URL_TRUSTING,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            //HAI FATTO UNTRUST RIMUOVO LA LISTA DEI GRUPPI E I CONTATTI PER QUESTA ASSOCIAZIONE
+                            SharedPreferences.Editor editor_account_information = p.edit();
+                            editor_account_information.remove(assId + "_groups_forTrusting");
+                            editor_account_information.remove(assId + "_contacts_forTrusting");
+                            editor_account_information.apply();
+
+                            dialog.dismiss();
+                            adapterCallback.onMethodCallback();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println(error.toString());
+                            dialog.dismiss();
+                            NetworkResponse networkResponse = error.networkResponse;
+                            if (networkResponse != null)
+                                Toast.makeText(mainActivity, getResources().getString(R.string.network_error) + " (" + networkResponse.statusCode + ")", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(mainActivity, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+            ) {
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<>();
+                    headers.put("X-Auth-Token", sp.getString("auth_token", null));
+                    return headers;
+                }
+
+            };
+            requestQueue.add(putRequest);
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        System.out.println("negative");
+    }
 
 }
 

@@ -8,11 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.telephony.SmsManager;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.columbasms.columbasms.R;
@@ -28,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -235,6 +232,39 @@ public class Utils {
         }
 
         return source.subSequence(0, i+1);
+    }
+
+    public static boolean knowIfCampaignIsExpired(String valid_until){
+        boolean isExpired = false;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        Calendar c = Calendar.getInstance();
+
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            String formattedDate = dateFormat.format(c.getTime());
+            date1 = dateFormat.parse(valid_until);
+            date2 = dateFormat.parse(formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar expires_at = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        expires_at.setTime(date1);
+        today.setTime(date2);
+
+
+        if(today.compareTo(expires_at)>0){
+            System.out.println(today.toString());
+            System.out.println(expires_at.toString());
+            isExpired = true;
+        }
+
+        return isExpired;
     }
 
 

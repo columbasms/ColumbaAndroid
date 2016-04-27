@@ -3,6 +3,7 @@ package com.columbasms.columbasms.fragment;
 /**
  * Created by Matteo Brienza on 1/29/16.
  */
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,11 +28,11 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.MyApplication;
-import com.columbasms.columbasms.listener.HidingScrollListener;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.TopicsAdapter;
+import com.columbasms.columbasms.callback.AdapterCallback;
+import com.columbasms.columbasms.listener.HidingScrollListener;
 import com.columbasms.columbasms.model.Topic;
 import com.columbasms.columbasms.utils.network.API_URL;
 import com.columbasms.columbasms.utils.network.CacheRequest;
@@ -61,6 +62,11 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
 
     private static SharedPreferences sp;
 
+    //VARIABLES TO MANAGE RV_FEED SCROLL POSITION
+    private static int index = -1;
+    private static int top = -1;
+    private static GridLayoutManager mLayoutManager;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -73,7 +79,8 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
         adapterCallback = this;
 
         // Set layout manager to position the items
-        rvTopics.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        rvTopics.setLayoutManager(mLayoutManager);
         rvTopics.setOnScrollListener(new HidingScrollListener() {
             @Override
             public void onHide() {
@@ -210,6 +217,10 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
     @Override
     public void onPause() {
         super.onPause();
+        //Read current RecyclerView position
+        index = mLayoutManager.findFirstVisibleItemPosition();
+        View v = rvTopics.getChildAt(0);
+        top = (v == null) ? 0 : (v.getTop() - rvTopics.getPaddingTop());
     }
 
     @Override
@@ -228,6 +239,11 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
                 getData();
             }
         });
+
+        //Set RecyclerView position
+        if(index != -1) {
+            mLayoutManager.scrollToPositionWithOffset( index, top);
+        }
     }
 
     @Override
@@ -244,4 +260,6 @@ public class TopicsFragment extends Fragment implements AdapterCallback {
     public void onMethodCallback() {
         getData();
     }
+
+
 }
