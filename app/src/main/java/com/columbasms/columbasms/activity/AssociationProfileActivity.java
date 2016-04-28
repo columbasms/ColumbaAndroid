@@ -218,6 +218,8 @@ public class AssociationProfileActivity extends AppCompatActivity implements Ada
         // Attach the adapter to the recyclerview to populate items
         rvAssociationProfile.setAdapter(associationProfileAdapter);
 
+
+
         getData();
 
     }

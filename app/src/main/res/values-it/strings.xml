@@ -80,7 +80,7 @@
     <string name="save">SALVA</string>
 
     <string name="disable_notify">Disattiva notifiche push</string>
-    <string name="msg_number">Numero limite di SMS mensili</string>
+    <string name="msg_number">SMS utilizzabili mensilmente da Columba</string>
     <string name="manage">Gestisci liste contatti</string>
 
     <string name="edit_name">Modifica username</string>
@@ -151,18 +151,26 @@
     // STRINGHE TUTORIAL:
 
     //HOME
-    <string name="t_share">Tocca qui per CONDIVIDERE la campagna sui social network!</string>
+    <string name="t_share">CONDIVIDI la campagna sui social network!</string>
 
-    <string name="t_discover">Tocca qui per SCOPRIRE dove si svolge la campagna!</string>
+    <string name="t_discover">SCOPRI dove si svolge la campagna!</string>
 
-    <string name="t_spread">Tocca qui per DIFFONDERE la campagna con i tuoi SMS!</string>
+    <string name="t_spread">DIFFONDI la campagna con i tuoi SMS verso i tuoi contatti!</string>
 
-    <string name="t_contact_select">Seleziona i contatti a cui vuoi inviare la campagna</string>
+    <string name="t_contact_select">Seleziona i contatti a cui vuoi inviare la campagna.</string>
 
-    <string name="t_contact_list">Salva la lista dei contatti selezionati per riutilizzarla in
-        futuro</string>
+    <string name="t_contact_list">Salva la lista dei contatti selezionati per riutilizzarla in futuro.</string>
 
-    <string name="t_campaign">Questa è una campagna attiva</string>
+    <string name="t_campaign_cliccable">Clicca il testo per saperne di più su una campagna.</string>
+
+    <string name="t_collision">Lo sapevi che..\nper evitare di infastidire il destinatario, solo un sms per campagna gli sarà inviato tramite Columba!\nQuindi se due utenti cercano di inviare una campagna alla stessa persona, solo il primo di loro potrà inoltrare l\'SMS.</string>
+
+    <string name="t_campaign">Questa è una campagna attualmente in corso.</string>
+
+    <string name="t_intro_campaign">Benvenuto su Columba!</string>
+
+
+
 
     //NAVDRAWER
     <string name="t_profile_btn">Tocca qui per accedere al profilo utente</string>
@@ -174,12 +182,14 @@
     <string name="t_logout_btn">Tocca qui per disconnetterti</string>
 
     //ASSOCIATIONS
-    <string name="t_desc_ass">Questa è la descrizione dell\'associazione</string>
 
-    <string name="t_follow_btn">Tocca qui per seguire un\'associazione e abilitare le notifiche
-        push per ogni sua nuova campagna</string>
+    <string name="t_intro_ass">Questo è il profilo di una associazione.</string>
 
-    <string name="t_trust_btn">Tocca qui per SOSTENERE un\'associazione e abilitare l\'invio
+    <string name="t_desc_ass">Clicca sulla descrizione per avere tutti i suoi dettagli.</string>
+
+    <string name="t_follow_btn">SEGUI un\'associazione e riceverai una notifica per ogni sua nuova campagna.</string>
+
+    <string name="t_trust_btn">SOSTIENI un\'associazione per abilitare l\'invio
         automatico di ogni sua nuova campagna! (Devi selezionare manualmente i contatti che vuoi
         ragiungere con i tuoi SMS)</string>
 

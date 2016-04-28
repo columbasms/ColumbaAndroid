@@ -65,6 +65,9 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -84,6 +87,9 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     private FragmentManager fragmentManager;
     private AdapterCallback adapterCallback;
     private NoSocialsSnackbarCallback noSocialsSnackbarCallback;
+
+    private boolean flag = false;
+    private int count = 0;
 
     private static final int TYPE_PROFILE = 0;
     private static final int TYPE_GROUP = 1;
@@ -137,6 +143,9 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
     }
 
     private PhotoViewAttacher mAttacher;
+    private static String parameter;
+
+    private static boolean trustShowed = false;
 
 
     public AssociationProfileAdapter(List<CharityCampaign> il,Association a,Resources r, Activity ay, FragmentManager f, AdapterCallback ac, NoSocialsSnackbarCallback s) {
@@ -176,7 +185,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
                 final CardView v = holder1.cardView;
-                final String parameter;
+
 
                 final String URL = API_URL.USERS_URL + "/" + sp.getString("user_id","") + API_URL.ASSOCIATIONS + "/" + association.getId();
 
@@ -214,7 +223,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 });
 
 
-                Button t = holder1.trust;
+                final Button t = holder1.trust;
 
                 if(association.isTrusting()){
                     t.setBackgroundResource(R.drawable.button_trusted);
@@ -222,6 +231,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                     t.setTextColor(Color.parseColor("#ffffff"));
                     parameter = "false";
                     t.setTag("1");
+
                 }else{
                     t.setBackgroundResource(android.R.color.white);
                     t.setText(res.getString(R.string.trust_btn));
@@ -330,11 +340,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                 });
 
+                System.out.println("sopra " + association.isFollowing());
+
                 final ImageView f = holder1.favourite;
                 if (association.isFollowing()){
                     f.setBackgroundResource(R.drawable.ic_favorite_white_36dp);
                     t.setVisibility(View.VISIBLE);
                     f.setTag("1");
+
                 }else{
                     f.setBackgroundResource(R.drawable.ic_favorite_border_white_36dp);
                     t.setVisibility(View.GONE);
@@ -384,6 +397,30 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                         //notifyDataSetChanged();
                                         dialog.dismiss();
                                         adapterCallback.onMethodCallback();
+
+                                        if(!trustShowed) {
+
+                                            String ID_SHOW = "TRUST_5";
+                                            int color = activity.getResources().getColor(R.color.colorShowCase2);
+                                            int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
+
+                                            ShowcaseConfig config = new ShowcaseConfig();
+                                            config.setMaskColor(color);
+                                            config.setDelay(500);
+
+                                            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, ID_SHOW);
+
+                                            sequence.addSequenceItem(new MaterialShowcaseView.Builder(activity)
+                                                    .setTarget(t)
+                                                    .setDismissText("OK")
+                                                    .setContentText(activity.getResources().getString(R.string.t_trust_btn))
+                                                    .withCircleShape()
+                                                    .setDismissTextColor(color_dismiss)
+                                                    .setMaskColour(color)
+                                                    .build());
+                                            sequence.start();
+                                        }
+
                                     }
 
 
@@ -431,6 +468,14 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                 final ImageView pp = holder1.thumbnailImage;
                 Utils.downloadImage(association.getAvatar_normal(),pp,true,true);
 
+
+
+                if(position==0 && flag == false && count == 1) {
+                    presentShowcaseSequence(activity,association,f,holder1.assDescription,t);
+                    flag = true;
+                }
+
+                count++;
 
                 break;
 
@@ -664,6 +709,73 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
         }.execute(null, null, null);;
     }
 
+    private String SHOWCASE_ID = "1039124438356555";
+    private void presentShowcaseSequence(Activity a,Association ass, ImageView favourite, TextView description, final Button trust) {
+
+        final int color = a.getResources().getColor(R.color.colorShowCase2);
+        final int color_dismiss = a.getResources().getColor(R.color.colorShowCaseText);
+        ShowcaseConfig config =  new ShowcaseConfig();
+        config.setMaskColor(color);
+        config.setDelay(500);
+
+        final MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(a, SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        System.out.println("Tutorial");
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(description)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_intro_ass))
+                        .withoutShape()
+                        .setDismissTextColor(color_dismiss)
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(description)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_desc_ass))
+                        .withCircleShape()
+                        .setDismissTextColor(color_dismiss)
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(favourite)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_follow_btn))
+                        .withCircleShape()
+                        .setDismissTextColor(color_dismiss)
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        if(ass.isFollowing()){
+            System.out.println("sonp dentro");
+                    sequence.addSequenceItem(
+                            new MaterialShowcaseView.Builder(a)
+                            .setTarget(trust)
+                            .setDismissText("OK")
+                            .setContentText(a.getResources().getString(R.string.t_trust_btn))
+                            .withCircleShape()
+                            .setDismissTextColor(color_dismiss)
+                            .setMaskColour(color)
+                            .build());
+                    trustShowed = true;
+        }
+
+        sequence.start();
+
+
+
+    }
 
 
 

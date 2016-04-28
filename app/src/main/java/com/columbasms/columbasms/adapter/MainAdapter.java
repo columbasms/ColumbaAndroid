@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -273,7 +274,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
         if(position==0){
-            presentShowcaseSequence(mainActivity,share,locate_layout,send,message);
+            presentShowcaseSequence(mainActivity,holder.cvtoclick,share,locate_layout,send,message);
         }
 
     }
@@ -297,6 +298,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Bind(R.id.timestamp)TextView timestamp;
         @Bind(R.id.profile_image)ImageView profile_image;
         @Bind(R.id.cover_image)ImageView cover_image;
+        @Bind(R.id.card_view_to_click)CardView cvtoclick;
 
         @Bind(R.id.layout_share)LinearLayout layout_share;
         @Bind(R.id.layout_locate)LinearLayout layout_locate;
@@ -313,10 +315,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private String SHOWCASE_ID = "C";
-    private void presentShowcaseSequence(Activity a, LinearLayout share, LinearLayout locate, LinearLayout send, TextView message) {
+    private String SHOWCASE_ID = "905";
+    private void presentShowcaseSequence(Activity a,CardView c, LinearLayout share, LinearLayout locate, LinearLayout send, TextView message) {
 
         int color = a.getResources().getColor(R.color.colorShowCasePrimaryDark);
+        int color_dismiss = a.getResources().getColor(R.color.colorShowCaseText);
         ShowcaseConfig config =  new ShowcaseConfig();
         config.setMaskColor(color);
         config.setDelay(500);
@@ -325,24 +328,25 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         sequence.setConfig(config);
 
-        sequence.addSequenceItem(message, a.getString(R.string.t_campaign), "OK");
-
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(a)
-                        .setTarget(share)
+                        .setTarget(message)
                         .setDismissText("OK")
-                        .setContentText(a.getResources().getString(R.string.t_share))
-                        .withCircleShape()
+                        .setContentText(a.getResources().getString(R.string.t_intro_campaign))
+                        .setDismissTextColor(color_dismiss)
+                        .withoutShape()
                         .setMaskColour(color)
                         .build()
         );
 
+
         sequence.addSequenceItem(
                 new MaterialShowcaseView.Builder(a)
-                        .setTarget(locate)
+                        .setTarget(c)
                         .setDismissText("OK")
-                        .setContentText(a.getResources().getString(R.string.t_discover))
-                        .withCircleShape()
+                        .setContentText(a.getResources().getString(R.string.t_campaign))
+                        .setDismissTextColor(color_dismiss)
+                        .withRectangleShape()
                         .setMaskColour(color)
                         .build()
         );
@@ -352,10 +356,46 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .setTarget(send)
                         .setDismissText("OK")
                         .setContentText(a.getResources().getString(R.string.t_spread))
+                        .setDismissTextColor(color_dismiss)
                         .withCircleShape()
                         .setMaskColour(color)
                         .build()
         );
+
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(locate)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_discover))
+                        .setDismissTextColor(color_dismiss)
+                        .withCircleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(share)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_share))
+                        .setDismissTextColor(color_dismiss)
+                        .withCircleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(a)
+                        .setTarget(message)
+                        .setDismissText("OK")
+                        .setContentText(a.getResources().getString(R.string.t_campaign_cliccable))
+                        .setDismissTextColor(color_dismiss)
+                        .withRectangleShape()
+                        .setMaskColour(color)
+                        .build()
+        );
+
 
         sequence.start();
     }

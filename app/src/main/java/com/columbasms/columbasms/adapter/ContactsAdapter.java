@@ -1,6 +1,7 @@
 package com.columbasms.columbasms.adapter;
+
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +14,16 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.columbasms.columbasms.R;
+import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.model.Contact;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Matteo Brienza on 2/2/16.
@@ -30,9 +34,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     private static List<Contact> contacts;
     private static List<Contact> allContacts;
     private static List<Integer> colors;
+    private Activity activity;
+    private AdapterCallback callback;
 
 
-    public ContactsAdapter(List<Contact> contacts,List<Contact> allContacts, List<Integer>colors) {
+    public ContactsAdapter(Activity activity, AdapterCallback callback, List<Contact> contacts, List<Contact> allContacts, List<Integer>colors) {
+        this.activity = activity;
+        this.callback = callback;
         this.contacts = contacts;   //list that changed based on search filter
         this.allContacts = allContacts;
         this.colors = colors;
@@ -112,6 +120,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     // Involves populating data into the item through holder
+    private String SHOWCASE_ID = "90_adapter";
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, int position) {
         Contact c = contacts.get(position);
@@ -133,6 +142,36 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             button.setChecked(false);
         }else button.setChecked(true);
 
+        if(position==0){
+            int color = activity.getResources().getColor(R.color.colorShowCasePrimaryDark);
+            int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
+            ShowcaseConfig config =  new ShowcaseConfig();
+            config.setMaskColor(color);
+            config.setDelay(0);
+
+            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, SHOWCASE_ID);
+
+            sequence.setConfig(config);
+
+            sequence.addSequenceItem(
+                    new MaterialShowcaseView.Builder(activity)
+                            .setTarget(viewHolder.cl)
+                            .setDismissText("OK")
+                            .setContentText(activity.getResources().getString(R.string.t_contact_select))
+                            .withRectangleShape()
+                            .setDismissTextColor(color_dismiss)
+                            .setMaskColour(color)
+                            .build()
+            );
+            sequence.start();
+            sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                @Override
+                public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                    callback.onMethodCallback();
+                }
+            });
+
+        }
     }
 
     // Return the total count of items
@@ -159,5 +198,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         contacts.addAll(allContacts);
         notifyDataSetChanged();
     }
+
+
 }
 

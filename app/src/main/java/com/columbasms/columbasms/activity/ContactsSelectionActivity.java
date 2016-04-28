@@ -43,6 +43,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.columbasms.columbasms.R;
 import com.columbasms.columbasms.adapter.ContactsAdapter;
+import com.columbasms.columbasms.callback.AdapterCallback;
 import com.columbasms.columbasms.fragment.AskGroupName;
 import com.columbasms.columbasms.model.Contact;
 import com.columbasms.columbasms.utils.Utils;
@@ -64,11 +65,14 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Created by Matteo Brienza on 2/29/16.
  */
-public class ContactsSelectionActivity extends AppCompatActivity implements AskGroupName.GroupNameInsertedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ContactsSelectionActivity extends AppCompatActivity implements AskGroupName.GroupNameInsertedCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,AdapterCallback {
 
     private static final float BACKOFF_MULT = 1.0f;
     private static final int TIMEOUT_MS = 10000;
@@ -234,7 +238,7 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
         rvContacts.setLayoutManager(new GridLayoutManager(this,1));
 
         // Create adapter passing in the sample user data
-        adapter = new ContactsAdapter(contactList,allContacts,colors);
+        adapter = new ContactsAdapter(this,this,contactList,allContacts,colors);
 
         // Attach the adapter to the recyclerview to populate items
         rvContacts.setAdapter(adapter);
@@ -783,5 +787,44 @@ public class ContactsSelectionActivity extends AppCompatActivity implements AskG
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    private String SHOWCASE_ID = "79";
+    @Override
+    public void onMethodCallback() {
+
+        int color = getResources().getColor(R.color.colorShowCasePrimaryDark);
+        int color_dismiss = getResources().getColor(R.color.colorShowCaseText);
+        ShowcaseConfig config =  new ShowcaseConfig();
+        config.setMaskColor(color);
+        config.setDelay(50);
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(save_as_a_grouplayout)
+                        .setDismissText("OK")
+                        .setContentText(getResources().getString(R.string.t_contact_list))
+                        .withCircleShape()
+                        .setDismissTextColor(color_dismiss)
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(save_as_a_grouplayout)
+                        .setDismissText("OK")
+                        .setContentText(getResources().getString(R.string.t_collision))
+                        .withoutShape()
+                        .setDismissTextColor(color_dismiss)
+                        .setMaskColour(color)
+                        .build()
+        );
+
+        sequence.start();
     }
 }

@@ -259,8 +259,6 @@ public class Utils {
 
 
         if(today.compareTo(expires_at)>0){
-            System.out.println(today.toString());
-            System.out.println(expires_at.toString());
             isExpired = true;
         }
 

@@ -9,6 +9,15 @@
     <color name="colorShowCaseAccent">#dd00BFA5</color>
     <color name="prova">#A7FFEB</color>
 
+    <color name="colorShowCaseText">#F57C00</color>
+    <color name="colorShowCase1">#dd4CAF50</color>
+    <color name="colorShowCase2">#dd00695C</color>#
+
+
+
+
+
+
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextUnselected">#B3FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>

@@ -86,7 +86,7 @@
     <string name="save">SAVE</string>
 
     <string name="disable_notify">Disable push notifications</string>
-    <string name="msg_number">Messages number limit</string>
+    <string name="msg_number">Monthly SMS amount limit</string>
     <string name="manage">Manage contacts lists</string>
 
     <string name="edit_name">Edit username</string>
@@ -136,7 +136,7 @@
 
     <string name="mess_succ_sent">messages succesfully sent</string>
 
-    <string name="mess_number_over"> MANCA</string>
+    <string name="mess_number_over">You have reached your SMS amount limit, increase it in Settings.</string>
 
     <string name="no_mess_succ_sent">No message succesfully sent</string>
 
@@ -158,18 +158,23 @@
     // TUTORIAL STRINGS:
 
     //HOME
-    <string name="t_share">Tap here to SHARE the campaign on social networks!</string>
+    <string name="t_share">SHARE the campaign on social networks!</string>
     
-    <string name="t_discover">Tap here to DISCOVER where\'s the campaign\'s event!</string>
+    <string name="t_discover">DISCOVER where\'s the campaign\'s event!</string>
     
-    <string name="t_spread">Tap here to SPREAD the campaign through yours SMS!</string>
+    <string name="t_spread">SPREAD the campaign through yours SMS to your contacts!</string>
 
     <string name="t_contact_select">Select contacts that you want to spread the campaign
     trough your SMS</string>
 
-    <string name="t_contact_list">Save the selected contacts list for future sending</string>
+    <string name="t_contact_list">Save the selected contacts list for future sending.</string>
     
-    <string name="t_campaign">This is active association\'s campaign</string>
+    <string name="t_campaign">This is an on going campaign.</string>
+
+    <string name="t_campaign_cliccable">Tap the text to know more about a campaign.</string>
+
+    <string name="t_collision">Do you know that..\nto avoid any annoyance to the receiver, only one sms per campaign will be send though Columba to him!\nTherefore, if two users try to forward a campaign to the same person, only the first one will send the SMS.</string>
+
 
     //NAVDRAWER
     <string name="t_profile_btn">Tap here to show the user\'s profile</string>
