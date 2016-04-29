@@ -191,7 +191,7 @@
 
     <string name="t_trust_btn">SOSTIENI un\'associazione per abilitare l\'invio
         automatico di ogni sua nuova campagna! (Devi selezionare manualmente i contatti che vuoi
-        ragiungere con i tuoi SMS)</string>
+        raggiungere con i tuoi SMS)</string>
 
     //SETTINGS
     <string name="t_SMS_limit">Imposta il numero massimo di SMS che Columba può inviare</string>
