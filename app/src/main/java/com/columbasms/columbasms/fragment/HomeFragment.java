@@ -234,11 +234,22 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
                         String fakePhoto = "https://www.columbasms.com/images/invalid";
                         String fakeDate = "2016-02-24T13:46:23.000Z";
                         List<Address> fakeAddressList = new ArrayList<>();
+                        fakeAddressList.add(new Address("",0,0));
+
+                        String fakeTopic = null;
+                        String fakeMessage = null;
+                        if(Locale.getDefault().getLanguage().equals("it")){
+                            fakeTopic = "Educazione e preservazione culturale";
+                            fakeMessage = "Benvenuto in Columba e grazie della tua collaborazione!";
+                        }else{
+                            fakeTopic = "Education and cultural Preservation";
+                            fakeMessage = "Welcome to Columba and thanks for your collaboration!";
+                        }
 
                         List<Topic> fakeTopicList = new ArrayList<>();
-                        fakeTopicList.add(new Topic("4","Educazione e preservazione culturale",
+                        fakeTopicList.add(new Topic("4",fakeTopic,
                                 false,"#9c27b0", "#7b1fa2",null));
-                        CharityCampaign fake = new CharityCampaign("0", "fake to insert", new Association("5","Amici di Columba",
+                        CharityCampaign fake = new CharityCampaign("0", fakeMessage, new Association("5","Amici di Columba",
                                 "https://www.columbasms.com/system/organizations/avatars/000/000/005/normal/prof.png?1455837092",null,null),
                                 fakeTopicList, Utils.getTimestamp(fakeDate.substring(0, 19),
                                 mainActivity), null, fakePhoto, "https://www.columbasms.com/images/invalid",
