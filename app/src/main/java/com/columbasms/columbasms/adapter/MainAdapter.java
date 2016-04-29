@@ -327,7 +327,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int color_dismiss = a.getResources().getColor(R.color.colorShowCaseText);
         ShowcaseConfig config =  new ShowcaseConfig();
         config.setMaskColor(color);
-        config.setDelay(500);
+        config.setDelay(1000);
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(a, SHOWCASE_ID);
 
