@@ -400,25 +400,32 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
                                         if(!trustShowed) {
 
-                                            String ID_SHOW = "TRUST_5";
-                                            int color = activity.getResources().getColor(R.color.colorShowCase2);
-                                            int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
+                                            t.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    String ID_SHOW = "TRUST_5";
+                                                    int color = activity.getResources().getColor(R.color.colorShowCase2);
+                                                    int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
 
-                                            ShowcaseConfig config = new ShowcaseConfig();
-                                            config.setMaskColor(color);
-                                            config.setDelay(500);
+                                                    ShowcaseConfig config = new ShowcaseConfig();
+                                                    config.setMaskColor(color);
+                                                    config.setDelay(2500);
 
-                                            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, ID_SHOW);
+                                                    MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, ID_SHOW);
 
-                                            sequence.addSequenceItem(new MaterialShowcaseView.Builder(activity)
-                                                    .setTarget(t)
-                                                    .setDismissText("OK")
-                                                    .setContentText(activity.getResources().getString(R.string.t_trust_btn))
-                                                    .withCircleShape()
-                                                    .setDismissTextColor(color_dismiss)
-                                                    .setMaskColour(color)
-                                                    .build());
-                                            sequence.start();
+                                                    sequence.addSequenceItem(new MaterialShowcaseView.Builder(activity)
+                                                            .setTarget(t)
+                                                            .setDismissText("OK")
+                                                            .setContentText(activity.getResources().getString(R.string.t_trust_btn))
+                                                            .withCircleShape()
+                                                            .setDismissTextColor(color_dismiss)
+                                                            .setMaskColour(color)
+                                                            .build());
+                                                    sequence.start();
+                                                }
+                                            });
+
+
                                         }
 
                                     }
@@ -471,8 +478,13 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
 
 
                 if(position==0 && flag == false && count == 1) {
-                    presentShowcaseSequence(activity,association,f,holder1.assDescription,t);
-                    flag = true;
+                    f.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            presentShowcaseSequence(activity,association,f,holder1.assDescription,t);
+                            flag = true;
+                        }
+                    });
                 }
 
                 count++;
@@ -740,7 +752,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                         .setTarget(description)
                         .setDismissText("OK")
                         .setContentText(a.getResources().getString(R.string.t_desc_ass))
-                        .withCircleShape()
+                        .withRectangleShape()
                         .setDismissTextColor(color_dismiss)
                         .setMaskColour(color)
                         .build()

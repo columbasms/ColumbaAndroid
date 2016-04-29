@@ -151,7 +151,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
 
-            LinearLayout send = holder.layout_send;
+            final LinearLayout send = holder.layout_send;
             send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -179,7 +179,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
 
-        LinearLayout share = holder.layout_share;
+        final LinearLayout share = holder.layout_share;
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +189,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
         ImageView locate = holder.locate;
-        LinearLayout locate_layout = holder.layout_locate;
+        final LinearLayout locate_layout = holder.layout_locate;
         if(c.getAddresses().size()!=0) {
             locate.setAlpha(1f);
             locate_layout.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +274,12 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
         if(position==0){
-            presentShowcaseSequence(mainActivity,holder.cvtoclick,share,locate_layout,send,message);
+            send.post(new Runnable() {
+                @Override
+                public void run() {
+                    presentShowcaseSequence(mainActivity,holder.cvtoclick,share,locate_layout,send,message);
+                }
+            });
         }
 
     }
@@ -396,7 +401,16 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .build()
         );
 
-
+    sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+        @Override
+        public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+            System.out.println(i);
+            if(i==5) {
+                mItemList.remove(0);
+                notifyDataSetChanged();
+            }
+        }
+    });
         sequence.start();
     }
 

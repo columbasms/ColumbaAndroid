@@ -230,6 +230,22 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
                         }
                     }
 
+                    if(sp.getString("fakeCampaign",null)==null) {
+                        String fakePhoto = "https://www.columbasms.com/images/invalid";
+                        String fakeDate = "2016-02-24T13:46:23.000Z";
+                        List<Address> fakeAddressList = new ArrayList<>();
+
+                        List<Topic> fakeTopicList = new ArrayList<>();
+                        fakeTopicList.add(new Topic("4","Educazione e preservazione culturale",
+                                false,"#9c27b0", "#7b1fa2",null));
+                        CharityCampaign fake = new CharityCampaign("0", "fake to insert", new Association("5","Amici di Columba",
+                                "https://www.columbasms.com/system/organizations/avatars/000/000/005/normal/prof.png?1455837092",null,null),
+                                fakeTopicList, Utils.getTimestamp(fakeDate.substring(0, 19),
+                                mainActivity), null, fakePhoto, "https://www.columbasms.com/images/invalid",
+                                fakeAddressList);
+                        campaigns_list.add(0, fake);
+                        sp.edit().putString("fakeCampaign","true").apply();
+                    }
 
                     adapter.notifyDataSetChanged();
 

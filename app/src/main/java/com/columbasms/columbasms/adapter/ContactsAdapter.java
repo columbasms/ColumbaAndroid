@@ -122,7 +122,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     // Involves populating data into the item through holder
     private String SHOWCASE_ID = "90_adapter";
     @Override
-    public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ContactsAdapter.ViewHolder viewHolder, int position) {
         Contact c = contacts.get(position);
         String type_name = c.getContact_name();
         boolean isSelected = c.isSelected();
@@ -142,32 +142,38 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             button.setChecked(false);
         }else button.setChecked(true);
 
-        if(position==0){
-            int color = activity.getResources().getColor(R.color.colorShowCasePrimaryDark);
-            int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
-            ShowcaseConfig config =  new ShowcaseConfig();
-            config.setMaskColor(color);
-            config.setDelay(0);
+        if(position==0 && !contacts.isEmpty() && !allContacts.isEmpty()){
 
-            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, SHOWCASE_ID);
-
-            sequence.setConfig(config);
-
-            sequence.addSequenceItem(
-                    new MaterialShowcaseView.Builder(activity)
-                            .setTarget(viewHolder.cl)
-                            .setDismissText("OK")
-                            .setContentText(activity.getResources().getString(R.string.t_contact_select))
-                            .withRectangleShape()
-                            .setDismissTextColor(color_dismiss)
-                            .setMaskColour(color)
-                            .build()
-            );
-            sequence.start();
-            sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+            viewHolder.cl.post(new Runnable() {
                 @Override
-                public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
-                    callback.onMethodCallback();
+                public void run() {
+                    int color = activity.getResources().getColor(R.color.colorShowCasePrimaryDark);
+                    int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
+                    ShowcaseConfig config =  new ShowcaseConfig();
+                    config.setMaskColor(color);
+                    config.setDelay(0);
+
+                    MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, SHOWCASE_ID);
+
+                    sequence.setConfig(config);
+
+                    sequence.addSequenceItem(
+                            new MaterialShowcaseView.Builder(activity)
+                                    .setTarget(viewHolder.cl)
+                                    .setDismissText("OK")
+                                    .setContentText(activity.getResources().getString(R.string.t_contact_select))
+                                    .withRectangleShape()
+                                    .setDismissTextColor(color_dismiss)
+                                    .setMaskColour(color)
+                                    .build()
+                    );
+                    sequence.start();
+                    sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                        @Override
+                        public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                            callback.onMethodCallback();
+                        }
+                    });
                 }
             });
 
