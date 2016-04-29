@@ -407,10 +407,6 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                                     int color = activity.getResources().getColor(R.color.colorShowCase2);
                                                     int color_dismiss = activity.getResources().getColor(R.color.colorShowCaseText);
 
-                                                    ShowcaseConfig config = new ShowcaseConfig();
-                                                    config.setMaskColor(color);
-                                                    config.setDelay(2500);
-
                                                     MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(activity, ID_SHOW);
 
                                                     sequence.addSequenceItem(new MaterialShowcaseView.Builder(activity)
@@ -420,6 +416,7 @@ public class AssociationProfileAdapter extends RecyclerView.Adapter<AssociationP
                                                             .withCircleShape()
                                                             .setDismissTextColor(color_dismiss)
                                                             .setMaskColour(color)
+                                                            .setDelay(750)
                                                             .build());
                                                     sequence.start();
                                                 }
