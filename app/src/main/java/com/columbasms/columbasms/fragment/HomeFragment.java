@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment implements NoSocialsSnackbarCallback 
         //First Inizialization
         if(campaigns_list == null) campaigns_list = new ArrayList<>();
 
-
+        System.out.println("HOME");
         adapter = new MainAdapter(campaigns_list, getFragmentManager(), getResources(), getActivity(), this);
 
         AlphaInAnimationAdapter adapter_anim = new AlphaInAnimationAdapter(adapter);

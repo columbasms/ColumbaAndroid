@@ -600,6 +600,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         */
     }
 
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sp.getString("tutorialDONE",null)!=null){
+            super.onBackPressed();
+            MainActivity.this.finish();
+        }
+    }
+
+
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {

@@ -273,7 +273,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         });
 
-        if(position==0){
+        if(position==0 && !mItemList.isEmpty() && mItemList.get(0).getId().equals("0")){
             send.post(new Runnable() {
                 @Override
                 public void run() {
@@ -327,7 +327,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int color_dismiss = a.getResources().getColor(R.color.colorShowCaseText);
         ShowcaseConfig config =  new ShowcaseConfig();
         config.setMaskColor(color);
-        config.setDelay(1000);
+        config.setDelay(3000);
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(a, SHOWCASE_ID);
 
@@ -340,6 +340,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .setContentText(a.getResources().getString(R.string.t_intro_campaign))
                         .setDismissTextColor(color_dismiss)
                         .withoutShape()
+                        .setDelay(1000)
                         .setMaskColour(color)
                         .build()
         );
@@ -404,10 +405,11 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
         @Override
         public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
-            System.out.println(i);
             if(i==5) {
                 mItemList.remove(0);
                 notifyDataSetChanged();
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+                sp.edit().putString("tutorialDONE","true").commit();
             }
         }
     });
