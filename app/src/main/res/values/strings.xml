@@ -165,7 +165,7 @@
     <string name="t_spread">SPREAD the campaign through yours SMS to your contacts!</string>
 
     <string name="t_contact_select">Select contacts that you want to spread the campaign
-    trough your SMS</string>
+    through your SMS</string>
 
     <string name="t_contact_list">Save the selected contacts list for future sending.</string>
     
@@ -173,7 +173,9 @@
 
     <string name="t_campaign_cliccable">Tap the text to know more about a campaign.</string>
 
-    <string name="t_collision">Do you know that..\nto avoid any annoyance to the receiver, only one sms per campaign will be send though Columba to him!\nTherefore, if two users try to forward a campaign to the same person, only the first one will send the SMS.</string>
+    <string name="t_collision">Do you know that..\nto avoid any annoyance to the receiver, only one sms per campaign will be send through Columba to him!\nTherefore, if two users try to forward a campaign to the same person, only the first one will send the SMS.</string>
+
+    <string name="t_intro_campaign">Welcome to Columba!</string>
 
 
     //NAVDRAWER
@@ -186,7 +188,10 @@
     <string name="t_logout_btn">Tap here to logout</string>
 
     //ASSOCIATIONS
-    <string name="t_desc_ass">This is the association\'s description</string>
+
+    <string name="t_intro_ass">This is the association\'s profile.</string>
+
+    <string name="t_desc_ass">Tap here to get all of his details.</string>
 
     <string name="t_follow_btn">Tap here to follow an association and enable push notifications
     for every new association\'s campaigns</string>
@@ -194,6 +199,8 @@
     <string name="t_trust_btn">Tap here to TRUST an association and enable the auto-spreading of every
         new association\'s campaigns! (You have to select manually the contacts that will be reached
     by SMSs)</string>
+
+
 
     //SETTINGS
     <string name="t_SMS_limit">Set the max number of SMS that Columba can send</string>
