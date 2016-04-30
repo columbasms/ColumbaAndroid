@@ -19,6 +19,8 @@
 
     <string name="notification_follow_message">started a new campaign!</string>
     <string name="notification_trust_message">You just shared a campaign for</string>
+    <string name="notification_trust_message_fail1">You cannot share a campaign for</string>
+    <string name="notification_trust_message_fail2">: sms limit reached!</string>
 
     <string name="save_as_a_group">Save as a group</string>
     <string name="save_as">Save as </string>
@@ -198,7 +200,7 @@
 
     <string name="t_trust_btn">Tap here to TRUST an association and enable the auto-spreading of every
         new association\'s campaigns! (You have to select manually the contacts that will be reached
-    by SMSs)</string>
+    by SMS)</string>
 
 
 
