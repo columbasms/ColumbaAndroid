@@ -1,6 +1,10 @@
 If you're searching for the Columba WebService go to our other repository: https://github.com/columbasms/columba
 
 # Columba Android App
+
+Project officially closed
+-------------------------
+
 Are you full of free SMS that you don't use? Help charity agencies with these wasted messages! 
 
 Columba is a no-profit and open-source service for charity agencies that permits spreading of informations, events and campaigns through smartphone users' wasted SMS in a simple and free way.
